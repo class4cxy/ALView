@@ -15,6 +15,7 @@
 		6B1D25051DB307A200FC4081 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1D25031DB307A200FC4081 /* LaunchScreen.storyboard */; };
 		6B1D25101DB307A300FC4081 /* ALViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D250F1DB307A300FC4081 /* ALViewTests.m */; };
 		6B1D251B1DB307A300FC4081 /* ALViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D251A1DB307A300FC4081 /* ALViewUITests.m */; };
+		6B89CD191DB511DD00B82163 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B89CD181DB511DD00B82163 /* ALView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		6B1D25161DB307A300FC4081 /* ALViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ALViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B1D251A1DB307A300FC4081 /* ALViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ALViewUITests.m; sourceTree = "<group>"; };
 		6B1D251C1DB307A300FC4081 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6B89CD171DB511DD00B82163 /* ALView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALView.h; sourceTree = SOURCE_ROOT; };
+		6B89CD181DB511DD00B82163 /* ALView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALView.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,8 @@
 		6B1D24F41DB307A200FC4081 /* ALView */ = {
 			isa = PBXGroup;
 			children = (
+				6B89CD171DB511DD00B82163 /* ALView.h */,
+				6B89CD181DB511DD00B82163 /* ALView.m */,
 				6B1D24F81DB307A200FC4081 /* AppDelegate.h */,
 				6B1D24F91DB307A200FC4081 /* AppDelegate.m */,
 				6B1D24FB1DB307A200FC4081 /* ViewController.h */,
@@ -279,6 +284,7 @@
 				6B1D24FD1DB307A200FC4081 /* ViewController.m in Sources */,
 				6B1D24FA1DB307A200FC4081 /* AppDelegate.m in Sources */,
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
+				6B89CD191DB511DD00B82163 /* ALView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,6 +520,7 @@
 				6B1D25211DB307A300FC4081 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6B1D25221DB307A300FC4081 /* Build configuration list for PBXNativeTarget "ALViewTests" */ = {
 			isa = XCConfigurationList;
@@ -522,6 +529,7 @@
 				6B1D25241DB307A300FC4081 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6B1D25251DB307A300FC4081 /* Build configuration list for PBXNativeTarget "ALViewUITests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +538,7 @@
 				6B1D25271DB307A300FC4081 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
