@@ -48,7 +48,10 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  * 其他属性
  */
 
-@property (nonatomic, assign) BOOL isAutoHeight; // 是否为系统自动设置高度
+@property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
+@property (nonatomic, assign, readonly) BOOL isFullWidth; // 是否为系统自动设置高度
+@property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
+//@property (nonatomic, assign) CGFloat parentMaxHeight;
 
 - (instancetype) init;
 - (void) addTo: (UIView *) parent;
