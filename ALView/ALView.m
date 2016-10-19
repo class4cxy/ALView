@@ -15,7 +15,7 @@
 @interface ALView ()
 {
     CGRect _currFrame;
-    UIView * _currParentView;
+//    UIView * _currParentView;
 }
 
 @end
@@ -27,24 +27,24 @@
     if ( self = [super initWithFrame:CGRectZero] ) {
         self.position = ALPositionRelative;
         self.display  = ALDisplayBlock;
-        _isAutoHeight = NO;
-        _isFullWidth = NO;
+        _isAutoHeight = YES;
+        _isFullWidth = YES;
         _isInNewLine = NO;
-        
-        self.top = -1;
-        self.bottom = -1;
-        self.left = -1;
-        self.right = -1;
-        
-        self.marginTop = -1;
-        self.marginBottom = -1;
-        self.marginLeft = -1;
-        self.marginRight = -1;
-        
-        self.height = -1;
-        self.width = -1;
+//        
+//        self.top = 0;
+//        self.bottom = -1;
+//        self.left = -1;
+//        self.right = -1;
+//        
+//        self.marginTop = -1;
+//        self.marginBottom = -1;
+//        self.marginLeft = -1;
+//        self.marginRight = -1;
+//        
+//        self.height = -1;
+//        self.width = -1;
         // 私有
-        _currParentView = nil;
+//        _currParentView = nil;
         _currFrame = CGRectZero;
     }
     return self;
@@ -61,7 +61,7 @@
         _isFullWidth = YES;
     }
     
-    _currParentView = parent;
+//    _currParentView = parent;
     
     // 初始化
     if ( _top == -1 ) self.top = 0;
@@ -81,7 +81,7 @@
 - (void) addTo:(UIView *)parent
 {
     [parent addSubview: self];
-    [self initConfig: parent];
+//    [self initConfig: parent];
     [self reflow: parent];
 }
 
@@ -89,25 +89,23 @@
 
 - (void) setWidth: (CGFloat)width
 {
-    _currFrame.size.width = width;
+    _isFullWidth = NO;
     _width = width;
 }
 
 - (void) setHeight: (CGFloat)height
 {
-    _currFrame.size.height = height;
+    _isAutoHeight = NO;
     _height = height;
 }
 
 - (void) setLeft: (CGFloat)left
 {
-    _currFrame.origin.x = left;
     _left = left;
 }
 
 - (void) setTop: (CGFloat)top
 {
-    _currFrame.origin.y = top;
     _top = top;
 }
 
@@ -125,7 +123,7 @@
         return;
     }
     // 重置frame
-    _currFrame = CGRectZero;
+    _currFrame = CGRectMake(_left, _top, _width, _height);
     
     switch (_position) {
         case ALPositionRelative:
@@ -150,24 +148,24 @@
             break;
     }
     //
-    switch (_display) {
-        case ALDisplayBlock:
-        {
-            [self reCountWithBlock: parent];
-        }
-            break;
-            
-        case ALDisplayInlineBlock:
-        {
-            [self reCountWithInlineBlock: parent];
-        }
-            break;
-            
-        default:
-            break;
-    }
+//    switch (_display) {
+//        case ALDisplayBlock:
+//        {
+//            [self reCountWithBlock: parent];
+//        }
+//            break;
+//            
+//        case ALDisplayInlineBlock:
+//        {
+//            [self reCountWithInlineBlock: parent];
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
     // 通过margin计算top, left, width
-    [self reCountWithMargin:parent];
+//    [self reCountWithMargin:parent];
     // 重算自己的高度，可能由子view改变而触发的reflow
     [self reCountHeightIfNeed];
     // draw
@@ -180,7 +178,56 @@
 
 - (void) reCountWithRelative:(UIView *)parent
 {
-    _currFrame = CGRectMake(_left, _top, _width, _height);
+    CGFloat top = _top;
+    CGFloat left = _left;
+    CGFloat width = _width;
+    
+    // block 的排版
+    if ( _display == ALDisplayBlock ) {
+        // block 如果没有设置width的情况，系统默认为父view的宽度
+        if ( _isFullWidth ) {
+            width = self.superview.frame.size.width - _marginLeft - _marginRight;
+        }
+        
+        // 根据外边距计算left, top
+        left += _marginLeft;
+        top += _marginTop;
+        
+        ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
+        
+        // 存在最后一个block view且非自己
+        if ( lastBlockView && lastBlockView != self ) {
+            top += lastBlockView.marginBottom + lastBlockView.frame.origin.y + lastBlockView.frame.size.height;
+        }
+    } else if ( _display == ALDisplayInlineBlock ) { // inline-block
+        ALView * lastInlineView = [self getLastALView:parent displayModel:ALDisplayInlineBlock];
+        // 非nil，参照最后一个inline-block类型view右侧排列
+        if ( lastInlineView ) {
+            CGFloat x = lastInlineView.frame.origin.x + lastInlineView.frame.size.width + lastInlineView.marginRight;
+            // 默认取父View的宽高
+            CGFloat parentWidth = parent.frame.size.width;
+            CGFloat parentHeight = parent.frame.size.height;
+            // 检查是否需要断行
+            if ( parentWidth < (x + _marginLeft + _width) ) { // 断行
+                top += parentHeight;
+                _isInNewLine = YES;
+            } else { // 不断行
+                left += _marginLeft + lastInlineView.frame.origin.x + lastInlineView.frame.size.width + lastInlineView.marginRight;
+                top += _marginTop + lastInlineView.frame.origin.y;
+            }
+        } else {
+            // 否则参照最后一个block类型的view下面排列
+            ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
+            if ( lastBlockView ) {
+                left += _marginLeft;
+                top += _marginTop + lastBlockView.frame.origin.y + lastBlockView.frame.size.height + lastBlockView.marginBottom;
+            }
+            _isInNewLine = YES;
+        }
+    }
+    _currFrame.origin.y = top;
+    _currFrame.origin.x = left;
+    _currFrame.size.width = width;
 }
 
 - (void) reCountWithAbsolute:(UIView *)parent
@@ -197,7 +244,7 @@
 {
     // block 排版参照最后一个block类型的view下面排列
     ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
-    CGFloat y = 0;
+    CGFloat top = 0;
     CGFloat width = _width;
     
     // block 如果没有设置width的情况，系统默认为父view的宽度
@@ -207,11 +254,13 @@
     
     // 存在最后一个block view，且非自己
     if ( lastBlockView && lastBlockView != self ) {
-        y = lastBlockView.top + lastBlockView.height;
+        top = lastBlockView.frame.origin.y + lastBlockView.frame.size.height;
     }
     
-    self.top = y;
-    self.width = width;
+    _currFrame.origin.y = top;
+    _currFrame.size.width = width;
+//    self.top = y;
+//    self.width = width;
 }
 
 - (void) reCountWithInlineBlock:(UIView *)parent
