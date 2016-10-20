@@ -50,8 +50,11 @@
     return self;
 }
 
-- (void) initConfig: (UIView*) parent
+- (void) initConfig
 {
+    // 重置frame
+    _currFrame = CGRectZero;
+    
     // 设置自动高度
     if ( _height == -1 ) {
         _isAutoHeight = YES;
@@ -60,9 +63,7 @@
     if ( _display == ALDisplayBlock && _width == -1 ) {
         _isFullWidth = YES;
     }
-    
-//    _currParentView = parent;
-    
+
     // 初始化
     if ( _top == -1 ) self.top = 0;
     if ( _bottom == -1 ) self.bottom = 0;
@@ -124,7 +125,7 @@
     }
     // 重置frame
     _currFrame = CGRectMake(_left, _top, _width, _height);
-    
+
     switch (_position) {
         case ALPositionRelative:
         {
@@ -272,24 +273,23 @@
         // 默认取UIView的宽度
         CGFloat parentWidth = parent.frame.size.width;
         CGFloat parentHeight = parent.frame.size.height;
-        // 如果是ALView类，那就取ALView的宽度
-        if ( [parent isKindOfClass:[ALView class]] ) {
-            parentWidth = ((ALView*)parent).width;
-            parentHeight = ((ALView*)parent).height;
-        }
         // 检查是否需要断行
-        if ( parentWidth < (x + self.width) ) { // 断行
-            self.top = parentHeight;
+        if ( parentWidth < (x + _width) ) { // 断行
+//            self.top = parentHeight;
+            _currFrame.origin.y = parentHeight;
             _isInNewLine = YES;
         } else { // 不断行
-            self.left = lastInlineBlockView.left + lastInlineBlockView.width;
-            self.top = lastInlineBlockView.top;
+            _currFrame.origin.x = lastInlineBlockView.frame.origin.x + lastInlineBlockView.frame.size.width;
+            _currFrame.origin.y = lastInlineBlockView.frame.origin.y;
+//            self.left = lastInlineBlockView.left + lastInlineBlockView.width;
+//            self.top = lastInlineBlockView.top;
         }
     } else {
         // 否则参照最后一个block类型的view下面排列
         ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
         if ( lastBlockView ) {
-            self.top = lastBlockView.top + lastBlockView.height;
+            _currFrame.origin.y = lastBlockView.frame.origin.y + lastBlockView.frame.size.width;
+//            self.top = lastBlockView.top + lastBlockView.height;
         }
         _isInNewLine = YES;
     }
@@ -311,21 +311,23 @@
             h = _height;
         }
     }
-    self.height = h;
+    _currFrame.size.height = h;
+//    self.height = h;
 }
 
 - (void) reCountWithMargin: (UIView*) parent
 {
-    CGFloat top = _top;
-    CGFloat left = _left + _marginLeft;
+    CGFloat top = _currFrame.origin.y;
+    CGFloat left = _currFrame.origin.x + _marginLeft;
     // 默认100%宽的情况
     if ( _isFullWidth ) {
-        self.width = _width - _marginLeft - _marginRight;
+        _currFrame.size.width -=  (_marginLeft + _marginRight);
+//        self.width = _width - _marginLeft - _marginRight;
     }
     
     if ( _display == ALDisplayBlock ) { // block
         ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
-        top = _top + _marginTop + lastBlockView.marginBottom;
+        top += _marginTop + lastBlockView.marginBottom;
 //        left = _left + _marginLeft;
     } else { // inline-block
         NSInteger len = self.superview.subviews.count;
@@ -336,18 +338,21 @@
             if ( [lastView isKindOfClass:[ALView class]] ) {
                 // 上一相邻view是block
                 if ( ((ALView*)lastView).display == ALDisplayBlock ) {
-                    top = _top + _marginTop + ((ALView*)lastView).marginBottom;
+                    top += _marginTop + ((ALView*)lastView).marginBottom;
                 } else {
                     // 只有当前view不是断行view，才需加上上一相邻view的右边距
                     if ( !_isInNewLine ) {
                         left += ((ALView*)lastView).marginRight;
                     }
+                    top = lastView.frame.origin.y;
                 }
             }
+        } else {
+            top += _marginTop;
         }
     }
-    self.top = top;
-    self.left = left;
+    _currFrame.origin.y = top;
+    _currFrame.origin.x = left;
 }
 
 #pragma mark - 私有方法

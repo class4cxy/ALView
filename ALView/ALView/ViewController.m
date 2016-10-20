@@ -52,14 +52,14 @@
     [article2 addTo:self.view];
     
     [[self createInlineBox1:0.1] addTo:article2];
-//    [[self createInlineBox1:0.2] addTo:article2];
-//    [[self createInlineBox1:0.3] addTo:article2];
-//    [[self createInlineBox1:0.4] addTo:article2];
-//    [[self createInlineBox1:0.5] addTo:article2];
-//    [[self createInlineBox1:0.6] addTo:article2];
-//    [[self createInlineBox1:0.7] addTo:article2];
-//    [[self createInlineBox1:0.8] addTo:article2];
-//    [[self createInlineBox1:0.9] addTo:article2];
+    [[self createInlineBox1:0.2] addTo:article2];
+    [[self createInlineBox1:0.3] addTo:article2];
+    [[self createInlineBox1:0.4] addTo:article2];
+    [[self createInlineBox1:0.5] addTo:article2];
+    [[self createInlineBox1:0.6] addTo:article2];
+    [[self createInlineBox1:0.7] addTo:article2];
+    [[self createInlineBox1:0.8] addTo:article2];
+    [[self createInlineBox1:0.9] addTo:article2];
 }
 
 - (ALView *) createInlineBox1: (CGFloat) alpha
