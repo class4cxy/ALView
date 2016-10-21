@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, ALPosition)
 typedef NS_ENUM(NSInteger, ALDisplay)
 {
     ALDisplayBlock, // 块级
-    ALDisplayInlineBlock, // 行内块级
+    ALDisplayInline, // 行内块级
 };
 
 

@@ -50,39 +50,9 @@
     return self;
 }
 
-- (void) initConfig
-{
-    // 重置frame
-    _currFrame = CGRectZero;
-    
-    // 设置自动高度
-    if ( _height == -1 ) {
-        _isAutoHeight = YES;
-    }
-    // BLOCK 如果没设置width值，则默认为父view的宽度
-    if ( _display == ALDisplayBlock && _width == -1 ) {
-        _isFullWidth = YES;
-    }
-
-    // 初始化
-    if ( _top == -1 ) self.top = 0;
-    if ( _bottom == -1 ) self.bottom = 0;
-    if ( _left == -1 ) self.left = 0;
-    if ( _right == -1 ) self.right = 0;
-    
-    if ( _marginTop == -1 ) self.marginTop = 0;
-    if ( _marginBottom == -1 ) self.marginBottom = 0;
-    if ( _marginLeft == -1 ) self.marginLeft = 0;
-    if ( _marginRight == -1 ) self.marginRight = 0;
-    
-    if ( _height == -1 ) self.height = 0;
-    if ( _width == -1 ) self.width = 0;
-}
-
 - (void) addTo:(UIView *)parent
 {
     [parent addSubview: self];
-//    [self initConfig: parent];
     [self reflow: parent];
 }
 
@@ -148,25 +118,6 @@
         default:
             break;
     }
-    //
-//    switch (_display) {
-//        case ALDisplayBlock:
-//        {
-//            [self reCountWithBlock: parent];
-//        }
-//            break;
-//            
-//        case ALDisplayInlineBlock:
-//        {
-//            [self reCountWithInlineBlock: parent];
-//        }
-//            break;
-//            
-//        default:
-//            break;
-//    }
-    // 通过margin计算top, left, width
-//    [self reCountWithMargin:parent];
     // 重算自己的高度，可能由子view改变而触发的reflow
     [self reCountHeightIfNeed];
     // draw
@@ -200,28 +151,43 @@
         if ( lastBlockView && lastBlockView != self ) {
             top += lastBlockView.marginBottom + lastBlockView.frame.origin.y + lastBlockView.frame.size.height;
         }
-    } else if ( _display == ALDisplayInlineBlock ) { // inline-block
-        ALView * lastInlineView = [self getLastALView:parent displayModel:ALDisplayInlineBlock];
+    } else if ( _display == ALDisplayInline ) { // inline-block
+        ALView * lastInlineView = [self getLastALView:parent displayModel:ALDisplayInline];
         // 非nil，参照最后一个inline-block类型view右侧排列
         if ( lastInlineView ) {
-            CGFloat x = lastInlineView.frame.origin.x + lastInlineView.frame.size.width + lastInlineView.marginRight;
+            CGFloat x = lastInlineView.frame.origin.x +
+                        lastInlineView.frame.size.width +
+                        lastInlineView.marginRight;
             // 默认取父View的宽高
             CGFloat parentWidth = parent.frame.size.width;
             CGFloat parentHeight = parent.frame.size.height;
             // 检查是否需要断行
-            if ( parentWidth < (x + _marginLeft + _width) ) { // 断行
+            if ( parentWidth < (x + _marginLeft + _marginRight + _width) ) { // 断行
                 top += parentHeight;
+                left += _marginLeft;
                 _isInNewLine = YES;
             } else { // 不断行
-                left += _marginLeft + lastInlineView.frame.origin.x + lastInlineView.frame.size.width + lastInlineView.marginRight;
-                top += _marginTop + lastInlineView.frame.origin.y;
+                left += _marginLeft +
+                        lastInlineView.frame.origin.x +
+                        lastInlineView.frame.size.width +
+                        lastInlineView.marginRight;
+                // top要以上一节点的y坐标减去顶部外边距为准
+                top += _marginTop +
+                        lastInlineView.frame.origin.y -
+                        lastInlineView.marginTop;
             }
         } else {
             // 否则参照最后一个block类型的view下面排列
             ALView * lastBlockView = [self getLastALView:parent displayModel:ALDisplayBlock];
             if ( lastBlockView ) {
                 left += _marginLeft;
-                top += _marginTop + lastBlockView.frame.origin.y + lastBlockView.frame.size.height + lastBlockView.marginBottom;
+                top += _marginTop +
+                        lastBlockView.frame.origin.y +
+                        lastBlockView.frame.size.height +
+                        lastBlockView.marginBottom;
+            } else { // 自己就是开始的节点
+                left += _marginLeft;
+                top += _marginTop;
             }
             _isInNewLine = YES;
         }
@@ -266,7 +232,7 @@
 
 - (void) reCountWithInlineBlock:(UIView *)parent
 {
-    ALView * lastInlineBlockView = [self getLastALView:parent displayModel:ALDisplayInlineBlock];
+    ALView * lastInlineBlockView = [self getLastALView:parent displayModel:ALDisplayInline];
     // 非nil，参照最后一个inline-block类型view右侧排列
     if ( lastInlineBlockView ) {
         CGFloat x = lastInlineBlockView.left + lastInlineBlockView.width;
@@ -297,9 +263,9 @@
 
 - (void) reCountHeightIfNeed
 {
-    CGFloat h = _height;
     // 如果没设置高度，那就是系统自动设置（根据子view来算自身高度）
     if ( _isAutoHeight && self.subviews.count > 0 ) {
+        CGFloat h = self.frame.size.height;
         UIView * lastView = self.subviews.lastObject;
         h = lastView.frame.size.height + lastView.frame.origin.y;
         // 加上底部外边距
@@ -307,12 +273,11 @@
             h += ((ALView*)lastView).marginBottom;
         }
         // 取子view中最高的
-        if ( h < _height ) {
-            h = _height;
+        if ( h < self.frame.size.height ) {
+            h = self.frame.size.height;
         }
+        _currFrame.size.height = h;
     }
-    _currFrame.size.height = h;
-//    self.height = h;
 }
 
 - (void) reCountWithMargin: (UIView*) parent
