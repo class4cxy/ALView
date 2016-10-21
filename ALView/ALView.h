@@ -48,10 +48,19 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  * 其他属性
  */
 
+// 记录当前view的内部高度，该值表示子view最高高度值，未必与height值相等
+@property (nonatomic, assign, readonly) CGFloat currInnerHeight;
 @property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isFullWidth; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
-//@property (nonatomic, assign) CGFloat parentMaxHeight;
+// 记录是否设置过left值
+@property (nonatomic, assign, readonly) BOOL hasSettedLeft;
+// 记录是否设置过top值
+@property (nonatomic, assign, readonly) BOOL hasSettedTop;
+// 记录是否设置过bottom值
+@property (nonatomic, assign, readonly) BOOL hasSettedBottom;
+// 记录是否设置过right值
+@property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
 - (instancetype) init;
 - (void) addTo: (UIView *) parent;
