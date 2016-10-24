@@ -9,8 +9,7 @@
 #import "ViewController.h"
 #import "ALView.h"
 
-@interface ViewController ()
-
+@interface ViewController () <UIScrollViewDelegate>
 @end
 
 @implementation ViewController
@@ -20,9 +19,35 @@
     
 //    [self initLayoutWithMargin];
 //    [self initLayout];
-    [self initLayoutWithAbsolute];
+//    [self initLayoutWithAbsolute];
+    [self initLayoutWithScrollView];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initLayoutWithScrollView
+{
+    UIScrollView * scbox = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
+    
+    scbox.contentSize = CGSizeMake(scbox.frame.size.width * 2, scbox.frame.size.height * 3);
+    scbox.delegate = self;
+//    scbox.contentOffset = CGPointMake(0, -200);
+    scbox.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:scbox];
+    
+    ALView * redbox = [[ALView alloc] init];
+    redbox.height = 100;
+    redbox.width = [[UIScreen mainScreen] bounds].size.width;
+    redbox.position = ALPositionAbsolute;
+    redbox.backgroundColor = [UIColor redColor];
+    
+    [redbox addTo:scbox];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGPoint point = scrollView.contentOffset;
+    NSLog(@"%@", NSStringFromCGPoint(point));
 }
 
 - (void) initLayoutWithAbsolute

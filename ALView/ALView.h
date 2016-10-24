@@ -8,10 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ALScrollView.h"
+
 typedef NS_ENUM(NSInteger, ALPosition)
 {
-    ALPositionRelative, // 相对定位，相对于父view
-    ALPositionAbsolute, // 绝对定位，相对于父view
+    // 相对父view，相对同级view布局，
+    // 依赖于父view，
+    // 依赖于同级view，
+    // 不受top,left,right,bottom类影响
+    ALPositionRelative,
+    // 相对于父view绝对布局，
+    // 依赖于父view，
+    // 依赖于top,left,right,bottom，
+    // 不受同级view影响，不会触发父view reflow
+    ALPositionAbsolute,
     ALPositionFixed, // 绝对定位，相对于window
 };
 
@@ -27,7 +37,6 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 /*
  * 样式属性
  */
-
 @property (nonatomic, assign) ALPosition position;
 @property (nonatomic, assign) ALDisplay display;
 
@@ -43,6 +52,12 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 @property (nonatomic, assign) CGFloat marginBottom;
 @property (nonatomic, assign) CGFloat marginLeft;
 @property (nonatomic, assign) CGFloat marginRight;
+
+// TODO
+@property (nonatomic, assign) CGFloat paddingTop;
+@property (nonatomic, assign) CGFloat paddingBottom;
+@property (nonatomic, assign) CGFloat paddingLeft;
+@property (nonatomic, assign) CGFloat paddingRight;
 
 /*
  * 其他属性
@@ -64,5 +79,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 
 - (instancetype) init;
 - (void) addTo: (UIView *) parent;
+// 私有
+- (void) reflowWithPositionFixed: (CGPoint) offset;
 
 @end

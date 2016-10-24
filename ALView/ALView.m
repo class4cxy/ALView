@@ -136,6 +136,18 @@
     }
 }
 
+// fixed方式布局的私有重排方法
+- (void) reflowWithPositionFixed: (CGPoint) offset
+{
+    if ( _position == ALPositionFixed ) {
+        CGFloat top = _currFrame.origin.y;
+        CGFloat left = _currFrame.origin.x;
+        
+        _currFrame.origin.y = top + offset.y;
+        _currFrame.origin.x = left + offset.x;
+    }
+}
+
 - (void) reCountWithRelative:(UIView *)parent
 {
     CGFloat top = _top;
@@ -215,10 +227,53 @@
     _currFrame.size.width = width;
 }
 
-// absolute方式的排版
+// absolute方式的排版：相对父view绝对位置排版
 // 宽高：没有自动宽，高度可由子view撑高，但不能撑开父view，不能触发父view reflow
-// 位置：通过top,left,bottom,right相对于父view来定位，margin不起作用
+// 位置：通过top,left,bottom,right相对于父view来定位
+// 注：如果父view为ALScrollView，排版应该是相对于父view的滚动区
+// 注：1、位置不受margin影响；2、不受同级view排版影响。
+// TODO: 兼容父view为ALScrollView的情况
 - (void) reCountWithAbsolute:(UIView *)parent
+{
+    CGFloat top = _top;
+    CGFloat left = _left;
+    
+    CGFloat parentHeight = parent.frame.size.height;
+    CGFloat parentWidth = parent.frame.size.width;
+    
+    // 如果父view是scrollView，排版需参考父view的content
+    // contentSize与frame.size，谁大用谁
+    if ( [parent isKindOfClass:[UIScrollView class]] ) {
+        CGFloat contentHeight = ((UIScrollView*)parent).contentSize.height;
+        CGFloat contentWidth = ((UIScrollView*)parent).contentSize.width;
+        
+        if ( contentHeight > parentHeight ) {
+            parentHeight = contentHeight;
+        }
+        if ( contentWidth > parentWidth ) {
+            parentWidth = contentWidth;
+        }
+    }
+    
+    // 底部定位优先
+    if ( _hasSettedBottom && !_hasSettedTop ) {
+        top = parentHeight - _bottom - _height;
+    } // 顶部定位优先直接为top值
+    
+    // 右边定位优先
+    if ( _hasSettedRight && !_hasSettedLeft ) {
+        left = parentWidth - _right - _width;
+    }
+    
+    _currFrame.origin.y = top;
+    _currFrame.origin.x = left;
+}
+
+// fixed方式的排版：相对父view固定位置排版
+// 宽高：没有自动宽，高度可由子view撑高，但不能撑开父view，不能触发父view reflow
+// 位置：通过top,left,bottom,right相对于父view来定位
+// 注：1、位置不受margin影响；2、不受同级view影响；3、不受父view滚动区域影响。
+- (void) reCountWithFixed:(UIView *)parent
 {
     CGFloat top = _top;
     CGFloat left = _left;
@@ -238,11 +293,6 @@
     
     _currFrame.origin.y = top;
     _currFrame.origin.x = left;
-}
-
-- (void) reCountWithFixed:(UIView *)parent
-{
-    _currFrame =  CGRectMake(_left, _top, _width, _height);
 }
 
 /*
@@ -270,6 +320,10 @@
     if ( _isAutoHeight ) {
         _currFrame.size.height = innerHeight;
     }
+    // 如果是ALScrollView
+//    if ( [self isKindOfClass:[ALScrollView class]] ) {
+//        ((ALScrollView*) self).
+//    }
 }
 
 #pragma mark - 私有方法

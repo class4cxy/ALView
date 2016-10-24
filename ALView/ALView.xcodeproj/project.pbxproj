@@ -15,6 +15,9 @@
 		6B1D25051DB307A200FC4081 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B1D25031DB307A200FC4081 /* LaunchScreen.storyboard */; };
 		6B1D25101DB307A300FC4081 /* ALViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D250F1DB307A300FC4081 /* ALViewTests.m */; };
 		6B1D251B1DB307A300FC4081 /* ALViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D251A1DB307A300FC4081 /* ALViewUITests.m */; };
+		6B1D252A1DBC4E0F00FC4081 /* ALScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25291DBC4E0F00FC4081 /* ALScrollView.m */; };
+		6B1D252B1DBC4E0F00FC4081 /* ALScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25291DBC4E0F00FC4081 /* ALScrollView.m */; };
+		6B1D252C1DBC4E0F00FC4081 /* ALScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25291DBC4E0F00FC4081 /* ALScrollView.m */; };
 		6B89CD191DB511DD00B82163 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B89CD181DB511DD00B82163 /* ALView.m */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +55,8 @@
 		6B1D25161DB307A300FC4081 /* ALViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ALViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B1D251A1DB307A300FC4081 /* ALViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ALViewUITests.m; sourceTree = "<group>"; };
 		6B1D251C1DB307A300FC4081 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6B1D25281DBC4DF100FC4081 /* ALScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALScrollView.h; sourceTree = "<group>"; };
+		6B1D25291DBC4E0F00FC4081 /* ALScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALScrollView.m; sourceTree = "<group>"; };
 		6B89CD171DB511DD00B82163 /* ALView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALView.h; sourceTree = SOURCE_ROOT; };
 		6B89CD181DB511DD00B82163 /* ALView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALView.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -110,6 +115,8 @@
 				6B1D24F91DB307A200FC4081 /* AppDelegate.m */,
 				6B1D24FB1DB307A200FC4081 /* ViewController.h */,
 				6B1D24FC1DB307A200FC4081 /* ViewController.m */,
+				6B1D25281DBC4DF100FC4081 /* ALScrollView.h */,
+				6B1D25291DBC4E0F00FC4081 /* ALScrollView.m */,
 				6B1D24FE1DB307A200FC4081 /* Main.storyboard */,
 				6B1D25011DB307A200FC4081 /* Assets.xcassets */,
 				6B1D25031DB307A200FC4081 /* LaunchScreen.storyboard */,
@@ -282,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B1D24FD1DB307A200FC4081 /* ViewController.m in Sources */,
+				6B1D252A1DBC4E0F00FC4081 /* ALScrollView.m in Sources */,
 				6B1D24FA1DB307A200FC4081 /* AppDelegate.m in Sources */,
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B89CD191DB511DD00B82163 /* ALView.m in Sources */,
@@ -292,6 +300,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1D252B1DBC4E0F00FC4081 /* ALScrollView.m in Sources */,
 				6B1D25101DB307A300FC4081 /* ALViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +309,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1D252C1DBC4E0F00FC4081 /* ALScrollView.m in Sources */,
 				6B1D251B1DB307A300FC4081 /* ALViewUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
