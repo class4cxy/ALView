@@ -1,14 +1,14 @@
 //
-//  ALScrollView.h
+//  ALBaseView.h
 //  ALView
 //
-//  Created by jdochen on 2016/10/23.
+//  Created by jdochen on 2016/10/25.
 //  Copyright © 2016年 jdochen. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ALScrollView : UIScrollView
+@interface ALBaseView : UIView
 
 - (instancetype) init;
 

@@ -32,9 +32,12 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 
 @interface UIView (ALBase)
 
+@property (nonatomic, assign, readonly) BOOL isALBase; // 是否为ALBase布局的view
+
 /*
  * 样式属性
  */
+
 @property (nonatomic, assign) ALPosition position;
 @property (nonatomic, assign) ALDisplay display;
 
@@ -75,8 +78,8 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 // 记录是否设置过right值
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
-//- (instancetype) init;
-//- (void) addTo: (UIView *) parent;
+- (instancetype) initWithALBase;
+- (void) addTo: (UIView *) parent;
 // 私有
 //- (void) reflowWithPositionFixed: (CGPoint) offset;
 
