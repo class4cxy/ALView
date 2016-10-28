@@ -30,6 +30,10 @@
 }
 -(void)setPosition:(ALPosition)position
 {
+    // absolute, fixed 时，isFullWidth要设置为NO
+    if ( position == ALPositionAbsolute || position == ALPositionFixed ) {
+        self.isFullWidth = NO;
+    }
     objc_setAssociatedObject(self, @"position", [NSNumber numberWithInt:position], OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -274,19 +278,19 @@
     switch (self.position) {
         case ALPositionRelative:
         {
-            [self reCountWithRelative: parent withFrame: reflowFrame];
+            reflowFrame = [self reCountWithRelative: parent withFrame: reflowFrame];
         }
             break;
             
         case ALPositionAbsolute:
         {
-            [self reCountWithAbsolute: parent withFrame: reflowFrame];
+            reflowFrame = [self reCountWithAbsolute: parent withFrame: reflowFrame];
         }
             break;
             
         case ALPositionFixed:
         {
-            [self reCountWithFixed: parent withFrame: reflowFrame];
+            reflowFrame = [self reCountWithFixed: parent withFrame: reflowFrame];
         }
             break;
             
@@ -294,7 +298,7 @@
             break;
     }
     // 重算自己的高度，可能由子view改变而触发的reflow
-    [self reCountHeightIfNeed: reflowFrame];
+    reflowFrame = [self reCountHeightIfNeed: reflowFrame];
     // draw
     self.frame = reflowFrame;
     // 父view是ALView的实例且当前view是relative布局时，触发父view reflow
@@ -315,7 +319,7 @@
     }
 }
 
-- (void) reCountWithRelative:(UIView *)parent withFrame: (CGRect) reflowFrame
+- (CGRect) reCountWithRelative:(UIView *)parent withFrame: (CGRect) reflowFrame
 {
     CGFloat top = self.top;
     CGFloat left = self.left;
@@ -354,12 +358,12 @@
             if ( parentWidth < (x + self.marginLeft + self.marginRight + self.width) ) { // 断行
                 // TODO 如果父view不是ALView实例，则无法读取 currInnerHeight，降级处理方案是排在上面view的下面
                 if ( parent.isALBase ) {
-                    top += parent.currInnerHeight;
-                } else {
                     top +=  self.marginTop +
                     lastInlineView.frame.origin.y +
                     lastInlineView.frame.size.height +
                     lastInlineView.marginBottom;
+                } else {
+                    top += parent.currInnerHeight;
                 }
                 left += self.marginLeft;
                 self.isInNewLine = YES;
@@ -392,6 +396,8 @@
     reflowFrame.origin.y = top;
     reflowFrame.origin.x = left;
     reflowFrame.size.width = width;
+    
+    return reflowFrame;
 }
 
 // absolute方式的排版：相对父view绝对位置排版
@@ -400,7 +406,7 @@
 // 注：如果父view为ALScrollView，排版应该是相对于父view的滚动区
 // 注：1、位置不受margin影响；2、不受同级view排版影响。
 // TODO: 兼容父view为ALScrollView的情况
-- (void) reCountWithAbsolute:(UIView *)parent withFrame: (CGRect) reflowFrame
+- (CGRect) reCountWithAbsolute:(UIView *)parent withFrame: (CGRect) reflowFrame
 {
     CGFloat top = self.top;
     CGFloat left = self.left;
@@ -434,13 +440,15 @@
     
     reflowFrame.origin.y = top;
     reflowFrame.origin.x = left;
+    
+    return reflowFrame;
 }
 
 // fixed方式的排版：相对父view固定位置排版
 // 宽高：没有自动宽，高度可由子view撑高，但不能撑开父view，不能触发父view reflow
 // 位置：通过top,left,bottom,right相对于父view来定位
 // 注：1、位置不受margin影响；2、不受同级view影响；3、不受父view滚动区域影响。
-- (void) reCountWithFixed:(UIView *)parent withFrame: (CGRect) reflowFrame
+- (CGRect) reCountWithFixed:(UIView *)parent withFrame: (CGRect) reflowFrame
 {
     CGFloat top = self.top;
     CGFloat left = self.left;
@@ -460,12 +468,14 @@
     
     reflowFrame.origin.y = top;
     reflowFrame.origin.x = left;
+    
+    return reflowFrame; 
 }
 
 /*
  * 如果isAutoHeight=YES时，每次子view操作都应当重新计算view的高度
  */
-- (void) reCountHeightIfNeed: (CGRect) reflowFrame
+- (CGRect) reCountHeightIfNeed: (CGRect) reflowFrame
 {
     CGFloat innerHeight = 0;
     // 计算最高的 currInnerHeight
@@ -491,6 +501,8 @@
     //    if ( [self isKindOfClass:[ALScrollView class]] ) {
     //        ((ALScrollView*) self).
     //    }
+    
+    return reflowFrame;
 }
 
 #pragma mark - 私有方法

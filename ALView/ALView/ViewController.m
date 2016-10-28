@@ -18,9 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self initLayoutWithMargin];
+    [self initLayoutWithMargin];
 //    [self initLayout];
-    [self initLayoutWithAbsolute];
+//    [self initLayoutWithAbsolute];
 //    [self initLayoutWithScrollView];
     
     // Do any additional setup after loading the view, typically from a nib.
