@@ -1,5 +1,5 @@
 //
-//  ALBaseView.h
+//  ALView.h
 //  ALView
 //
 //  Created by jdochen on 2016/10/25.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ALBaseView : UIView
+@interface ALView : UIView
 
 - (instancetype) init;
 

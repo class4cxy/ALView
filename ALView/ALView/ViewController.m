@@ -8,7 +8,6 @@
 
 #import "ViewController.h"
 #import "UIView+ALBase.h"
-#import "ALBaseView.h"
 
 @interface ViewController () <UIScrollViewDelegate>
 @end
@@ -18,28 +17,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initLayoutWithMargin];
+//    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
-//    [self initLayoutWithScrollView];
+    [self initLayoutWithScrollView];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void) initLayoutWithScrollView
 {
-    UIScrollView * scbox = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
-    
-    scbox.contentSize = CGSizeMake(scbox.frame.size.width * 2, scbox.frame.size.height * 3);
+//    UIScrollView * scbox = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height)];
+    ALScrollView * scbox = [[ALScrollView alloc] init];
+    scbox.height = [[UIScreen mainScreen] bounds].size.height;
+//    scbox.contentSize = CGSizeMake(scbox.frame.size.width * 2, scbox.frame.size.height * 3);
     scbox.delegate = self;
-//    scbox.contentOffset = CGPointMake(0, -200);
     scbox.backgroundColor = [UIColor greenColor];
-    [self.view addSubview:scbox];
+    [scbox addTo:self.view];
     
-    ALBaseView * redbox = [[ALBaseView alloc] init];
+    ALView * redbox = [[ALView alloc] init];
     redbox.height = 100;
-    redbox.width = [[UIScreen mainScreen] bounds].size.width;
-    redbox.position = ALPositionAbsolute;
+//    redbox.position = ALPositionAbsolute;
     redbox.backgroundColor = [UIColor redColor];
     
     [redbox addTo:scbox];
@@ -53,7 +51,7 @@
 
 - (void) initLayoutWithAbsolute
 {
-    ALBaseView * body = [[ALBaseView alloc] init];
+    ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
     body.height = 200;
     body.marginTop = 100;
@@ -72,9 +70,9 @@
     [[self createAbsoluteBox:0 left:-50 right:0 bottom:-50 alpha:0.3] addTo: body];
     [[self createAbsoluteBox:0 left:0 right:-50 bottom:-50 alpha:0.4] addTo: body];
 }
-- (ALBaseView *) createAbsoluteBox: (CGFloat) top left: (CGFloat) left right: (CGFloat) right bottom: (CGFloat) bottom alpha: (CGFloat) alpha
+- (ALView *) createAbsoluteBox: (CGFloat) top left: (CGFloat) left right: (CGFloat) right bottom: (CGFloat) bottom alpha: (CGFloat) alpha
 {
-    ALBaseView * box = [[ALBaseView alloc] init];
+    ALView * box = [[ALView alloc] init];
     box.height = 40;
     box.width = 40;
     box.position = ALPositionAbsolute;
@@ -88,12 +86,12 @@
 
 - (void) initLayoutWithMargin
 {
-    ALBaseView * body = [[ALBaseView alloc] init];
+    ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
 //    body.height = 450;
     [body addTo:self.view];
     
-    ALBaseView * article2 = [[ALBaseView alloc] init];
+    ALView * article2 = [[ALView alloc] init];
     article2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
     article2.marginTop = 50;
     article2.marginLeft = 20;
@@ -106,7 +104,7 @@
     [[self createInlineBox1:0.4] addTo:article2];
     [[self createInlineBox1:0.5] addTo:article2];
     
-    ALBaseView * subInline = [[ALBaseView alloc] init];
+    ALView * subInline = [[ALView alloc] init];
     subInline.height = 40;
     subInline.width = 40;
     subInline.marginTop = 20;
@@ -134,9 +132,9 @@
     [[self createInlineBox1:0.9] addTo:body];
     }
 
-- (ALBaseView *) createInlineBox1: (CGFloat) alpha
+- (ALView *) createInlineBox1: (CGFloat) alpha
 {
-    ALBaseView * subInline = [[ALBaseView alloc] init];
+    ALView * subInline = [[ALView alloc] init];
     subInline.height = 40;
     subInline.width = 40;
     subInline.marginTop = 10;
@@ -147,9 +145,9 @@
     subInline.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
     return subInline;
 }
-- (ALBaseView *) createInlineBox2: (CGFloat) alpha
+- (ALView *) createInlineBox2: (CGFloat) alpha
 {
-    ALBaseView * subInline = [[ALBaseView alloc] init];
+    ALView * subInline = [[ALView alloc] init];
     subInline.height = 50;
     subInline.width = 80;
     subInline.display = ALDisplayInline;
@@ -159,15 +157,15 @@
 
 - (void) initLayout
 {
-    ALBaseView * body = [[ALBaseView alloc] init];
+    ALView * body = [[ALView alloc] init];
     [body addTo:self.view];
     
-    ALBaseView * header = [[ALBaseView alloc] init];
+    ALView * header = [[ALView alloc] init];
     header.height = 120;
     header.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:1];
     [header addTo:body];
     
-    ALBaseView * container = [[ALBaseView alloc] init];
+    ALView * container = [[ALView alloc] init];
     [container addTo:body];
     
     [[self createInlineBox2:0.1] addTo:container];
@@ -179,7 +177,7 @@
     [[self createInlineBox2:0.7] addTo:container];
     [[self createInlineBox2:0.8] addTo:container];
     
-    ALBaseView * footer = [[ALBaseView alloc] init];
+    ALView * footer = [[ALView alloc] init];
     footer.height = 150;
     footer.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:1];
     [footer addTo:body];

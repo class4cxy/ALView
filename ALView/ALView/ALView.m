@@ -1,15 +1,15 @@
 //
-//  ALBaseView.m
+//  ALView.m
 //  ALView
 //
 //  Created by jdochen on 2016/10/25.
 //  Copyright © 2016年 jdochen. All rights reserved.
 //
 
-#import "ALBaseView.h"
+#import "ALView.h"
 #import "UIView+ALBase.h"
 
-@implementation ALBaseView
+@implementation ALView
 
 - (instancetype)init
 {

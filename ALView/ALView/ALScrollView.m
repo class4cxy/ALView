@@ -29,6 +29,11 @@
     [super setDisplay: ALDisplayBlock];
 }
 
+- (void) reflowContentFrame
+{
+    self.contentSize = CGSizeMake(self.currInnerWidth, self.currInnerHeight);
+}
+
 
 //- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 //{

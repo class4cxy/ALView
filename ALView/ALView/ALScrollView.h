@@ -11,5 +11,7 @@
 @interface ALScrollView : UIScrollView
 
 - (instancetype) init;
+// private method
+- (void) reflowContentFrame;
 
 @end

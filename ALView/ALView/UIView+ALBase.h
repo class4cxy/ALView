@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ALView.h"
+#import "ALScrollView.h"
 
 typedef NS_ENUM(NSInteger, ALPosition)
 {
@@ -64,8 +66,10 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  * 其他属性
  */
 
-// 记录当前view的内部高度，该值表示子view最高高度值，未必与height值相等
+// 记录当前view的内部高度，该值表示子view最高高度值，未必与height值相等，例如scrollView的情况
 @property (nonatomic, assign, readonly) CGFloat currInnerHeight;
+// 记录当前view的内部高度，该值表示子view最高高度值，未必与width值相等，例如scrollView的情况
+@property (nonatomic, assign, readonly) CGFloat currInnerWidth;
 @property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isFullWidth; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
