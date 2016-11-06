@@ -1,3 +1,3 @@
 # ALView
-a auto layout framework
+ALView is not just autolayout, is a fast way to layout like html's flow layout.
 ## working...
