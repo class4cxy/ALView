@@ -20,12 +20,12 @@
 //    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
-//    [self initLayoutWithScrollView];
+    [self initLayoutWithScrollView];
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initSiblingLayout];
-    [self initBlockContentInlineLayout];
+//    [self initBlockContentInlineLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -266,14 +266,14 @@
     [[self createInlineBox1:0.9] addTo:scbox1];
     [[self createInlineBox1:1.0] addTo:scbox1];
     
-    ALView * fixed1 = [[ALView alloc] init];
-    fixed1.width = 30;
-    fixed1.height = 30;
-    fixed1.top = 20;
-    fixed1.left = 20;
-    fixed1.position = ALPositionFixed;
-    fixed1.backgroundColor = [UIColor whiteColor];
-    [fixed1 addTo: scbox1];
+//    ALView * fixed1 = [[ALView alloc] init];
+//    fixed1.width = 30;
+//    fixed1.height = 30;
+//    fixed1.top = 20;
+//    fixed1.left = 20;
+//    fixed1.position = ALPositionFixed;
+//    fixed1.backgroundColor = [UIColor whiteColor];
+//    [fixed1 addTo: scbox1];
     
     ALScrollView * scbox2 = [[ALScrollView alloc] init];
     scbox2.marginTop = 20;
@@ -366,7 +366,7 @@
     yellowBox.height = 400;
     yellowBox.backgroundColor = [UIColor yellowColor];
     [yellowBox addTo:scbox];
-//    
+//
     ALView * absoluteGradView = [[ALView alloc] init];
     absoluteGradView.height = 50;
     absoluteGradView.width = 50;
@@ -375,15 +375,34 @@
     absoluteGradView.backgroundColor = [UIColor grayColor];
     absoluteGradView.position = ALPositionAbsolute;
     [absoluteGradView addTo:scbox];
+    
+    ALView * absoluteGradView2 = [[ALView alloc] init];
+    absoluteGradView2.height = 50;
+    absoluteGradView2.width = 50;
+    absoluteGradView2.top = 20;
+    absoluteGradView2.right = 20;
+    absoluteGradView2.backgroundColor = [UIColor grayColor];
+    absoluteGradView2.position = ALPositionAbsolute;
+    [absoluteGradView2 addTo:scbox];
+    
+    ALView * absoluteGradView3 = [[ALView alloc] init];
+    absoluteGradView3.height = 50;
+    absoluteGradView3.width = 50;
+    absoluteGradView3.bottom = 20;
+    absoluteGradView3.right = 20;
+    absoluteGradView3.backgroundColor = [UIColor grayColor];
+    absoluteGradView3.position = ALPositionAbsolute;
+    [absoluteGradView3 addTo:scbox];
+
 //
-    ALView * fixedWhiteView = [[ALView alloc] init];
-    fixedWhiteView.height = 50;
-    fixedWhiteView.width = 50;
-    fixedWhiteView.top = 20;
-    fixedWhiteView.right = 20;
-    fixedWhiteView.backgroundColor = [UIColor whiteColor];
-    fixedWhiteView.position = ALPositionFixed;
-    [fixedWhiteView addTo:scbox];
+//    ALView * fixedWhiteView = [[ALView alloc] init];
+//    fixedWhiteView.height = 50;
+//    fixedWhiteView.width = 50;
+//    fixedWhiteView.top = 20;
+//    fixedWhiteView.right = 20;
+//    fixedWhiteView.backgroundColor = [UIColor whiteColor];
+//    fixedWhiteView.position = ALPositionFixed;
+//    [fixedWhiteView addTo:scbox];
 }
 
 - (void) initLayoutWithAbsolute

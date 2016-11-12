@@ -23,15 +23,15 @@
     objc_setAssociatedObject(self, @"isALBase", [NSNumber numberWithBool:isALBase], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic isVirtual;
-- (BOOL) isVirtual
-{
-    return [objc_getAssociatedObject(self, @"isVirtual") boolValue];
-}
-- (void) setIsVirtual:(BOOL)isVirtual
-{
-    objc_setAssociatedObject(self, @"isVirtual", [NSNumber numberWithBool:isVirtual], OBJC_ASSOCIATION_RETAIN);
-}
+//@dynamic isVirtual;
+//- (BOOL) isVirtual
+//{
+//    return [objc_getAssociatedObject(self, @"isVirtual") boolValue];
+//}
+//- (void) setIsVirtual:(BOOL)isVirtual
+//{
+//    objc_setAssociatedObject(self, @"isVirtual", [NSNumber numberWithBool:isVirtual], OBJC_ASSOCIATION_RETAIN);
+//}
 
 @dynamic position;
 - (ALPosition) position
@@ -41,7 +41,8 @@
 -(void)setPosition:(ALPosition)position
 {
     // absolute, fixed 时，isFullWidth要设置为NO
-    if ( position == ALPositionAbsolute || position == ALPositionFixed ) {
+//    if ( position == ALPositionAbsolute || position == ALPositionFixed ) {
+    if ( position == ALPositionAbsolute ) {
         self.isFullWidth = NO;
     }
     objc_setAssociatedObject(self, @"position", [NSNumber numberWithInt:position], OBJC_ASSOCIATION_RETAIN);
@@ -295,7 +296,7 @@
 {
     if ( self = [self initWithFrame:CGRectZero] ) {
         self.isALBase = YES;
-        self.isVirtual = NO;
+//        self.isVirtual = NO;
         
         self.isAutoHeight = YES;
         self.isFullWidth = YES;
@@ -316,13 +317,13 @@
     return self;
 }
 
-- (instancetype) initWithALVirtualBase
-{
-    if ( self = [self initWithALBase] ) {
-        self.isVirtual = YES;
-    }
-    return self;
-}
+//- (instancetype) initWithALVirtualBase
+//{
+//    if ( self = [self initWithALBase] ) {
+//        self.isVirtual = YES;
+//    }
+//    return self;
+//}
 
 /*
  * 添加到父view
@@ -330,15 +331,21 @@
 - (void) addTo: (UIView *) parent
 {
     // ALScrollView 自有的添加逻辑
-    if ( [parent isKindOfClass:[ALScrollView class]] && !self.isVirtual ) {
-        [((ALScrollView*) parent).scrollView addSubview: self];
-        [self linkSiblingView:((ALScrollView*) parent).scrollView];
-        [self reflow: ((ALScrollView*) parent).scrollView];
-    } else {
-        [parent addSubview: self];
-        [self linkSiblingView:parent];
-        [self reflow: parent];
-    }
+//    if ( [parent isKindOfClass:[ALScrollView class]] && !self.isVirtual ) {
+//        [((ALScrollView*) parent).scrollView addSubview: self];
+//        [self linkSiblingView:((ALScrollView*) parent).scrollView];
+//        [self reflow: ((ALScrollView*) parent).scrollView];
+//    } else {
+//        [parent addSubview: self];
+//        [self linkSiblingView:parent];
+//        [self reflow: parent];
+//    }
+    // 将view add到树中
+    [parent addSubview: self];
+    // 生成兄弟view关系
+    [self linkSiblingView:parent];
+    // 排版该view
+    [self reflow: parent];
 }
 
 /*
@@ -376,19 +383,19 @@
         }
             break;
             
-        case ALPositionFixed:
-        {
-            [self reflowWithFixed: parent];
-        }
-            break;
+//        case ALPositionFixed:
+//        {
+//            [self reflowWithFixed: parent];
+//        }
+//            break;
             
         default:
             break;
     }
     
     // reflow ALScrollView's contentSize
-    if ([self isKindOfClass:[ALScrollView class]]) {
-        [((ALScrollView*)self) reflowInnerFrame];
+    if ([parent isKindOfClass:[ALScrollView class]]) {
+        [((ALScrollView*)parent) reflowInnerFrame];
     }
     // 父view是ALView的实例且当前view是relative布局时，触发父view重算自己的高度
     if ( parent.isALBase && self.position == ALPositionRelative ) {
@@ -671,39 +678,39 @@
         left = parentWidth - self.right - self.width;
     }
     
-    self.frame = CGRectMake(left, top, self.frame.size.width, self.frame.size.height);
+    self.frame = CGRectMake(left, top, self.width, self.height);
 }
 
 // fixed方式的排版：相对父view固定位置排版
 // 宽高：没有自动宽，高度可由子view撑高，但不能撑开父view，不能触发父view reflow
 // 位置：通过top,left,bottom,right相对于父view来定位
 // 注：1、位置不受margin影响；2、不受同级view影响；3、不受父view滚动区域影响。
-- (void) reflowWithFixed:(UIView *)parent
-{
-    CGFloat top = self.top;
-    CGFloat left = self.left;
-    
-    CGFloat parentHeight = parent.frame.size.height;
-    CGFloat parentWidth = parent.frame.size.width;
-    
-    // 底部定位优先
-    if ( self.hasSettedBottom && !self.hasSettedTop ) {
-        top = parentHeight - self.bottom - self.height;
-    } // 顶部定位优先直接为top值
-    
-    // 右边定位优先
-    if ( self.hasSettedRight && !self.hasSettedLeft ) {
-        left = parentWidth - self.right - self.width;
-    }
-    // 如果父view是scrollView，需考虑对应的contentOffset
-    if ( [parent isKindOfClass:[UIScrollView class]] ) {
-        CGPoint offset =  ((UIScrollView *)parent).contentOffset;
-        top += offset.y;
-        left += offset.x;
-    }
-    
-    self.frame = CGRectMake(left, top, self.frame.size.width, self.frame.size.height);
-}
+//- (void) reflowWithFixed:(UIView *)parent
+//{
+//    CGFloat top = self.top;
+//    CGFloat left = self.left;
+//    
+//    CGFloat parentHeight = parent.frame.size.height;
+//    CGFloat parentWidth = parent.frame.size.width;
+//    
+//    // 底部定位优先
+//    if ( self.hasSettedBottom && !self.hasSettedTop ) {
+//        top = parentHeight - self.bottom - self.height;
+//    } // 顶部定位优先直接为top值
+//    
+//    // 右边定位优先
+//    if ( self.hasSettedRight && !self.hasSettedLeft ) {
+//        left = parentWidth - self.right - self.width;
+//    }
+//    // 如果父view是scrollView，需考虑对应的contentOffset
+//    if ( [parent isKindOfClass:[UIScrollView class]] ) {
+//        CGPoint offset =  ((UIScrollView *)parent).contentOffset;
+//        top += offset.y;
+//        left += offset.x;
+//    }
+//    
+//    self.frame = CGRectMake(left, top, self.width, self.height);
+//}
 
 /*
  * 如果isAutoHeight=YES时，每次子view操作都应当重新计算view的高度

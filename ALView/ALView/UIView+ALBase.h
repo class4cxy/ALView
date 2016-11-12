@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, ALPosition)
      * 布局计算依赖于：同上
      * 4、不会随着父view的contentOffset变化而变化（脱离scrollView的滚动，固定在父view的某个位置）
      */
-    ALPositionFixed,
+//    ALPositionFixed,
 };
 
 /*
@@ -98,7 +98,7 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
  * 1、虚拟view的子类layout应当由使用者去定义
  * 2、虚拟view的子类应该透传所有方法、协议、变量给所继承的父类
  */
-@property (nonatomic, assign, readonly) BOOL isVirtual; // 是否为ALBase的虚拟view
+//@property (nonatomic, assign, readonly) BOOL isVirtual; // 是否为ALBase的虚拟view
 
 /*
  * 样式属性
@@ -156,7 +156,7 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
 - (instancetype) initWithALBase;
 // 初始化AL虚拟view【提供给子类初始化用，实例不要调用该方法】
-- (instancetype) initWithALVirtualBase;
+//- (instancetype) initWithALVirtualBase;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
 
@@ -165,5 +165,7 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
  */
 // 提供给子类重新布局当前view用的，实例不要调用该方法
 - (void) reflow:(UIView *)parent;
+// 提供给子类重新排版absolute方式布局的view
+- (void) reflowWithAbsolute:(UIView *)parent;
 
 @end

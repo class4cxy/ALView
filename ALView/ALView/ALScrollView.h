@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ALVirtualScrollView : UIScrollView
+//@interface ALVirtualScrollView : UIScrollView
+//
+//- (instancetype) init;
+//
+//@end
 
-- (instancetype) init;
-
-@end
-
-@interface ALScrollView : UIView
+@interface ALScrollView : UIScrollView
 
 // 內建虚拟view，scrollView
-@property (nonatomic, retain) ALVirtualScrollView * scrollView;
+//@property (nonatomic, retain) ALVirtualScrollView * scrollView;
 
 - (instancetype) init;
 // private method
