@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6B099BE91DD007300031F8EA /* ALLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B099BE81DD007300031F8EA /* ALLabel.m */; };
 		6B1D24F71DB307A200FC4081 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D24F61DB307A200FC4081 /* main.m */; };
 		6B1D24FA1DB307A200FC4081 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D24F91DB307A200FC4081 /* AppDelegate.m */; };
 		6B1D24FD1DB307A200FC4081 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D24FC1DB307A200FC4081 /* ViewController.m */; };
@@ -44,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6B099BE71DD0071A0031F8EA /* ALLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALLabel.h; sourceTree = "<group>"; };
+		6B099BE81DD007300031F8EA /* ALLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALLabel.m; sourceTree = "<group>"; };
 		6B1D24F21DB307A200FC4081 /* ALView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ALView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B1D24F61DB307A200FC4081 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6B1D24F81DB307A200FC4081 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 		6B1D24F41DB307A200FC4081 /* ALView */ = {
 			isa = PBXGroup;
 			children = (
+				6B099BE71DD0071A0031F8EA /* ALLabel.h */,
+				6B099BE81DD007300031F8EA /* ALLabel.m */,
 				6B1D25571DBE5C6800FC4081 /* UIView+ALBase.h */,
 				6B1D257D1DBE5F5700FC4081 /* UIView+ALBase.m */,
 				6B1D25811DBFB20300FC4081 /* ALView.h */,
@@ -303,6 +308,7 @@
 				6B1D24FA1DB307A200FC4081 /* AppDelegate.m in Sources */,
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */,
+				6B099BE91DD007300031F8EA /* ALLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

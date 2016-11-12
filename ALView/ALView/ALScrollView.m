@@ -9,6 +9,18 @@
 #import "ALScrollView.h"
 #import "UIView+ALBase.h"
 
+@implementation ALVirtualScrollView
+
+- (instancetype) init
+{
+    if ( self = [super initWithALVirtualBase] ) {
+        
+    }
+    return self;
+}
+
+@end
+
 @interface ALScrollView() <UIScrollViewDelegate>
 
 @end
@@ -18,34 +30,58 @@
 - (instancetype)init
 {
     if ( self = [super initWithALBase] ) {
-        self.position = ALPositionRelative;
         self.display  = ALDisplayBlock;
+        [self initInnerUI];
     }
     return self;
 }
+
+- (void) initInnerUI
+{
+    self.scrollView = [[ALVirtualScrollView alloc] init];
+    self.scrollView.delegate = self;
+    [self.scrollView addTo: self];
+}
+
+#pragma mark - 重载父类方法
 // ALScrollView的排版方式默认为block类型，不允许修改
 - (void)setDisplay:(ALDisplay)display
 {
     [super setDisplay: ALDisplayBlock];
 }
 
-- (void) reflowContentFrame
+#pragma mark - 私有排版逻辑
+// 触发內建UIScrollView进行layout
+// 触发子view中使用了absolute方式布局的重新layout
+- (void) reflowInnerFrame
 {
-    self.contentSize = CGSizeMake(self.currInnerWidth, self.currInnerHeight);
+    // 触发內建UIScrollView进行layout
+    self.scrollView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.currInnerWidth, self.currInnerHeight);
+    // 触发子view中使用了absolute布局且使用了bottom或者right方式定位的重新布局
+    for (UIView * subView in _scrollView.subviews) {
+        if (
+            subView.isALBase &&
+            subView.position == ALPositionAbsolute &&
+            (subView.hasSettedBottom || subView.hasSettedRight)
+        ) {
+            [subView reflow:self];
+        }
+    }
 }
 
-
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-//    NSInteger i = 0;
-//    NSInteger len = scrollView.subviews.count;
-//    
-//    for (; i < len; i++) {
-//        UIView * subView = [scrollView.subviews objectAtIndex:i];
-//        if ( subView.isALBase ) {
-//            [subView reflowWithPositionFixed:scrollView.contentOffset];
-//        }
-//    }
-//}
+// 触发子view中使用了fixed方式布局的重新layout
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // 触发子view中使用了fixed布局
+    for (UIView * subView in self.scrollView.subviews) {
+        if (
+            subView.isALBase &&
+            subView.position == ALPositionFixed
+            ) {
+            [subView reflow:self.scrollView];
+        }
+    }
+}
 
 @end

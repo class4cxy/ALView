@@ -8,10 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ALScrollView : UIScrollView
+@interface ALVirtualScrollView : UIScrollView
+
+- (instancetype) init;
+
+@end
+
+@interface ALScrollView : UIView
+
+// 內建虚拟view，scrollView
+@property (nonatomic, retain) ALVirtualScrollView * scrollView;
 
 - (instancetype) init;
 // private method
-- (void) reflowContentFrame;
+- (void) reflowInnerFrame;
 
 @end
