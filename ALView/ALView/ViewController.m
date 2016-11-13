@@ -20,14 +20,37 @@
 //    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
-    [self initLayoutWithScrollView];
+//    [self initLayoutWithScrollView];
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initSiblingLayout];
 //    [self initBlockContentInlineLayout];
+    [self initInlineAutoWidthHeightLayout];
+    
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initInlineAutoWidthHeightLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.marginTop = 20;
+    [body addTo: self.view];
+
+    ALView * inlinewrap = [[ALView alloc] init];
+    inlinewrap.backgroundColor = [UIColor redColor];
+    inlinewrap.display = ALDisplayInline;
+    [inlinewrap addTo: body];
+    
+    [[self createInlineBox1:0.1] addTo:inlinewrap];
+    [[self createInlineBox1:0.2] addTo:inlinewrap];
+    [[self createInlineBox1:0.3] addTo:inlinewrap];
+    [[self createInlineBox1:0.4] addTo:inlinewrap];
+    [[self createInlineBox1:0.5] addTo:inlinewrap];
+    [[self createInlineBox1:0.6] addTo:inlinewrap];
+    [[self createInlineBox1:0.7] addTo:inlinewrap];
+    [[self createInlineBox1:0.8] addTo:inlinewrap];
 }
 
 - (void) initSiblingLayout

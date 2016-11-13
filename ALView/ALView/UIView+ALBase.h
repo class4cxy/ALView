@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
 // 记录当前view的内部高度，该值表示子view最高高度值，未必与width值相等，例如scrollView的情况
 @property (nonatomic, assign, readonly) CGFloat currInnerWidth;
 @property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
-@property (nonatomic, assign, readonly) BOOL isFullWidth; // 是否为系统自动设置高度
+@property (nonatomic, assign, readonly) BOOL isAutoWidth; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
 // 记录是否设置过left值
 @property (nonatomic, assign, readonly) BOOL hasSettedLeft;

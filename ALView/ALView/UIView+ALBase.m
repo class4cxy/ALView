@@ -40,11 +40,11 @@
 }
 -(void)setPosition:(ALPosition)position
 {
-    // absolute, fixed 时，isFullWidth要设置为NO
+    // absolute, fixed 时，isAutoWidth要设置为NO
 //    if ( position == ALPositionAbsolute || position == ALPositionFixed ) {
-    if ( position == ALPositionAbsolute ) {
-        self.isFullWidth = NO;
-    }
+//    if ( position == ALPositionAbsolute ) {
+//        self.isAutoWidth = NO;
+//    }
     objc_setAssociatedObject(self, @"position", [NSNumber numberWithInt:position], OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -75,7 +75,7 @@
 }
 -(void)setWidth:(CGFloat)width
 {
-    self.isFullWidth = NO;
+    self.isAutoWidth = NO;
     objc_setAssociatedObject(self, @"width", [NSNumber numberWithFloat:width], OBJC_ASSOCIATION_RETAIN);
 }
 
@@ -206,14 +206,14 @@
 }
 
 
-@dynamic isFullWidth;
-- (BOOL) isFullWidth
+@dynamic isAutoWidth;
+- (BOOL) isAutoWidth
 {
-    return [objc_getAssociatedObject(self, @"isFullWidth") boolValue];
+    return [objc_getAssociatedObject(self, @"isAutoWidth") boolValue];
 }
-- (void) setIsFullWidth:(BOOL)isFullWidth
+- (void) setIsAutoWidth:(BOOL)isAutoWidth
 {
-    objc_setAssociatedObject(self, @"isFullWidth", [NSNumber numberWithBool:isFullWidth], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"isAutoWidth", [NSNumber numberWithBool:isAutoWidth], OBJC_ASSOCIATION_RETAIN);
 }
 
 
@@ -299,7 +299,7 @@
 //        self.isVirtual = NO;
         
         self.isAutoHeight = YES;
-        self.isFullWidth = YES;
+        self.isAutoWidth = YES;
         
         self.hasSettedTop = NO;
         self.hasSettedLeft = NO;
@@ -399,7 +399,7 @@
     }
     // 父view是ALView的实例且当前view是relative布局时，触发父view重算自己的高度
     if ( parent.isALBase && self.position == ALPositionRelative ) {
-        [parent reflowHeightIfNeed];
+        [parent reflowInnerSizeIfNeed];
     }
 }
 
@@ -412,7 +412,7 @@
     // block 的排版
     if ( self.display == ALDisplayBlock ) {
         // block 如果没有设置width的情况，系统默认为父view的宽度
-        if ( self.isFullWidth ) {
+        if ( self.isAutoWidth ) {
             width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
         }
 
@@ -497,6 +497,9 @@
                     prevView.marginRight;
         // 默认取父View的宽高
         CGFloat parentWidth = parent.frame.size.width;
+        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+            parentWidth = parent.superview.frame.size.width;
+        }
         // 检查是否需要断行
         if ( parentWidth < (x + self.marginLeft + self.marginRight + self.width) ) { // 断行
             left = self.marginLeft;
@@ -715,7 +718,7 @@
 /*
  * 如果isAutoHeight=YES时，每次子view操作都应当重新计算view的高度
  */
-- (void) reflowHeightIfNeed
+- (void) reflowInnerSizeIfNeed
 {
     CGFloat innerHeight = 0;
     CGFloat innerWidth = 0;
@@ -736,19 +739,22 @@
         }
         
         // calc inner width - only block view can overflow parent view's width
-        if ( lastView.isALBase && lastView.display == ALDisplayBlock ) {
-            innerWidth = lastView.frame.size.width + lastView.frame.origin.x + lastView.marginRight;
-            
-            if ( self.currInnerWidth < innerWidth ) {
-                self.currInnerWidth = innerWidth;
-            } else {
-                innerWidth = self.currInnerWidth;
-            }
+        innerWidth = lastView.frame.size.width + lastView.frame.origin.x + lastView.marginRight;
+        
+        if ( self.currInnerWidth < innerWidth ) {
+            self.currInnerWidth = innerWidth;
+        } else {
+            innerWidth = self.currInnerWidth;
         }
     }
     // 如果没设置高度，那就是系统自动设置（根据子view来算自身高度）
     if ( self.isAutoHeight ) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
+    }
+    // inline类型排版的view如果没设置宽度，则会被子view宽度撑大
+    // block类型排版的view如果没设置宽度，则默认继承父view的宽度，所以block类型不需要处理该逻辑
+    if ( self.isAutoWidth && self.display == ALDisplayInline ) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
     }
 }
 
