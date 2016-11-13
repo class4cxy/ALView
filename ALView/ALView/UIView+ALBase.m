@@ -543,8 +543,12 @@
     // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
     } else if ( prevView && prevView.display == ALDisplayInline ) {
         CGFloat currRowWidth = [self getWidthOfInsideRow:self];
+        CGFloat parentWidth = parent.frame.size.width;
+        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+            parentWidth = parent.superview.frame.size.width;
+        }
         // 检查是否需要断行
-        if ( currRowWidth > parent.frame.size.width ) { // 断行
+        if ( currRowWidth > parentWidth ) { // 断行
             self.isInNewLine = YES;
         } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
             left =  (parent.frame.size.width + currRowWidth)/2 -
@@ -590,8 +594,12 @@
     // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
     } else if ( prevView && prevView.display == ALDisplayInline ) {
         CGFloat currRowWidth = [self getWidthOfInsideRow:self];
+        CGFloat parentWidth = parent.frame.size.width;
+        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+            parentWidth = parent.superview.frame.size.width;
+        }
         // 检查是否需要断行
-        if ( currRowWidth > parent.frame.size.width ) { // 断行
+        if ( currRowWidth > parentWidth ) { // 断行
             self.isInNewLine = YES;
         } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
             callPreviousViewReflow = YES;
