@@ -406,7 +406,7 @@
 - (void) reflowWithRelative:(UIView *)parent
 {
     // 先排版size
-    [self reflowSizeWithRelative: parent];
+    [self reflowSelfSize: parent];
     CGFloat top = 0;
     // block 的排版
     if ( self.display == ALDisplayBlock ) {
@@ -478,7 +478,10 @@
     self.frame = CGRectMake(self.frame.origin.x, top, self.frame.size.width, self.frame.size.height);
 }
 
-- (void) reflowSizeWithRelative: (UIView *) parent
+/*
+ * 排版自身尺寸
+ */
+- (void) reflowSelfSize: (UIView *) parent
 {
     // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
     if ( [self isKindOfClass:[ALLabel class]] ) {
@@ -513,9 +516,6 @@
             UIView * p = [self getLastNotInlineOrAutoWidthParentView: self];
             parentWidth = p.frame.size.width;
         }
-//        if ( parent.display == ALDisplayInline && parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
-//            parentWidth = parent.superview.frame.size.width;
-//        }
         // 检查是否需要断行
         if ( parentWidth < (x + self.marginLeft + self.marginRight + self.frame.size.width) ) { // 断行
             left = self.marginLeft;
@@ -678,6 +678,9 @@
 // TODO: 兼容父view为ALScrollView的情况
 - (void) reflowWithAbsolute:(UIView *)parent
 {
+    // 排版size
+    [self reflowSelfSize: parent];
+    
     CGFloat top = self.top;
     CGFloat left = self.left;
     
@@ -708,7 +711,7 @@
         left = parentWidth - self.right - self.width;
     }
     
-    self.frame = CGRectMake(left, top, self.width, self.height);
+    self.frame = CGRectMake(left, top, self.frame.size.width, self.frame.size.height);
 }
 
 // fixed方式的排版：相对父view固定位置排版

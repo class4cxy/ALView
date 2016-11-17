@@ -7,3 +7,5 @@ ALView is not just an autolayout framework, but also provide a fastest way to la
 ## [demo3] - you also can layout by use position:relative & position:absolute
 // todo
 ## [demo4] - layout with contentAlign:left/center/right is so nice
+// todo
+## [demo5] - we have `ALLabel` make things more easer
