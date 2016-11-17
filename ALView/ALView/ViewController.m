@@ -26,10 +26,49 @@
 //    [self initBlockContentBlockLayout];
 //    [self initSiblingLayout];
 //    [self initBlockContentInlineLayout];
-    [self initInlineAutoWidthHeightLayout];
+//    [self initInlineAutoWidthHeightLayout];
+    [self initALLabelAutoHeightWidthLayout];
     
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initALLabelAutoHeightWidthLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.marginTop = 20;
+    [body addTo: self.view];
+    
+    ALView * blockwrap = [[ALView alloc] init];
+    blockwrap.backgroundColor = [UIColor yellowColor];
+    blockwrap.contentAlign = ALContentAlignLeft;
+    [blockwrap addTo: body];
+
+    [[self createALLabel: @"jdochen"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen321"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen432"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen1"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen4"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen6789"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen0"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen"] addTo:blockwrap];
+}
+
+- (ALLabel *) createALLabel: (NSString *) text
+{
+    ALLabel * tx1 = [[ALLabel alloc] init];
+    tx1.text = text;
+    tx1.marginTop = 2;
+    tx1.marginRight = 2;
+//    tx1.textAlignment = NSTextAlignmentCenter;
+//    tx1.lineBreakMode = NSLineBreakByTruncatingTail;
+    tx1.numberOfLines = 0;
+    tx1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    tx1.font = [UIFont systemFontOfSize:14.0];
+    tx1.textColor = [UIColor redColor];
+    
+    return tx1;
 }
 
 - (void) initInlineAutoWidthHeightLayout
@@ -289,15 +328,6 @@
     [[self createInlineBox1:0.9] addTo:scbox1];
     [[self createInlineBox1:1.0] addTo:scbox1];
     
-//    ALView * fixed1 = [[ALView alloc] init];
-//    fixed1.width = 30;
-//    fixed1.height = 30;
-//    fixed1.top = 20;
-//    fixed1.left = 20;
-//    fixed1.position = ALPositionFixed;
-//    fixed1.backgroundColor = [UIColor whiteColor];
-//    [fixed1 addTo: scbox1];
-    
     ALScrollView * scbox2 = [[ALScrollView alloc] init];
     scbox2.marginTop = 20;
     scbox2.height = 500;
@@ -311,7 +341,6 @@
     block1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.3];
     [block1 addTo:scbox2];
     
-    
     [[self createInlineBox2:0.1] addTo:block1];
     [[self createInlineBox2:0.2] addTo:block1];
     [[self createInlineBox2:0.3] addTo:block1];
@@ -332,7 +361,7 @@
     [[self createInlineBox2:0.8] addTo:block1];
     [[self createInlineBox2:0.9] addTo:block1];
     [[self createInlineBox2:1.0] addTo:block1];
-    
+
     ALView * block2 = [[ALView alloc] init];
     block2.marginTop = 20;
     block2.marginLeft = 20;
@@ -486,7 +515,7 @@
     ALView * subInline = [[ALView alloc] init];
     subInline.height = 40;
     subInline.width = 40;
-    subInline.marginTop = 50;
+    subInline.marginTop = 10;
     subInline.marginLeft = 10;
     subInline.marginRight = 10;
     subInline.marginBottom = 10;

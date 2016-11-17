@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  * 1、该属性有继承性，父view设置了该属性，子view也拥有同样的属性
  * 2、该属性只适用于relative方式布局的子view
  * 默认：ALContentAlignLeft
+ * 注：inline类型的view支持ALContentAlignRight 与 ALContentAlignCenter，但是需设置固定宽度的前提，否则会出现布局错乱
  */
 typedef NS_ENUM(NSInteger, ALContentAlign) {
     // 内容左对齐
@@ -87,6 +88,17 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
     ALContentAlignRight,
     // 内容居中
     ALContentAlignCenter,
+};
+/*
+ * reflow自己时会用到递归去reflow相邻view
+ */
+typedef NS_ENUM(NSInteger, ALRecursionType) {
+    // 不递归
+    ALRecursionNone,
+    // 递归上一个兄弟view
+    ALRecursionPreviousView,
+    // 递归下一个兄弟view
+    ALRecursionNextView,
 };
 
 

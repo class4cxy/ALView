@@ -330,16 +330,6 @@
  */
 - (void) addTo: (UIView *) parent
 {
-    // ALScrollView 自有的添加逻辑
-//    if ( [parent isKindOfClass:[ALScrollView class]] && !self.isVirtual ) {
-//        [((ALScrollView*) parent).scrollView addSubview: self];
-//        [self linkSiblingView:((ALScrollView*) parent).scrollView];
-//        [self reflow: ((ALScrollView*) parent).scrollView];
-//    } else {
-//        [parent addSubview: self];
-//        [self linkSiblingView:parent];
-//        [self reflow: parent];
-//    }
     // 将view add到树中
     [parent addSubview: self];
     // 生成兄弟view关系
@@ -363,6 +353,9 @@
 }
 
 #pragma mark - reflow & reCount
+/*
+ * 总的排版入口，如果涉及到关联的view或者super view需重排也尽量别直接调到这里来
+ */
 - (void) reflow:(UIView *)parent
 {
     // 检查父view
@@ -393,30 +386,32 @@
             break;
     }
     
-    // reflow ALScrollView's contentSize
-    if ([parent isKindOfClass:[ALScrollView class]]) {
-        [((ALScrollView*)parent) reflowInnerFrame];
-    }
-    // 父view是ALView的实例且当前view是relative布局时，触发父view重算自己的高度
-    if ( parent.isALBase && self.position == ALPositionRelative ) {
-        [parent reflowInnerSizeIfNeed];
+    // 父view是ALView的实例且当前view是relative布局时
+    if ( self.position == ALPositionRelative ) {
+        UIView * p = self.superview;
+        while (p) {
+            // 触发父view重算自己的高度
+            if ( p.isALBase ) {
+                [p reflowInnerSizeIfNeed];
+            }
+            // 如果父view是ALScrollView，需触发父view重算contentSize
+            if ([p isKindOfClass:[ALScrollView class]]) {
+                [((ALScrollView*)p) reflowInnerFrame];
+            }
+            p = p.superview;
+        }
     }
 }
 
 - (void) reflowWithRelative:(UIView *)parent
 {
+    // 先排版size
+    [self reflowSizeWithRelative: parent];
     CGFloat top = 0;
-//    CGFloat left = 0;
-    CGFloat width = self.width;
-    
     // block 的排版
     if ( self.display == ALDisplayBlock ) {
-        // block 如果没有设置width的情况，系统默认为父view的宽度
-        if ( self.isAutoWidth ) {
-            width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
-        }
 
-        [self reflowBlockLeftWithContentAlign:parent selfWidth:width];
+        [self reflowBlockLeftWithContentAlign:parent];
         
         top += self.marginTop;
         
@@ -480,7 +475,23 @@
         }
     }
     // reflow
-    self.frame = CGRectMake(self.frame.origin.x, top, width, self.height);
+    self.frame = CGRectMake(self.frame.origin.x, top, self.frame.size.width, self.frame.size.height);
+}
+
+- (void) reflowSizeWithRelative: (UIView *) parent
+{
+    // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
+    if ( [self isKindOfClass:[ALLabel class]] ) {
+        [((ALLabel *) self) reflowWithInnerText: parent];
+    } else {
+        CGFloat width = self.width;
+        // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
+        if ( self.display == ALDisplayBlock && self.isAutoWidth ) {
+            width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
+        }
+        // reflow
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.height);
+    }
 }
 
 /*
@@ -497,11 +508,16 @@
                     prevView.marginRight;
         // 默认取父View的宽高
         CGFloat parentWidth = parent.frame.size.width;
-        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
-            parentWidth = parent.superview.frame.size.width;
+        // 如果父view是inline方式布局，且没有设置宽度，那就往上找
+        if ( parent.display == ALDisplayInline && parent.isAutoWidth ) {
+            UIView * p = [self getLastNotInlineOrAutoWidthParentView: self];
+            parentWidth = p.frame.size.width;
         }
+//        if ( parent.display == ALDisplayInline && parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+//            parentWidth = parent.superview.frame.size.width;
+//        }
         // 检查是否需要断行
-        if ( parentWidth < (x + self.marginLeft + self.marginRight + self.width) ) { // 断行
+        if ( parentWidth < (x + self.marginLeft + self.marginRight + self.frame.size.width) ) { // 断行
             left = self.marginLeft;
             self.isInNewLine = YES;
         } else { // 不断行
@@ -524,7 +540,7 @@
 - (void) reflowInlineLeftWidthContentAlignCenter: (UIView *) parent
 {
     // 默认断行的排版坐标
-    CGFloat left = (parent.frame.size.width - self.width)/2;
+    CGFloat left = (parent.frame.size.width - self.frame.size.width)/2;
     UIView * prevView = self.previousSibling;
     UIView * nextView = self.nextSibling;
     BOOL callPreviousViewReflow = NO;
@@ -535,7 +551,7 @@
         left =  nextView.frame.origin.x -
                 nextView.marginLeft -
                 self.marginRight -
-                self.width;
+                self.frame.size.width;
         // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
         if ( !self.isInNewLine && prevView ) {
             callPreviousViewReflow = YES;
@@ -553,7 +569,7 @@
         } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
             left =  (parent.frame.size.width + currRowWidth)/2 -
                     self.marginRight -
-                    self.width;
+                    self.frame.size.width;
             
             callPreviousViewReflow = YES;
         }
@@ -574,7 +590,9 @@
 - (void) reflowInlineLeftWidthContentAlignRight: (UIView *) parent
 {
     // 默认断行情况的右对齐的排版
-    CGFloat left = parent.frame.size.width - self.width - self.marginRight;
+    CGFloat left =  parent.frame.size.width -
+                    self.frame.size.width -
+                    self.marginRight;
     UIView * prevView = self.previousSibling;
     UIView * nextView = self.nextSibling;
     BOOL callPreviousViewReflow = NO;
@@ -585,7 +603,7 @@
         left =  nextView.frame.origin.x -
                 nextView.marginLeft -
                 self.marginRight -
-                self.width;
+                self.frame.size.width;
         // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
         if ( !self.isInNewLine && prevView ) {
             callPreviousViewReflow = YES;
@@ -615,9 +633,10 @@
     }
 }
 
-- (void) reflowBlockLeftWithContentAlign: (UIView *) parent selfWidth: (CGFloat) width
+- (void) reflowBlockLeftWithContentAlign: (UIView *) parent
 {
     CGFloat left = 0;
+    CGFloat width = self.frame.size.width;
     // 根据父view的内容对齐方式计算left
     if ( parent.isALBase ) {
         switch (parent.contentAlign) {
@@ -747,7 +766,8 @@
         }
         
         // calc inner width - only block view can overflow parent view's width
-        innerWidth = lastView.frame.size.width + lastView.frame.origin.x + lastView.marginRight;
+        innerWidth = [self getWidthOfInsideRow: lastView];
+//        innerWidth = lastView.frame.size.width + lastView.frame.origin.x + lastView.marginRight;
         
         if ( self.currInnerWidth < innerWidth ) {
             self.currInnerWidth = innerWidth;
@@ -763,6 +783,13 @@
     // block类型排版的view如果没设置宽度，则默认继承父view的宽度，所以block类型不需要处理该逻辑
     if ( self.isAutoWidth && self.display == ALDisplayInline ) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
+        
+        // 重排自身的宽高之后，如果自身设置了ALContentAlignRight或者ALContentAlignCenter，那就需要触发子view进行重排
+        if ( self.contentAlign == ALContentAlignRight ) {
+            [self.subviews.lastObject reflowInlineLeftWidthContentAlignRight: self];
+        } else if ( self.contentAlign == ALContentAlignCenter ) {
+            [self.subviews.lastObject reflowInlineLeftWidthContentAlignCenter: self];
+        }
     }
 }
 
@@ -794,8 +821,8 @@
     
     while (view && view.display == ALDisplayInline) {
         width += view.marginLeft +
-                view.marginRight +
-                view.width;
+                 view.marginRight +
+                 view.frame.size.width;
         
         // 如果到了这一行的第一个view，那就跳出该计算
         if ( view.isInNewLine ) {
@@ -806,6 +833,20 @@
     }
     
     return width;
+}
+
+/*
+ * 获取当前view最近的非inline方式布局的父view
+ */
+- (UIView *) getLastNotInlineOrAutoWidthParentView: (UIView *) view
+{
+    while (view) {
+        if ( view.superview.display != ALDisplayInline || !view.superview.isAutoWidth ) {
+            return view.superview;
+        }
+        view = view.superview;
+    }
+    return [[[UIApplication sharedApplication] delegate] window];
 }
 
 @end
