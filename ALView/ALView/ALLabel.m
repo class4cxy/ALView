@@ -64,13 +64,14 @@
             fontSize.width = self.width;
             fontSize.height = self.height;
         }
-        
+        // padding是会导致内增高的
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.paddingLeft + self.paddingRight, fontSize.height + self.paddingTop + self.paddingBottom);
     }
 }
 
 - (void) drawTextInRect:(CGRect)rect
 {
+    // 增加padding计算逻辑
     UIEdgeInsets inset = UIEdgeInsetsMake(self.paddingTop, self.paddingLeft, self.paddingBottom, self.paddingRight);
     
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, inset)];
