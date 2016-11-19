@@ -127,18 +127,13 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, assign) CGFloat left;
 @property (nonatomic, assign) CGFloat right;
 
+@property (nonatomic, assign) CGFloat margin;
 @property (nonatomic, assign) CGFloat marginTop;
 @property (nonatomic, assign) CGFloat marginBottom;
 @property (nonatomic, assign) CGFloat marginLeft;
 @property (nonatomic, assign) CGFloat marginRight;
 
 @property (nonatomic, assign) ALContentAlign contentAlign;
-
-// TODO
-//@property (nonatomic, assign) CGFloat paddingTop;
-//@property (nonatomic, assign) CGFloat paddingBottom;
-//@property (nonatomic, assign) CGFloat paddingLeft;
-//@property (nonatomic, assign) CGFloat paddingRight;
 
 /*
  * 其他属性

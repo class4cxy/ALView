@@ -135,6 +135,20 @@
     objc_setAssociatedObject(self, @"right", [NSNumber numberWithFloat:right], OBJC_ASSOCIATION_RETAIN);
 }
 
+@dynamic margin;
+- (CGFloat) margin
+{
+    return [objc_getAssociatedObject(self, @"margin") floatValue];
+}
+-(void)setMargin:(CGFloat)margin
+{
+    objc_setAssociatedObject(self, @"margin", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"marginTop", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"marginLeft", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"marginBottom", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"marginRight", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+}
+
 @dynamic marginTop;
 - (CGFloat) marginTop
 {

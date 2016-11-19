@@ -19,6 +19,15 @@
     return self;
 }
 
+-(void)setPadding:(CGFloat)padding
+{
+    _padding = padding;
+    _paddingTop = padding;
+    _paddingLeft = padding;
+    _paddingBottom = padding;
+    _paddingRight = padding;
+}
+
 #pragma mark - 重载父类方法
 /*
  * 增加默认行为：setText时如果isAutoWidth & isAutoHeight 为YES时，需自动调整宽高
@@ -35,8 +44,8 @@
         // 根据font大小动态计算
         CGSize fontSize = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
         // label的宽度不能超过parent的宽度
-        if ( fontSize.width > parent.frame.size.width ) {
-            fontSize.width = parent.frame.size.width;
+        if ( fontSize.width + self.paddingRight + self.paddingLeft > parent.frame.size.width ) {
+            fontSize.width = parent.frame.size.width - self.paddingLeft - self.paddingRight;
         }
         // 自动高度 & 自动宽度
         // 宽度自动，但不能大于父view宽度
@@ -56,8 +65,15 @@
             fontSize.height = self.height;
         }
         
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width, fontSize.height);
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.paddingLeft + self.paddingRight, fontSize.height + self.paddingTop + self.paddingBottom);
     }
+}
+
+- (void) drawTextInRect:(CGRect)rect
+{
+    UIEdgeInsets inset = UIEdgeInsetsMake(self.paddingTop, self.paddingLeft, self.paddingBottom, self.paddingRight);
+    
+    [super drawTextInRect:UIEdgeInsetsInsetRect(rect, inset)];
 }
 
 @end

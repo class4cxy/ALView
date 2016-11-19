@@ -61,8 +61,7 @@
     tx1.text = text;
     tx1.marginTop = 2;
     tx1.marginRight = 2;
-//    tx1.textAlignment = NSTextAlignmentCenter;
-//    tx1.lineBreakMode = NSLineBreakByTruncatingTail;
+    tx1.padding = 10;
     tx1.numberOfLines = 0;
     tx1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
     tx1.font = [UIFont systemFontOfSize:14.0];
