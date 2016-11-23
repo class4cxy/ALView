@@ -50,7 +50,10 @@
         // 自动高度 & 自动宽度
         // 宽度自动，但不能大于父view宽度
         if ( self.isAutoHeight && self.isAutoWidth ) {
-            fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, MAXFLOAT)];
+            // 如果numberOfLines不为0时，sizeThatFits的计算会以高度为准，所以在这种情况，就直接用原来的值就行了
+            if ( self.numberOfLines == 0 ) {
+                fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, MAXFLOAT)];
+            }
         // 自动高度 & 给定宽度
         // 根据给定的宽度自适应
         } else if ( self.isAutoHeight ) {

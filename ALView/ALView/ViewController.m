@@ -17,9 +17,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initLayoutWithMargin];
+//    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
+//    [self initLayoutWithAbsolutePriority];
 //    [self initLayoutWithScrollView];
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
@@ -27,7 +28,7 @@
 //    [self initSiblingLayout];
 //    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
-//    [self initALLabelAutoHeightWidthLayout];
+    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
     
@@ -131,25 +132,27 @@
     blockwrap.contentAlign = ALContentAlignLeft;
     [blockwrap addTo: body];
 
-    [[self createALLabel: @"jdochen"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen321"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen432"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen1"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen4"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen6789"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen0"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww"] addTo:blockwrap];
-    [[self createALLabel: @"jdochen"] addTo:blockwrap];
+    [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen321" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen432" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen1" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen4" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen6789" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen0" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:1] addTo:blockwrap];
+    [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
 }
 
-- (ALLabel *) createALLabel: (NSString *) text
+- (ALLabel *) createALLabel: (NSString *) text numberOfLine: (NSInteger) num
 {
     ALLabel * tx1 = [[ALLabel alloc] init];
     tx1.text = text;
     tx1.marginTop = 2;
     tx1.marginRight = 2;
     tx1.padding = 10;
-    tx1.numberOfLines = 0;
+    tx1.numberOfLines = num;
+    tx1.lineBreakMode = NSLineBreakByTruncatingTail;
     tx1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
     tx1.font = [UIFont systemFontOfSize:14.0];
     tx1.textColor = [UIColor redColor];
@@ -236,13 +239,6 @@
     [[self createInlineBox1:0.5] addTo:artivle2];
     [[self createInlineBox1:0.6] addTo:artivle2];
     
-//    ALView * inline2 = [[ALView alloc] init];
-//    inline2.width = 150;
-//    inline2.height = 50;
-//    inline2.display = ALDisplayInline;
-//    inline2.backgroundColor = [UIColor blueColor];
-//    [inline2 addTo: artivle2];
-    
     ALView * artivle3 = [[ALView alloc] init];
     artivle3.marginBottom = 20;
     artivle3.contentAlign = ALContentAlignRight;
@@ -272,7 +268,6 @@
     ALView * block1 = [[ALView alloc] init];
     block1.width = 150;
     block1.height = 100;
-    block1.marginLeft = 20;
     block1.backgroundColor = [UIColor yellowColor];
     [block1 addTo: artivle1];
     
@@ -297,7 +292,6 @@
     ALView * block3 = [[ALView alloc] init];
     block3.width = 150;
     block3.height = 100;
-    block3.marginRight = 20;
     block3.backgroundColor = [UIColor redColor];
     [block3 addTo: artivle3];
 }
@@ -541,6 +535,33 @@
 //    fixedWhiteView.backgroundColor = [UIColor whiteColor];
 //    fixedWhiteView.position = ALPositionFixed;
 //    [fixedWhiteView addTo:scbox];
+}
+
+- (void) initLayoutWithAbsolutePriority
+{
+    ALView * body = [[ALView alloc] init];
+    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
+    body.height = 200;
+    body.marginTop = 50;
+    body.marginLeft = 50;
+    body.marginRight = 50;
+    [body addTo:self.view];
+    
+    // If you had set `left` property, then `right` propert is ignore
+    [[self createAbsoluteBox:0 left:10 right:10 bottom:0 alpha:0.2] addTo: body];
+    [[self createAbsoluteBox:0 left:0 right:10 bottom:0 alpha:0.4] addTo: body];
+    
+    ALView * body2 = [[ALView alloc] init];
+    body2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
+    body2.height = 200;
+    body2.marginTop = 50;
+    body2.marginLeft = 50;
+    body2.marginRight = 50;
+    [body2 addTo:self.view];
+    
+    // If you had set `top` property, then `bottom` propert is ignore
+    [[self createAbsoluteBox:10 left:0 right:0 bottom:10 alpha:0.2] addTo: body2];
+    [[self createAbsoluteBox:0 left:0 right:0 bottom:10 alpha:0.4] addTo: body2];
 }
 
 - (void) initLayoutWithAbsolute
