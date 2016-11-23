@@ -1,7 +1,7 @@
 # ALView
 ALView is not just an autolayout framework, but also provide a fastest way to layout like html's flow layout.
 
-### \# You can layout by use display:block & display:inline
+### \# You can use flowlayout by use block & inline
 ####[demo1] - flow layout
 ----
 ```objective-c
@@ -10,7 +10,7 @@ ALView * body = [[ALView alloc] init];
 body.marginTop = 20;
 [body addTo: self.view];
 
-// new a block view
+// a block view always break in a new line
 ALView * blockArticle = [[ALView alloc] init];
 // if you did not set `display`, default is ALDisplayBlock
 // blockArticle.display = ALDisplayBlock;
@@ -19,14 +19,14 @@ blockArticle.width = 200;
 blockArticle.backgroundColor = [UIColor yellowColor];
 [blockArticle addTo:body];
 
-// new a block view again
 ALView * blockArticle2 = [[ALView alloc] init];
 blockArticle2.height = 100;
 // if you did not set `width`, default is parent's width
 blockArticle2.backgroundColor = [UIColor blueColor];
 [blockArticle2 addTo:body];
 
-// new a inline view
+// if previous view is inline view, a new inline view will layout next to previous in same line
+// if previous view is block view, a new inline view will layout next to previous view and break in a new line
 ALView * inlineTx1 = [[ALView alloc] init];
 inlineTx1.display = ALDisplayInline;
 inlineTx1.height = 40;
@@ -51,9 +51,9 @@ inlineTx3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
 ```
 ####[result]
 ------
-![block and inline demo1](resource/block_inline_demo1@2x.png)
+![block and inline demo1](resource/block_inline_demo1.png)
 
-####[demo] - auto height & auto width
+####[demo2] - auto height & auto width
 ```objective-c
 ALView * body = [[ALView alloc] init];
 body.marginTop = 20;
@@ -88,10 +88,59 @@ inlineArticle.backgroundColor = [UIColor redColor];
 ```
 ####[result]
 ------
-![block and inline demo1](resource/block_inline_demo2@2x.png)
+![block and inline demo2](resource/block_inline_demo2.png)
 ### \# you can layout with marginTop, marginLeft, marginRight, marginBottom
+####[demo1]
+```objective-c
+ALView * body = [[ALView alloc] init];
+body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
+[body addTo:self.view];
 
-// todo
+ALView * article2 = [[ALView alloc] init];
+article2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+article2.marginTop = 50;
+article2.marginLeft = 20;
+article2.marginRight = 20;
+[article2 addTo:body];
+
+[[self createInlineBox1:0.1] addTo:article2];
+[[self createInlineBox1:0.2] addTo:article2];
+[[self createInlineBox1:0.3] addTo:article2];
+[[self createInlineBox1:0.4] addTo:article2];
+[[self createInlineBox1:0.5] addTo:article2];
+[[self createInlineBox1:0.6] addTo:article2];
+[[self createInlineBox1:0.7] addTo:article2];
+[[self createInlineBox1:0.8] addTo:article2];
+[[self createInlineBox1:0.9] addTo:article2];
+[[self createInlineBox1:1.0] addTo:article2];
+
+[[self createInlineBox1:0.1] addTo:body];
+[[self createInlineBox1:0.2] addTo:body];
+[[self createInlineBox1:0.3] addTo:body];
+[[self createInlineBox1:0.4] addTo:body];
+[[self createInlineBox1:0.5] addTo:body];
+[[self createInlineBox1:0.6] addTo:body];
+[[self createInlineBox1:0.7] addTo:body];
+[[self createInlineBox1:0.8] addTo:body];
+[[self createInlineBox1:0.9] addTo:body];
+
+- (ALView *) createInlineBox1: (CGFloat) alpha
+{
+    ALView * subInline = [[ALView alloc] init];
+    subInline.height = 50;
+    subInline.width = 40;
+    subInline.marginTop = 10;
+    subInline.marginLeft = 10;
+    subInline.marginRight = 10;
+    subInline.marginBottom = 10;
+    subInline.display = ALDisplayInline;
+    subInline.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return subInline;
+}
+```
+####[result]
+------
+![margin demo1](resource/margin_demo1.png)
 ### \# you also can layout by use position:relative & position:absolute
 
 // todo

@@ -17,7 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self initLayoutWithMargin];
+    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
 //    [self initLayoutWithScrollView];
@@ -29,7 +29,7 @@
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
-    [self initBlockAndInlineLayout2];
+//    [self initBlockAndInlineLayout2];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -582,7 +582,6 @@
 {
     ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
-//    body.height = 450;
     [body addTo:self.view];
     
     ALView * article2 = [[ALView alloc] init];
@@ -597,18 +596,6 @@
     [[self createInlineBox1:0.3] addTo:article2];
     [[self createInlineBox1:0.4] addTo:article2];
     [[self createInlineBox1:0.5] addTo:article2];
-    
-    ALView * subInline = [[ALView alloc] init];
-    subInline.height = 40;
-    subInline.width = 40;
-    subInline.marginTop = 10;
-    subInline.marginLeft = 10;
-    subInline.marginRight = 10;
-    subInline.marginBottom = 10;
-    subInline.display = ALDisplayInline;
-    subInline.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
-    [subInline addTo:article2];
-    
     [[self createInlineBox1:0.6] addTo:article2];
     [[self createInlineBox1:0.7] addTo:article2];
     [[self createInlineBox1:0.8] addTo:article2];
@@ -625,7 +612,7 @@
     [[self createInlineBox1:0.7] addTo:body];
     [[self createInlineBox1:0.8] addTo:body];
     [[self createInlineBox1:0.9] addTo:body];
-    }
+}
 
 - (ALView *) createInlineBox1: (CGFloat) alpha
 {
