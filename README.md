@@ -51,7 +51,7 @@ inlineTx3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
 ```
 ####[result]
 ------
-![block and inline demo1](resource/block_inline_demo1.png)
+![block and inline demo1](resource/block_inline_demo1@2x.png)
 
 ####[demo] - auto height & auto width
 ```objective-c
@@ -88,7 +88,7 @@ inlineArticle.backgroundColor = [UIColor redColor];
 ```
 ####[result]
 ------
-![block and inline demo1](resource/block_inline_demo2.png)
+![block and inline demo1](resource/block_inline_demo2@2x.png)
 ### \# you can layout with marginTop, marginLeft, marginRight, marginBottom
 
 // todo
