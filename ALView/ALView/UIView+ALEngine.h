@@ -1,5 +1,5 @@
 //
-//  UIView+ALBase.h
+//  UIView+ALEngine.h
 //  ALView
 //
 //  Created by jdochen on 2016/10/24.
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, ALPosition)
      * 布局计算方式：
      * 1、相对父view，相对同级view布局，
      * 2、依赖于同级view，
-     * 3、不受top,left,right,bottom类影响 TODO
+     * 3、不受top,left,right,bottom类影响
      */
     ALPositionRelative,
     /*
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
      * 【如果上一个view是block类型】
      * 1、紧接着上一个view，并以新的一行开始布局（x = 0; y = preView.frame.origin.y + preView.frame.size.height）
      * 【如果上一个view是inline类型】
-     * 1、紧接着上一个view，在上一个view的右侧开始布局（x = preView.frame.origin.x + preView.frame.size.width; y = preView.frame.origin.y）
+     * 2、紧接着上一个view，在上一个view的右侧开始布局（x = preView.frame.origin.x + preView.frame.size.width; y = preView.frame.origin.y）
      */
     ALDisplayInline,
 };
@@ -102,15 +102,15 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 };
 
 
-@interface UIView (ALBase)
+@interface UIView (ALEngine)
 
-@property (nonatomic, assign, readonly) BOOL isALBase; // 是否为ALBase布局的view
+@property (nonatomic, assign, readonly) BOOL isALEngine; // 是否为ALEngine布局的view
 /*
  * 虚拟ALView，主要用于辅助常规的ALView去实现某些能力而创建
  * 1、虚拟view的子类layout应当由使用者去定义
  * 2、虚拟view的子类应该透传所有方法、协议、变量给所继承的父类
  */
-//@property (nonatomic, assign, readonly) BOOL isVirtual; // 是否为ALBase的虚拟view
+//@property (nonatomic, assign, readonly) BOOL isVirtual; // 是否为ALEngine的虚拟view
 
 /*
  * 样式属性
@@ -161,9 +161,9 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, retain, readonly) ALView * previousSibling;
 
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
-- (instancetype) initWithALBase;
+- (instancetype) initWithALEngine;
 // 初始化AL虚拟view【提供给子类初始化用，实例不要调用该方法】
-//- (instancetype) initWithALVirtualBase;
+//- (instancetype) initWithALVirtuALEngine;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
 

@@ -1,7 +1,9 @@
 # ALView
-ALView is not just an autolayout framework, but also provide a fastest way to layout like html's flow layout.
 
-### \# You can use flowlayout by use block & inline
+> ALView is not just an autolayout framework, but also provide a fastest way to layout like html's flow layout.
+
+### \# [feature-1] You can experience flowlayout by use block & inline
+
 ####[demo1] - flow layout
 ----
 ```objective-c
@@ -89,7 +91,9 @@ inlineArticle.backgroundColor = [UIColor redColor];
 ####[result]
 ------
 ![block and inline demo2](resource/block_inline_demo2.png)
-### \# you can layout with marginTop, marginLeft, marginRight, marginBottom
+
+### \# [feature-2] You can layout with marginTop, marginLeft, marginRight, marginBottom
+
 ####[demo1]
 ```objective-c
 ALView * body = [[ALView alloc] init];
@@ -124,7 +128,7 @@ article2.marginRight = 20;
 [[self createInlineBox1:0.8] addTo:body];
 [[self createInlineBox1:0.9] addTo:body];
     
-    - (ALView *) createInlineBox1: (CGFloat) alpha
+- (ALView *) createInlineBox1: (CGFloat) alpha
 {
     ALView * subInline = [[ALView alloc] init];
     subInline.height = 50;
@@ -141,7 +145,9 @@ article2.marginRight = 20;
 ####[result]
 ------
 ![margin demo1](resource/margin_demo1.png)
-### \# you also can layout by use position:relative & position:absolute
+
+### \# [feature-3] You also can layout by use position:relative & position:absolute
+
 ####[demo1]
 ```objective-c
 ALView * body = [[ALView alloc] init];
@@ -207,7 +213,9 @@ body2.marginRight = 50;
 ```
 ####[result]
 ![position demo2](resource/position_demo2.png)
-### \# Layout with contentAlign:left/center/right is so nice
+
+### \# [feature-4] Layout with contentAlign:left/center/right is so nice
+
 ####[demo1] - contentAlign is suitable for block and inline view
 ```objective-c
 ALView * body = [[ALView alloc] init];
@@ -299,7 +307,7 @@ artivle3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 [[self createInlineBox1:0.5] addTo:artivle3];
 [[self createInlineBox1:0.6] addTo:artivle3];
     
-    - (ALView *) createInlineBox1: (CGFloat) alpha
+- (ALView *) createInlineBox1: (CGFloat) alpha
 {
     ALView * subInline = [[ALView alloc] init];
     subInline.height = 50;
@@ -317,7 +325,7 @@ artivle3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 ####[result]
 ![content align demo2](resource/content_align_demo2.png)
 
-### \# We have **ALLabel**, which make things more easer
+### \# [feature-5] We have **ALLabel**, which make things more easer
 
 ####[demo1] - just use! did not have to care height/width
 
@@ -339,7 +347,7 @@ blockwrap.contentAlign = ALContentAlignLeft;
 [[self createALLabel: @"jdochen432"] addTo:blockwrap];
 [[self createALLabel: @"jdochen1"] addTo:blockwrap];
 [[self createALLabel: @"jdochen4"] addTo:blockwrap];
-    
+
 - (ALLabel *) createALLabel: (NSString *) text
 {
     ALLabel * tx1 = [[ALLabel alloc] init];
@@ -356,7 +364,7 @@ blockwrap.contentAlign = ALContentAlignLeft;
 ```
 ####[result]
 ![allabel demo1](resource/allabel_demo1.png)
-####[demo1] - how did text auto break word
+####[demo2] - how did text auto break word
 ```objective-c
 ALView * body = [[ALView alloc] init];
 body.marginTop = 20;
@@ -387,7 +395,7 @@ blockwrap.contentAlign = ALContentAlignLeft;
 ####[result]
 ![allabel demo1](resource/allabel_demo2.png)
 
-####[demo1] - with `padding` property will make everything look more nice.
+####[demo3] - with `padding` property will make everything look more nice.
 ```objective-c
 ALView * body = [[ALView alloc] init];
 body.marginTop = 20;

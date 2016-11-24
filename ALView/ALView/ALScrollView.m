@@ -7,13 +7,13 @@
 //
 
 #import "ALScrollView.h"
-#import "UIView+ALBase.h"
+#import "UIView+ALEngine.h"
 
 //@implementation ALVirtualScrollView
 //
 //- (instancetype) init
 //{
-//    if ( self = [super initWithALVirtualBase] ) {
+//    if ( self = [super initWithALVirtuALEngine] ) {
 //        
 //    }
 //    return self;
@@ -25,7 +25,7 @@
 
 - (instancetype)init
 {
-    if ( self = [super initWithALBase] ) {
+    if ( self = [super initWithALEngine] ) {
         self.display  = ALDisplayBlock;
 //        [self initInnerUI];
     }
@@ -57,7 +57,7 @@
     // 触发子view中使用了absolute布局且使用了bottom或者right方式定位的重新布局
     for (UIView * subView in self.subviews) {
         if (
-            subView.isALBase &&
+            subView.isALEngine &&
             subView.position == ALPositionAbsolute &&
             (subView.hasSettedBottom || subView.hasSettedRight)
         ) {
@@ -72,7 +72,7 @@
 //    // 触发子view中使用了fixed布局
 //    for (UIView * subView in self.scrollView.subviews) {
 //        if (
-//            subView.isALBase &&
+//            subView.isALEngine &&
 //            subView.position == ALPositionFixed
 //            ) {
 //            [subView reflow:self.scrollView];

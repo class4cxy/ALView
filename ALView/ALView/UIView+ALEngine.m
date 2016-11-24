@@ -1,26 +1,26 @@
 //
-//  UIView+ALBase.m
+//  UIView+ALEngine.m
 //  ALView
 //
 //  Created by jdochen on 2016/10/24.
 //  Copyright © 2016年 jdochen. All rights reserved.
 //
 
-#import "UIView+ALBase.h"
+#import "UIView+ALEngine.h"
 #import <objc/runtime.h>
 
-@implementation UIView (ALBase)
+@implementation UIView (ALEngine)
 
 #pragma mark - dynamic property
 
-@dynamic isALBase;
-- (BOOL) isALBase
+@dynamic isALEngine;
+- (BOOL) isALEngine
 {
-    return [objc_getAssociatedObject(self, @"isALBase") boolValue];
+    return [objc_getAssociatedObject(self, @"isALEngine") boolValue];
 }
-- (void) setIsALBase:(BOOL)isALBase
+- (void) setIsALEngine:(BOOL)isALEngine
 {
-    objc_setAssociatedObject(self, @"isALBase", [NSNumber numberWithBool:isALBase], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"isALEngine", [NSNumber numberWithBool:isALEngine], OBJC_ASSOCIATION_RETAIN);
 }
 
 //@dynamic isVirtual;
@@ -306,10 +306,10 @@
 
 #pragma mark - init
 // 继承类需重载该方法，用于初始化对应的配置文件
-- (instancetype) initWithALBase
+- (instancetype) initWithALEngine
 {
     if ( self = [self initWithFrame:CGRectZero] ) {
-        self.isALBase = YES;
+        self.isALEngine = YES;
 //        self.isVirtual = NO;
         
         self.isAutoHeight = YES;
@@ -331,9 +331,9 @@
     return self;
 }
 
-//- (instancetype) initWithALVirtualBase
+//- (instancetype) initWithALVirtuALEngine
 //{
-//    if ( self = [self initWithALBase] ) {
+//    if ( self = [self initWithALEngine] ) {
 //        self.isVirtual = YES;
 //    }
 //    return self;
@@ -358,7 +358,7 @@
 
 - (void) linkSiblingView: (UIView *) parent
 {
-    UIView * lastSubView = [self getLastALBaseSubview: parent displayModel:-1];
+    UIView * lastSubView = [self getLastALEngineSubview: parent displayModel:-1];
     
     if ( lastSubView != nil ) {
         self.previousSibling = (ALView*)lastSubView;
@@ -405,7 +405,7 @@
         UIView * p = self.superview;
         while (p) {
             // 触发父view重算自己的高度
-            if ( p.isALBase ) {
+            if ( p.isALEngine ) {
                 [p reflowInnerSizeIfNeed];
             }
             // 如果父view是ALScrollView，需触发父view重算contentSize
@@ -429,7 +429,7 @@
         
         top += self.marginTop;
         
-        UIView * lastBlockView = [self getLastALBaseSubview:parent displayModel:(NSUInteger)ALDisplayBlock];
+        UIView * lastBlockView = [self getLastALEngineSubview:parent displayModel:(NSUInteger)ALDisplayBlock];
         
         // 存在最后一个block view且非自己
         if ( lastBlockView && lastBlockView != self ) {
@@ -438,7 +438,7 @@
                     lastBlockView.frame.size.height;
         }
     } else if ( self.display == ALDisplayInline ) { // inline-block
-        UIView * lastInlineView = [self getLastALBaseSubview:parent displayModel:(NSUInteger)ALDisplayInline];
+        UIView * lastInlineView = [self getLastALEngineSubview:parent displayModel:(NSUInteger)ALDisplayInline];
         
         // 根据父view内容对齐方式布局
         switch (parent.contentAlign) {
@@ -477,7 +477,7 @@
             }
         } else {
             // 否则参照最后一个block类型的view下面排列
-            UIView * lastBlockView = [self getLastALBaseSubview:parent displayModel:(ALDisplay)ALDisplayBlock];
+            UIView * lastBlockView = [self getLastALEngineSubview:parent displayModel:(ALDisplay)ALDisplayBlock];
             if ( lastBlockView ) {
                 top +=  self.marginTop +
                         lastBlockView.frame.origin.y +
@@ -652,7 +652,7 @@
     CGFloat left = 0;
     CGFloat width = self.frame.size.width;
     // 根据父view的内容对齐方式计算left
-    if ( parent.isALBase ) {
+    if ( parent.isALEngine ) {
         switch (parent.contentAlign) {
                 // 靠左排版
             case ALContentAlignLeft:
@@ -772,7 +772,7 @@
         // calc inner height
         innerHeight = lastView.frame.size.height + lastView.frame.origin.y;
         // 加上底部外边距
-        if ( lastView.isALBase ) {
+        if ( lastView.isALEngine ) {
             innerHeight += lastView.marginBottom;
         }
         // 取子view中最高的
@@ -814,14 +814,14 @@
 /*
  * 获取子view中的最后一个ALView，可通过display类型来查找
  */
-- (UIView *) getLastALBaseSubview: (UIView *)parent displayModel: (NSUInteger) index
+- (UIView *) getLastALEngineSubview: (UIView *)parent displayModel: (NSUInteger) index
 {
     UIView * lastView = nil;
     NSInteger i = parent.subviews.count - 2; // 跳过自己
     
     for (; i >= 0; i--) {
         lastView = [parent.subviews objectAtIndex:i];
-        if ( lastView.isALBase && (index == -1 || lastView.display == (ALDisplay)index) ) {
+        if ( lastView.isALEngine && (index == -1 || lastView.display == (ALDisplay)index) ) {
             return lastView;
         }
     }

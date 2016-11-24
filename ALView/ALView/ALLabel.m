@@ -7,13 +7,13 @@
 //
 
 #import "ALLabel.h"
-#import "UIView+ALBase.h"
+#import "UIView+ALEngine.h"
 
 @implementation ALLabel
 
 - (instancetype) init
 {
-    if ( self = [super initWithALBase] ) {
+    if ( self = [super initWithALEngine] ) {
         self.display  = ALDisplayInline;
     }
     return self;

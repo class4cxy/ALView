@@ -7,13 +7,13 @@
 //
 
 #import "ALView.h"
-#import "UIView+ALBase.h"
+#import "UIView+ALEngine.h"
 
 @implementation ALView
 
 - (instancetype)init
 {
-    if ( self = [super initWithALBase] ) {
+    if ( self = [super initWithALEngine] ) {
         self.position = ALPositionRelative;
         self.display  = ALDisplayBlock;
     }
