@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ALRow.h"
 #import "ALView.h"
 #import "ALScrollView.h"
 #import "ALLabel.h"
@@ -126,6 +127,12 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, assign) CGFloat bottom;
 @property (nonatomic, assign) CGFloat left;
 @property (nonatomic, assign) CGFloat right;
+/*
+ * 0表示居中，允许负值
+ */
+@property (nonatomic, assign) CGFloat centerX;
+@property (nonatomic, assign) CGFloat centerY;
+
 
 @property (nonatomic, assign) CGFloat margin;
 @property (nonatomic, assign) CGFloat marginTop;
@@ -150,6 +157,10 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, assign, readonly) BOOL hasSettedLeft;
 // 记录是否设置过top值
 @property (nonatomic, assign, readonly) BOOL hasSettedTop;
+// 记录是否设置过centerX值
+@property (nonatomic, assign, readonly) BOOL hasSettedCenterX;
+// 记录是否设置过centerY值
+@property (nonatomic, assign, readonly) BOOL hasSettedCenterY;
 // 记录是否设置过bottom值
 @property (nonatomic, assign, readonly) BOOL hasSettedBottom;
 // 记录是否设置过right值
@@ -159,6 +170,12 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, retain, readonly) ALView * nextSibling;
 // 上一个兄弟view
 @property (nonatomic, retain, readonly) ALView * previousSibling;
+// 管理的行数
+//@property (nonatomic, assign, readonly) NSInteger rowNum;
+// 所属行数
+@property (nonatomic, assign, readonly) NSInteger row;
+// rows，以row为单位管理子view
+@property (nonatomic, retain) NSMutableArray<ALRow *> * rows;
 
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
 - (instancetype) initWithALEngine;
@@ -166,6 +183,8 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 //- (instancetype) initWithALVirtuALEngine;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
+// 开放给实例使用，当改变样式属性时，用于刷新UI用
+- (void) refreshView;
 
 /*
  * 私有
@@ -173,6 +192,7 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 // 提供给子类重新布局当前view用的，实例不要调用该方法
 - (void) reflow:(UIView *)parent;
 // 提供给子类重新排版absolute方式布局的view
-- (void) reflowWithAbsolute:(UIView *)parent;
+//- (void) reflowWithAbsolute:(UIView *)parent;
+- (void) reflowOriginAndSizeWhenAbsolute: (UIView *) parent;
 
 @end

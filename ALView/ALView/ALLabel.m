@@ -58,10 +58,14 @@
         // 根据给定的宽度自适应
         } else if ( self.isAutoHeight ) {
             fontSize = [self sizeThatFits:CGSizeMake(self.width, MAXFLOAT)];
+            // sizeThatFits也会重新计算过width值，这里需要重置回来
+            fontSize.width = self.width;
         // 自动宽度 & 给定高度
         // 宽度自动，但不能大于父view宽度，高度使用给定的高度
         } else if ( self.isAutoWidth ) {
             fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, self.height)];
+            // sizeThatFits也会重新计算过height值，这里需要重置回来
+            fontSize.height = self.height;
         // 如果都有设置了宽高，那就按设置的来
         } else {
             fontSize.width = self.width;

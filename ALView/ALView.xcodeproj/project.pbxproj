@@ -25,6 +25,9 @@
 		6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25821DBFB23A00FC4081 /* ALView.m */; };
 		6B1D25841DBFB23A00FC4081 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25821DBFB23A00FC4081 /* ALView.m */; };
 		6B1D25851DBFB23A00FC4081 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25821DBFB23A00FC4081 /* ALView.m */; };
+		6B700E691DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
+		6B700E6A1DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
+		6B700E6B1DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,8 @@
 		6B1D257D1DBE5F5700FC4081 /* UIView+ALEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ALEngine.m"; sourceTree = "<group>"; };
 		6B1D25811DBFB20300FC4081 /* ALView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALView.h; sourceTree = "<group>"; };
 		6B1D25821DBFB23A00FC4081 /* ALView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALView.m; sourceTree = "<group>"; };
+		6B700E671DEC34B6002B49AD /* ALRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALRow.h; sourceTree = "<group>"; };
+		6B700E681DEC35E6002B49AD /* ALRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALRow.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +126,8 @@
 			children = (
 				6B099BE71DD0071A0031F8EA /* ALLabel.h */,
 				6B099BE81DD007300031F8EA /* ALLabel.m */,
+				6B700E671DEC34B6002B49AD /* ALRow.h */,
+				6B700E681DEC35E6002B49AD /* ALRow.m */,
 				6B1D25571DBE5C6800FC4081 /* UIView+ALEngine.h */,
 				6B1D257D1DBE5F5700FC4081 /* UIView+ALEngine.m */,
 				6B1D25811DBFB20300FC4081 /* ALView.h */,
@@ -309,6 +316,7 @@
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B099BE91DD007300031F8EA /* ALLabel.m in Sources */,
+				6B700E691DEC35E6002B49AD /* ALRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +325,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B1D252B1DBC4E0F00FC4081 /* ALScrollView.m in Sources */,
+				6B700E6A1DEC35E6002B49AD /* ALRow.m in Sources */,
 				6B1D25101DB307A300FC4081 /* ALViewTests.m in Sources */,
 				6B1D25841DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B1D257F1DBE5F5700FC4081 /* UIView+ALEngine.m in Sources */,
@@ -328,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B1D252C1DBC4E0F00FC4081 /* ALScrollView.m in Sources */,
+				6B700E6B1DEC35E6002B49AD /* ALRow.m in Sources */,
 				6B1D251B1DB307A300FC4081 /* ALViewUITests.m in Sources */,
 				6B1D25851DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B1D25801DBE5F5700FC4081 /* UIView+ALEngine.m in Sources */,

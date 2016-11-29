@@ -61,7 +61,8 @@
             subView.position == ALPositionAbsolute &&
             (subView.hasSettedBottom || subView.hasSettedRight)
         ) {
-            [subView reflowWithAbsolute:self];
+//            [subView reflowWithAbsolute:self];
+            [subView reflowOriginAndSizeWhenAbsolute: self];
         }
     }
 }

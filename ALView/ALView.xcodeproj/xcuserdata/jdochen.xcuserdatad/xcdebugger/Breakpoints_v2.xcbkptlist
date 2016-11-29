@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ALView/ALLabel.m"
-            timestampString = "501596871.674229"
+            filePath = "ALView/ViewController.m"
+            timestampString = "502081090.956957"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "-reflowWithInnerText:"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "-subTheHeight"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
