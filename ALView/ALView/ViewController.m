@@ -29,7 +29,7 @@
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initSiblingLayout];
-    [self initBlockContentInlineLayout];
+//    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
@@ -39,7 +39,7 @@
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
     
-//    [self initDynamicLayout];
+    [self initDynamicLayout];
 //    [self initPositionAutoSizeWhenBottomAndRight];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -53,17 +53,25 @@
     [body addTo: self.view];
 
     ALView * sub1 = [[ALView alloc] init];
-    sub1.position = ALPositionAbsolute;
-    sub1.bottom = 10;
+//    sub1.position = ALPositionAbsolute;
+    sub1.display = ALDisplayInline;
+    sub1.contentAlign = ALContentAlignCenter;
+//    sub1.width = 200;
+//    sub1.bottom = 10;
 //    sub1.centerY = 0;
-    sub1.centerX = 0;
+//    sub1.centerX = 0;
     sub1.backgroundColor = [UIColor yellowColor];
     [sub1 addTo: body];
     
     [[self createInlineViewWidth:50 height:30 alpha:0.7] addTo:sub1];
-    [[self createInlineViewWidth:80 height:30 alpha:0.8] addTo:sub1];
+    [[self createInlineViewWidth:70 height:30 alpha:0.8] addTo:sub1];
     [[self createInlineViewWidth:100 height:30 alpha:0.9] addTo:sub1];
-    [[self createInlineViewWidth:150 height:30 alpha:0.9] addTo:sub1];
+    [[self createInlineViewWidth:150 height:30 alpha:0.8] addTo:sub1];
+//    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.8] addTo:sub1];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.9] addTo:sub1];
+//    [[self createInlineViewWidth:150 height:30 alpha:0.8] addTo:sub1];
+//    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
 }
 
 - (void) initPositionAutoSizeWhenCenterXAndY
@@ -74,7 +82,7 @@
 - (void) initDynamicLayout
 {
     ALView * body = [[ALView alloc] init];
-//    body.contentAlign = ALContentAlignRight;
+    body.contentAlign = ALContentAlignRight;
     body.height = [[UIScreen mainScreen] bounds].size.height;
     [body addTo: self.view];
     
@@ -83,71 +91,75 @@
     [[self createInlineViewWidth:60 height:50 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
     
-//    _section1 = [[ALView alloc] init];
-//    _section1.display = ALDisplayInline;
-//    _section1.height = 30;
-//    _section1.width = 250;
-//    _section1.marginBottom = 5;
-//    _section1.marginRight = 5;
-//    _section1.backgroundColor = [UIColor yellowColor];
-//    [_section1 addTo: body];
+    _section1 = [[ALView alloc] init];
+    _section1.display = ALDisplayInline;
+    _section1.height = 30;
+    _section1.width = 200;
+    _section1.marginBottom = 5;
+    _section1.marginRight = 5;
+    _section1.backgroundColor = [UIColor yellowColor];
+    [_section1 addTo: body];
     
-    [[self createInlineViewWidth:30 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
     
-//    ALView * panelWrap = [[ALView alloc] init];
-//    panelWrap.position = ALPositionAbsolute;
-//    panelWrap.bottom = 10;
-//    panelWrap.centerX = 0;
-//    [panelWrap addTo: body];
-//    
-//    ALLabel * widthTx = [[ALLabel alloc] init];
-//    widthTx.text = @"width: ";
-//    widthTx.font = [UIFont systemFontOfSize:12];
-//    widthTx.height = 30;
-//    [widthTx addTo: panelWrap];
-//    
-//    ALLabel * subBtn = [[ALLabel alloc] init];
-//    subBtn.userInteractionEnabled = YES;
-//    subBtn.text = @"-";
-//    subBtn.height = 30;
-//    subBtn.width = 30;
-//    subBtn.marginLeft = 10;
-//    subBtn.textColor = [UIColor whiteColor];
-//    subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-//    subBtn.textAlignment = NSTextAlignmentCenter;
-//    [subBtn addTo: panelWrap];
-//    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheHeight)];
-//    [subBtn addGestureRecognizer: tapSubBtn];
-//    
-//    ALLabel * addBtn = [[ALLabel alloc] init];
-//    addBtn.userInteractionEnabled = YES;
-//    addBtn.text = @"+";
-//    addBtn.height = 30;
-//    addBtn.width = 30;
-//    addBtn.marginLeft = 10;
-//    addBtn.textColor = [UIColor whiteColor];
-//    addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-//    addBtn.textAlignment = NSTextAlignmentCenter;
-//    [addBtn addTo: panelWrap];
-//    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
-//    [addBtn addGestureRecognizer: tapAddBtn];
+    ALView * panelWrap = [[ALView alloc] init];
+    panelWrap.position = ALPositionAbsolute;
+    panelWrap.bottom = 10;
+    panelWrap.centerX = 0;
+    [panelWrap addTo: body];
+    
+    ALLabel * widthTx = [[ALLabel alloc] init];
+    widthTx.text = @"width: ";
+    widthTx.font = [UIFont systemFontOfSize:12];
+    widthTx.height = 30;
+    [widthTx addTo: panelWrap];
+    
+    ALLabel * subBtn = [[ALLabel alloc] init];
+    subBtn.userInteractionEnabled = YES;
+    subBtn.text = @"-";
+    subBtn.height = 30;
+    subBtn.width = 30;
+    subBtn.marginLeft = 10;
+    subBtn.textColor = [UIColor whiteColor];
+    subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    subBtn.textAlignment = NSTextAlignmentCenter;
+    [subBtn addTo: panelWrap];
+    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheHeight)];
+    [subBtn addGestureRecognizer: tapSubBtn];
+    
+    ALLabel * addBtn = [[ALLabel alloc] init];
+    addBtn.userInteractionEnabled = YES;
+    addBtn.text = @"+";
+    addBtn.height = 30;
+    addBtn.width = 30;
+    addBtn.marginLeft = 10;
+    addBtn.textColor = [UIColor whiteColor];
+    addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    addBtn.textAlignment = NSTextAlignmentCenter;
+    [addBtn addTo: panelWrap];
+    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
+    [addBtn addGestureRecognizer: tapAddBtn];
+    
+    NSLog(@"%@", body.rows);
 }
 
 - (void) subTheHeight
 {
     _section1.width -= 2;
     [_section1 refreshView];
+    NSLog(@"%@", _section1.superview.rows);
     NSLog(@"%f", _section1.width);
 }
 - (void) addTheHeight
 {
     _section1.width += 2;
     [_section1 refreshView];
+    NSLog(@"%@", _section1.superview.rows);
     NSLog(@"%f", _section1.width);
 }
 
@@ -404,7 +416,7 @@
     
     ALView * blockwrap = [[ALView alloc] init];
     blockwrap.backgroundColor = [UIColor yellowColor];
-    blockwrap.contentAlign = ALContentAlignLeft;
+    blockwrap.contentAlign = ALContentAlignRight;
     [blockwrap addTo: body];
 
     [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
@@ -443,17 +455,37 @@
 
     ALView * inlinewrap = [[ALView alloc] init];
     inlinewrap.backgroundColor = [UIColor redColor];
+//    inlinewrap.width = 300;
+    inlinewrap.contentAlign = ALContentAlignCenter;
     inlinewrap.display = ALDisplayInline;
     [inlinewrap addTo: body];
     
-    [[self createInlineBox1:0.1] addTo:inlinewrap];
-    [[self createInlineBox1:0.2] addTo:inlinewrap];
-    [[self createInlineBox1:0.3] addTo:inlinewrap];
-    [[self createInlineBox1:0.4] addTo:inlinewrap];
-    [[self createInlineBox1:0.5] addTo:inlinewrap];
-    [[self createInlineBox1:0.6] addTo:inlinewrap];
-    [[self createInlineBox1:0.7] addTo:inlinewrap];
-    [[self createInlineBox1:0.8] addTo:inlinewrap];
+    [[self createInlineViewWidth:150 height:30 alpha:0.1] addTo: inlinewrap];
+    [[self createInlineViewWidth:50 height:40 alpha:0.2] addTo: inlinewrap];
+    [[self createInlineViewWidth:30 height:30 alpha:0.3] addTo: inlinewrap];
+    [[self createInlineViewWidth:120 height:30 alpha:0.4] addTo: inlinewrap];
+    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: inlinewrap];
+    [[self createInlineViewWidth:200 height:60 alpha:0.6] addTo: inlinewrap];
+    [[self createInlineViewWidth:300 height:30 alpha:0.7] addTo: inlinewrap];
+//    [[self createInlineViewWidth:200 height:30 alpha:0.8] addTo: inlinewrap];
+//    [[self createInlineBox1:0.7] addTo:inlinewrap];
+    //    [[self createInlineBox1:0.8] addTo:inlinewrap];
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:0].top);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:0].width);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:0].height);
+    NSLog(@"%@", [inlinewrap.rows objectAtIndex:0].viewArr);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:1].top);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:1].width);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:1].height);
+    NSLog(@"%@", [inlinewrap.rows objectAtIndex:1].viewArr);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:2].top);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:2].width);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:2].height);
+    NSLog(@"%@", [inlinewrap.rows objectAtIndex:2].viewArr);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:3].top);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:3].width);
+    NSLog(@"%f", [inlinewrap.rows objectAtIndex:3].height);
+    NSLog(@"%@", [inlinewrap.rows objectAtIndex:3].viewArr);
 }
 
 - (void) initSiblingLayout

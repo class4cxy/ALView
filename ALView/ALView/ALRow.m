@@ -15,6 +15,7 @@
 {
     if ( self = [super init] ) {
         _height = 0;
+        _width = 0;
         _top = top;
         self.viewArr = [[NSMutableArray alloc] init];
     }
@@ -29,15 +30,16 @@
             [self.viewArr addObject: view];
         }
         // 更新height值
-        [self refreshMaxHeight];
+        [self refreshSize];
     }
 }
 
-- (void) refreshMaxHeight
+- (void) refreshSize
 {
     if ( [self.viewArr count] > 0 ) {
         // reset height
         _height = 0;
+        _width = 0;
         
         NSUInteger i = 0;
         NSUInteger len = [self.viewArr count];
@@ -47,9 +49,14 @@
             CGFloat h = view.marginTop +
                         view.marginBottom +
                         view.frame.size.height;
+            CGFloat w = view.marginLeft +
+                        view.marginRight +
+                        view.frame.size.width;
+            
             if ( _height < h ) {
                 _height = h;
             }
+            _width += w;
         }
     }
 }

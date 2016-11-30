@@ -14,6 +14,8 @@
 
 // 行高，会随着view被add进来而自动更新到最大高度
 @property (nonatomic, assign, readonly) CGFloat height;
+// 宽度，会随着view被add进来而自动更新到最大宽度
+@property (nonatomic, assign, readonly) CGFloat width;
 // 行坐标
 @property (nonatomic, assign, readonly) CGFloat top;
 // 存储的子view，该属性不允许实例手动去维护，务必要通过addView方法添加view
