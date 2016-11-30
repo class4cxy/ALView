@@ -29,7 +29,7 @@
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initSiblingLayout];
-//    [self initBlockContentInlineLayout];
+    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
@@ -39,7 +39,7 @@
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
     
-    [self initDynamicLayout];
+//    [self initDynamicLayout];
 //    [self initPositionAutoSizeWhenBottomAndRight];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -527,6 +527,9 @@
     [[self createInlineBox1:0.4] addTo:artivle3];
     [[self createInlineBox1:0.5] addTo:artivle3];
     [[self createInlineBox1:0.6] addTo:artivle3];
+    [[self createInlineBox1:0.7] addTo:artivle3];
+    [[self createInlineBox1:0.8] addTo:artivle3];
+    NSLog(@"%@", artivle3.rows);
 }
 
 - (void) initBlockContentBlockLayout

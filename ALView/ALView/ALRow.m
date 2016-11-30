@@ -25,15 +25,31 @@
 - (void)addView:(UIView *)view
 {
     if ( view != nil ) {
-        CGFloat newHeight = view.frame.size.height +
-                            view.marginTop +
-                            view.marginBottom;
-        // 更新height值
-        if ( _height < newHeight ) {
-            _height = newHeight;
-        }
         if ( ![self.viewArr containsObject: view] ) {
             [self.viewArr addObject: view];
+        }
+        // 更新height值
+        [self refreshMaxHeight];
+    }
+}
+
+- (void) refreshMaxHeight
+{
+    if ( [self.viewArr count] > 0 ) {
+        // reset height
+        _height = 0;
+        
+        NSUInteger i = 0;
+        NSUInteger len = [self.viewArr count];
+        
+        for (; i < len; i++) {
+            UIView * view = [self.viewArr objectAtIndex:i];
+            CGFloat h = view.marginTop +
+                        view.marginBottom +
+                        view.frame.size.height;
+            if ( _height < h ) {
+                _height = h;
+            }
         }
     }
 }
