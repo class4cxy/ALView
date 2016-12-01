@@ -88,24 +88,24 @@
     
     
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:50 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
     
     _section1 = [[ALView alloc] init];
     _section1.display = ALDisplayInline;
     _section1.height = 30;
-    _section1.width = 200;
+    _section1.width = 150;
     _section1.marginBottom = 5;
     _section1.marginRight = 5;
     _section1.backgroundColor = [UIColor yellowColor];
     [_section1 addTo: body];
     
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
     
     ALView * panelWrap = [[ALView alloc] init];
     panelWrap.position = ALPositionAbsolute;

@@ -7,7 +7,6 @@
 //
 
 #import "ALRow.h"
-#import "UIView+ALEngine.h"
 
 @implementation ALRow
 
@@ -16,6 +15,7 @@
     if ( self = [super init] ) {
         _height = 0;
         _width = 0;
+        _maxWidth = 0;
         _top = top;
         self.viewArr = [[NSMutableArray alloc] init];
     }
@@ -23,7 +23,12 @@
     return self;
 }
 
-- (void)addView:(UIView *)view
+- (BOOL) canAddView: (UIView *) view
+{
+    return _maxWidth < _width + view.frame.size.width + view.marginLeft + view.marginRight;
+}
+
+- (void) addView:(UIView *)view
 {
     if ( view != nil ) {
         if ( ![self.viewArr containsObject: view] ) {
@@ -32,6 +37,19 @@
         // 更新height值
         [self refreshSize];
     }
+}
+
+// 从结尾移除一个view
+// 并返回最后一个view
+- (UIView *) popView
+{
+    if ( [self.viewArr count] > 0 ) {
+        UIView * lastView = [self.viewArr lastObject];
+        [self.viewArr removeLastObject];
+        [self refreshSize];
+        return lastView;
+    }
+    return nil;
 }
 
 - (void) refreshSize
@@ -58,6 +76,13 @@
             }
             _width += w;
         }
+    }
+}
+// 触发row内部的view进行layout，仅重排left值
+- (void) reflow
+{
+    if ( [self.viewArr count] > 0 ) {
+        
     }
 }
 

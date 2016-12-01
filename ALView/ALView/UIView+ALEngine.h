@@ -96,6 +96,8 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
 typedef NS_ENUM(NSInteger, ALRecursionType) {
     // 不递归
     ALRecursionNone,
+    // 递归父view
+    ALRecursionParentView,
     // 递归上一个兄弟view
     ALRecursionPreviousView,
     // 递归下一个兄弟view
