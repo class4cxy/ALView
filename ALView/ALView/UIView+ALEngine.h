@@ -190,9 +190,9 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
  * 私有
  */
 // 提供给子类重新布局当前view用的，实例不要调用该方法
-- (void) reflow:(UIView *)parent;
+- (void) reflow;
 // 提供给子类重新排版absolute方式布局的view
 //- (void) reflowWithAbsolute:(UIView *)parent;
-- (void) reflowOriginAndSizeWhenAbsolute: (UIView *) parent;
+- (void) reflowOriginAndSizeWhenAbsolute;
 
 @end

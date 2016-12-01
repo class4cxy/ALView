@@ -62,7 +62,7 @@
             (subView.hasSettedBottom || subView.hasSettedRight)
         ) {
 //            [subView reflowWithAbsolute:self];
-            [subView reflowOriginAndSizeWhenAbsolute: self];
+            [subView reflowOriginAndSizeWhenAbsolute];
         }
     }
 }

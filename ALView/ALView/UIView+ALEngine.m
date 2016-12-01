@@ -432,17 +432,19 @@
     // 将view add到树中
     [parent addSubview: self];
     // 生成兄弟view关系
-    [self linkSiblingView:parent];
+    [self linkSiblingView];
     // 排版该view
-    [self reflow: parent];
+    [self reflow];
 }
 
 /*
  * link view by nextSibling & previousSibling
  */
 
-- (void) linkSiblingView: (UIView *) parent
+- (void) linkSiblingView
 {
+    UIView * parent = self.superview;
+    
     UIView * lastSubView = [self getLastALEngineSubview: parent displayModel:-1];
     
     if ( lastSubView != nil ) {
@@ -455,23 +457,23 @@
 /*
  * 总的排版入口，如果涉及到关联的view或者super view需重排也尽量别直接调到这里来
  */
-- (void) reflow:(UIView *)parent
+- (void) reflow
 {
     // 检查父view
-    if ( parent == nil ) {
-        return;
-    }
+//    if ( parent == nil ) {
+//        return;
+//    }
 
     switch (self.position) {
         case ALPositionRelative:
         {
-            [self reflowOriginAndSizeWhenRelative: parent];
+            [self reflowOriginAndSizeWhenRelative];
         }
             break;
             
         case ALPositionAbsolute:
         {
-            [self reflowOriginAndSizeWhenAbsolute: parent];
+            [self reflowOriginAndSizeWhenAbsolute];
         }
             break;
             
@@ -496,14 +498,16 @@
 //    }
 }
 // relation布局时，重排origin跟size
-- (void) reflowOriginAndSizeWhenRelative:(UIView *)parent
+- (void) reflowOriginAndSizeWhenRelative
 {
-    [self reflowSelfSize: parent];
-    [self reflowOriginWhenRelative: parent];
+    [self reflowSelfSize];
+    [self reflowOriginWhenRelative];
 }
 // relation布局时，重排origin
-- (void) reflowOriginWhenRelative:(UIView *)parent
+- (void) reflowOriginWhenRelative
 {
+    UIView * parent = self.superview;
+    
     // 在最前面做一次类型确认，跳过absolute布局的view
     if ( self.position != ALPositionRelative ) {
         [self recurNextSiblingReflowWhenRelative];
@@ -534,24 +538,24 @@
             case ALContentAlignCenter:
             {
                 // 添加
-                if ( parent.subviews.lastObject == self ) {
+//                if ( parent.subviews.lastObject == self ) {
                     [self reflowInlineLeftWidthContentAlignCenter];
-                // 重排
-                } else {
-                    [parent.subviews.lastObject reflowInlineLeftWidthContentAlignCenter];
-                }
+//                // 重排
+//                } else {
+//                    [parent.subviews.lastObject reflowInlineLeftWidthContentAlignCenter];
+//                }
             }
                 break;
                 // 右对齐
             case ALContentAlignRight:
             {
                 // 添加
-                if ( parent.subviews.lastObject == self ) {
+//                if ( parent.subviews.lastObject == self ) {
                     [self reflowInlineLeftWidthContentAlignRight];
                     // 重排
-                } else {
-                    [parent.subviews.lastObject reflowInlineLeftWidthContentAlignRight];
-                }
+//                } else {
+//                    [parent.subviews.lastObject reflowInlineLeftWidthContentAlignRight];
+//                }
             }
                 break;
                 
@@ -583,10 +587,10 @@
  */
 - (void) recurNextSiblingReflowWhenRelative
 {
-    UIView * parent = self.superview;
+//    UIView * parent = self.superview;
     // 递归后面的兄弟view进行重排
     if ( self.nextSibling != nil ) {
-        [self.nextSibling reflowOriginWhenRelative: parent];
+        [self.nextSibling reflowOriginWhenRelative];
         // 如果不存在下一个view，那就递归完了，这时候需要触发父viewreflow size
     }
 }
@@ -594,8 +598,9 @@
 /*
  * 排版自身尺寸
  */
-- (void) reflowSelfSize: (UIView *) parent
+- (void) reflowSelfSize
 {
+    UIView * parent = self.superview;
     // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
     if ( [self isKindOfClass:[ALLabel class]] ) {
         [((ALLabel *) self) reflowWithInnerText: parent];
@@ -865,15 +870,17 @@
 // 位置：通过top,left,bottom,right,centerX,centerY相对于父view来定位
 // 注：如果父view为ALScrollView，排版应该是相对于父view的滚动区
 // 注：1、位置不受margin影响；2、不受同级view排版影响。
-- (void) reflowOriginAndSizeWhenAbsolute: (UIView *) parent
+- (void) reflowOriginAndSizeWhenAbsolute
 {
     // 排版size
-    [self reflowSelfSize: parent];
-    [self reflowOriginWhenAbsolute: parent];
+    [self reflowSelfSize];
+    [self reflowOriginWhenAbsolute];
 }
 // 不带重排size
-- (void) reflowOriginWhenAbsolute: (UIView *) parent
+- (void) reflowOriginWhenAbsolute
 {
+    UIView * parent = self.superview;
+    
     CGFloat top = self.top;
     CGFloat left = self.left;
     
@@ -975,7 +982,7 @@
     // 如果当前view使用了absolute布局，而且属于isAutoHeight 或者 isAutoWidth
     // 那需触发该view重新进行定位排版
     if ( self.position == ALPositionAbsolute && (self.isAutoWidth || self.isAutoHeight) ) {
-        [self reflowOriginWhenAbsolute: self.superview];
+        [self reflowOriginWhenAbsolute];
     // 如果当前view使用relative布局，而且属于isAutoHeight
     // 那需递归触发父view进行高度调整
     } else if ( self.position == ALPositionRelative && self.superview.isALEngine ) {
@@ -985,13 +992,14 @@
 
 - (void) refreshView
 {
-    // 重置一下父view的数据
-//    [self recurParents: ^(UIView * parent) {
-//        parent.currInnerWidth = 0;
-//        parent.currInnerHeight = 0;
-//    }];
-    [self resetParentRowManager];
-    [self reflow: self.superview];
+    // absolute类型的view的重排逻辑：
+    // 1、reflow size
+    // 2、reflow origin
+    // 3、触发内部子view重排
+    if ( self.position == ALPositionAbsolute ) {
+        [self reflowOriginAndSizeWhenAbsolute];
+        
+    }
 }
 
 #pragma mark - 链表操作逻辑
