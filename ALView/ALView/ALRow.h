@@ -9,7 +9,23 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIView+ALEngine.h"
+
+/*
+ * 内容对齐方式，适用于所有使用AL引擎布局的的view
+ * 注：
+ * 1、该属性有继承性，父view设置了该属性，子view也拥有同样的属性
+ * 2、该属性只适用于relative方式布局的子view
+ * 默认：ALContentAlignLeft
+ * 注：inline类型的view支持ALContentAlignRight 与 ALContentAlignCenter，但是需设置固定宽度的前提，否则会出现布局错乱
+ */
+typedef NS_ENUM(NSInteger, ALContentAlign) {
+    // 内容左对齐
+    ALContentAlignLeft,
+    // 内容右对齐
+    ALContentAlignRight,
+    // 内容居中
+    ALContentAlignCenter,
+};
 
 @interface ALRow : NSObject
 
@@ -26,11 +42,13 @@
 // 存储的子view，该属性不允许实例手动去维护，务必要通过addView方法添加view
 @property (nonatomic, retain) NSMutableArray * viewArr;
 
-- (instancetype) initWithTop: (CGFloat) top;
+- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign;
 // 检查是否能插入该view
 - (BOOL) canAddView: (UIView *) view;
-// 插入该view
+// 在Row头部插入一个view
 - (void) addView: (UIView *) view;
+// 在Row尾部插入一个view
+- (void) pushView:(UIView *)view;
 // 弹出最后一个view
 - (UIView *) popView;
 // 重排该row里面的所有view

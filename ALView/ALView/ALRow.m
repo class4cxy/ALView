@@ -7,24 +7,30 @@
 //
 
 #import "ALRow.h"
+#import "UIView+ALEngine.h"
 
 @implementation ALRow
 
-- (instancetype) initWithTop: (CGFloat) top
+- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign
 {
     if ( self = [super init] ) {
         _height = 0;
         _width = 0;
         _maxWidth = 0;
         _top = top;
+        _contentAlign = contentAlign;
         self.viewArr = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
-
+// TODO, 考虑单行业超过maxWidth的情况
 - (BOOL) canAddView: (UIView *) view
 {
+    // 特殊逻辑，如果当前行已经没有子view，那直接返回YES
+    if ( [self.viewArr count] == 0 ) {
+        return YES;
+    }
     return _maxWidth < _width + view.frame.size.width + view.marginLeft + view.marginRight;
 }
 
@@ -32,10 +38,23 @@
 {
     if ( view != nil ) {
         if ( ![self.viewArr containsObject: view] ) {
+            [self.viewArr insertObject:view atIndex:0];
+        }
+        // 更新height值
+        [self refreshSize];
+        [self reflow];
+    }
+}
+
+- (void) pushView:(UIView *)view
+{
+    if ( view != nil ) {
+        if ( ![self.viewArr containsObject: view] ) {
             [self.viewArr addObject: view];
         }
         // 更新height值
         [self refreshSize];
+        [self reflow];
     }
 }
 
@@ -81,8 +100,31 @@
 // 触发row内部的view进行layout，仅重排left值
 - (void) reflow
 {
-    if ( [self.viewArr count] > 0 ) {
+    NSInteger i = 0;
+    NSInteger len = [self.viewArr count];
+    
+    for ( ; i < len; i++ ) {
+        UIView * view = [self.viewArr objectAtIndex: 0];
+        UIView * prevView = view.previousSibling;
+        CGFloat left = 0;
+        CGFloat top = _top + view.marginTop;
         
+        if ( i == 0 ) {
+            if ( _contentAlign == ALContentAlignCenter ) {
+                left = (_maxWidth - _width)/2 + view.marginLeft;
+            } else if ( _contentAlign == ALContentAlignRight ) {
+                left = _maxWidth - _width + view.marginLeft;
+            } else {
+                left = 0;
+            }
+        } else {
+            left =  view.marginLeft +
+                    prevView.frame.origin.x +
+                    prevView.frame.size.width +
+                    prevView.marginRight;
+        }
+        
+        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
     }
 }
 
