@@ -83,7 +83,8 @@
 {
     ALView * body = [[ALView alloc] init];
     body.contentAlign = ALContentAlignRight;
-    body.height = [[UIScreen mainScreen] bounds].size.height;
+    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+//    body.height = [[UIScreen mainScreen] bounds].size.height;
     [body addTo: self.view];
     
     
@@ -102,48 +103,55 @@
     _section1.backgroundColor = [UIColor yellowColor];
     [_section1 addTo: body];
     
-//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
-//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
-//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
+    ALView * block1 = [[ALView alloc] init];
+    block1.height = 100;
+    block1.width = 200;
+    block1.marginBottom = 10;
+    block1.backgroundColor = [UIColor redColor];
+    [block1 addTo: body];
     
-    ALView * panelWrap = [[ALView alloc] init];
-    panelWrap.position = ALPositionAbsolute;
-    panelWrap.bottom = 10;
-    panelWrap.centerX = 0;
-    [panelWrap addTo: body];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: body];
     
-    ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"width: ";
-    widthTx.font = [UIFont systemFontOfSize:12];
-    widthTx.height = 30;
-    [widthTx addTo: panelWrap];
-    
-    ALLabel * subBtn = [[ALLabel alloc] init];
-    subBtn.userInteractionEnabled = YES;
-    subBtn.text = @"-";
-    subBtn.height = 30;
-    subBtn.width = 30;
-    subBtn.marginLeft = 10;
-    subBtn.textColor = [UIColor whiteColor];
-    subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    subBtn.textAlignment = NSTextAlignmentCenter;
-    [subBtn addTo: panelWrap];
-    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheHeight)];
-    [subBtn addGestureRecognizer: tapSubBtn];
-    
-    ALLabel * addBtn = [[ALLabel alloc] init];
-    addBtn.userInteractionEnabled = YES;
-    addBtn.text = @"+";
-    addBtn.height = 30;
-    addBtn.width = 30;
-    addBtn.marginLeft = 10;
-    addBtn.textColor = [UIColor whiteColor];
-    addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
-    addBtn.textAlignment = NSTextAlignmentCenter;
-    [addBtn addTo: panelWrap];
-    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
-    [addBtn addGestureRecognizer: tapAddBtn];
+//    ALView * panelWrap = [[ALView alloc] init];
+//    panelWrap.position = ALPositionAbsolute;
+//    panelWrap.bottom = 10;
+//    panelWrap.centerX = 0;
+//    [panelWrap addTo: body];
+//    
+//    ALLabel * widthTx = [[ALLabel alloc] init];
+//    widthTx.text = @"width: ";
+//    widthTx.font = [UIFont systemFontOfSize:12];
+//    widthTx.height = 30;
+//    [widthTx addTo: panelWrap];
+//    
+//    ALLabel * subBtn = [[ALLabel alloc] init];
+//    subBtn.userInteractionEnabled = YES;
+//    subBtn.text = @"-";
+//    subBtn.height = 30;
+//    subBtn.width = 30;
+//    subBtn.marginLeft = 10;
+//    subBtn.textColor = [UIColor whiteColor];
+//    subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+//    subBtn.textAlignment = NSTextAlignmentCenter;
+//    [subBtn addTo: panelWrap];
+//    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheHeight)];
+//    [subBtn addGestureRecognizer: tapSubBtn];
+//    
+//    ALLabel * addBtn = [[ALLabel alloc] init];
+//    addBtn.userInteractionEnabled = YES;
+//    addBtn.text = @"+";
+//    addBtn.height = 30;
+//    addBtn.width = 30;
+//    addBtn.marginLeft = 10;
+//    addBtn.textColor = [UIColor whiteColor];
+//    addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+//    addBtn.textAlignment = NSTextAlignmentCenter;
+//    [addBtn addTo: panelWrap];
+//    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
+//    [addBtn addGestureRecognizer: tapAddBtn];
     
     NSLog(@"%@", body.rows);
 }

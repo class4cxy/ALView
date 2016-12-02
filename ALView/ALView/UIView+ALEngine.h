@@ -52,29 +52,6 @@ typedef NS_ENUM(NSInteger, ALPosition)
 };
 
 /*
- * AL引擎的排版类型
- * 默认：ALDisplayBlock
- */
-typedef NS_ENUM(NSInteger, ALDisplay)
-{
-    /*
-     * 说明：块级view
-     * 布局计算方式：
-     * 1、紧接着上一个block类型的view，并以新的一行开始布局（x = 0; y = preBlockView.frame.origin.y + preBlockView.frame.size.height）
-     */
-    ALDisplayBlock,
-    /*
-     * 说明：行内view
-     * 布局方式：
-     * 【如果上一个view是block类型】
-     * 1、紧接着上一个view，并以新的一行开始布局（x = 0; y = preView.frame.origin.y + preView.frame.size.height）
-     * 【如果上一个view是inline类型】
-     * 2、紧接着上一个view，在上一个view的右侧开始布局（x = preView.frame.origin.x + preView.frame.size.width; y = preView.frame.origin.y）
-     */
-    ALDisplayInline,
-};
-
-/*
  * reflow自己时会用到递归去reflow相邻view
  */
 typedef NS_ENUM(NSInteger, ALRecursionType) {
@@ -137,6 +114,7 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 // 记录当前view的内部高度，该值表示子view最高高度值，未必与width值相等，例如scrollView的情况
 @property (nonatomic, assign, readonly) CGFloat currInnerWidth;
 @property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
+// 注：考虑到排版的复杂度，inline类型的view不允许不设置width值
 @property (nonatomic, assign, readonly) BOOL isAutoWidth; // 是否为系统自动设置高度
 @property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
 // 记录是否设置过left值
@@ -156,6 +134,10 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, retain, readonly) ALView * nextSibling;
 // 上一个兄弟view
 @property (nonatomic, retain, readonly) ALView * previousSibling;
+// 下一个兄弟Row管理器，block类型的view才会用，为了方便递归
+//@property (nonatomic, retain, readonly) ALRow * nextRow;
+// 上一个兄弟Row管理器，block类型的view才会用，为了方便递归
+//@property (nonatomic, retain, readonly) ALRow * previousRow;
 // 管理的行数
 //@property (nonatomic, assign, readonly) NSInteger rowNum;
 // 所属行数
@@ -171,6 +153,8 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 - (void) addTo: (UIView *) parent;
 // 开放给实例使用，当改变样式属性时，用于刷新UI用
 - (void) refreshView;
+
+- (void) rowReflowWithView: (UIView *) view;
 
 /*
  * 私有

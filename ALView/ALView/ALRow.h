@@ -27,6 +27,29 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
     ALContentAlignCenter,
 };
 
+/*
+ * AL引擎的排版类型
+ * 默认：ALDisplayBlock
+ */
+typedef NS_ENUM(NSInteger, ALDisplay)
+{
+    /*
+     * 说明：块级view
+     * 布局计算方式：
+     * 1、紧接着上一个block类型的view，并以新的一行开始布局（x = 0; y = preBlockView.frame.origin.y + preBlockView.frame.size.height）
+     */
+    ALDisplayBlock,
+    /*
+     * 说明：行内view
+     * 布局方式：
+     * 【如果上一个view是block类型】
+     * 1、紧接着上一个view，并以新的一行开始布局（x = 0; y = preView.frame.origin.y + preView.frame.size.height）
+     * 【如果上一个view是inline类型】
+     * 2、紧接着上一个view，在上一个view的右侧开始布局（x = preView.frame.origin.x + preView.frame.size.width; y = preView.frame.origin.y）
+     */
+    ALDisplayInline,
+};
+
 @interface ALRow : NSObject
 
 // 行高，会随着view被add进来而自动更新到最大高度
@@ -34,15 +57,23 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
 // 宽度，会随着view被add进来而自动更新到最大宽度
 @property (nonatomic, assign, readonly) CGFloat width;
 // 当前行的最大宽度
-@property (nonatomic, assign, readonly) CGFloat maxWidth;
+@property (nonatomic, assign) CGFloat maxWidth;
 // 当前行的排版方式
 @property (nonatomic, assign) ALContentAlign contentAlign;
+// 当前行插入的view类型
+@property (nonatomic, assign) ALDisplay display;
 // 行坐标
-@property (nonatomic, assign, readonly) CGFloat top;
+@property (nonatomic, assign) CGFloat top;
 // 存储的子view，该属性不允许实例手动去维护，务必要通过addView方法添加view
 @property (nonatomic, retain) NSMutableArray * viewArr;
-
-- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign;
+// 下一个兄弟Row
+@property (nonatomic, retain) ALRow * nextRow;
+// 上一个兄弟Row
+@property (nonatomic, retain) ALRow * previousRow;
+// 父view
+@property (nonatomic, retain) UIView * parentView;
+- (instancetype) init;
+//- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign display: (ALDisplay) display;
 // 检查是否能插入该view
 - (BOOL) canAddView: (UIView *) view;
 // 在Row头部插入一个view
@@ -51,7 +82,7 @@ typedef NS_ENUM(NSInteger, ALContentAlign) {
 - (void) pushView:(UIView *)view;
 // 弹出最后一个view
 - (UIView *) popView;
-// 重排该row里面的所有view
-- (void) reflow;
+// 重排全部
+- (void) layout;
 
 @end

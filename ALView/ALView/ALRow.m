@@ -11,27 +11,34 @@
 
 @implementation ALRow
 
-- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign
+- (instancetype) init
 {
     if ( self = [super init] ) {
         _height = 0;
         _width = 0;
         _maxWidth = 0;
-        _top = top;
-        _contentAlign = contentAlign;
+        _top = 0;
+        _contentAlign = ALContentAlignLeft;
+        _display = ALDisplayBlock;
         self.viewArr = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
-// TODO, 考虑单行业超过maxWidth的情况
+
 - (BOOL) canAddView: (UIView *) view
 {
-    // 特殊逻辑，如果当前行已经没有子view，那直接返回YES
+    // 特殊逻辑：
+    // 1、如果当前行是block行，那直接返回NO
+    // 2、如果插入的view是block类型，那直接返回NO
+    if ( self.display == ALDisplayBlock || view.display == ALDisplayBlock ) {
+        return NO;
+    }
+    // 3、如果当前行已经没有子view，那直接返回YES
     if ( [self.viewArr count] == 0 ) {
         return YES;
     }
-    return _maxWidth < _width + view.frame.size.width + view.marginLeft + view.marginRight;
+    return _maxWidth > _width + view.frame.size.width + view.marginLeft + view.marginRight;
 }
 
 - (void) addView:(UIView *)view
@@ -40,9 +47,10 @@
         if ( ![self.viewArr containsObject: view] ) {
             [self.viewArr insertObject:view atIndex:0];
         }
+        [self layout];
         // 更新height值
-        [self refreshSize];
-        [self reflow];
+//        [self refreshSize];
+//        [self reflow];
     }
 }
 
@@ -53,9 +61,25 @@
             [self.viewArr addObject: view];
         }
         // 更新height值
-        [self refreshSize];
-        [self reflow];
+        [self layout];
+//        [self refreshSize];
+//        if ( _display == ALDisplayBlock ) {
+//            [self reflowWhenBlock];
+//        } else {
+//            [self reflowWhenInline];
+//        }
     }
+}
+
+- (void) layout
+{
+    [self refreshSize];
+    if ( _display == ALDisplayBlock ) {
+        [self reflowWhenBlock];
+    } else {
+        [self reflowWhenInline];
+    }
+    [self reflowTop];
 }
 
 // 从结尾移除一个view
@@ -97,14 +121,55 @@
         }
     }
 }
-// 触发row内部的view进行layout，仅重排left值
-- (void) reflow
+// 仅刷新top排版
+- (void) reflowTop
 {
     NSInteger i = 0;
     NSInteger len = [self.viewArr count];
     
     for ( ; i < len; i++ ) {
-        UIView * view = [self.viewArr objectAtIndex: 0];
+        UIView * view = [self.viewArr objectAtIndex: i];
+        CGFloat top = _top + view.marginTop;
+        view.frame = CGRectMake(view.frame.size.width, top, view.frame.size.width, view.frame.size.height);
+    }
+    // recurive reflow origin or next row
+    if ( _nextRow ) {
+        [_nextRow reflowTop];
+    } else {
+        [_parentView.superview rowReflowWithView:_parentView];
+    }
+}
+
+- (void) reflowWhenBlock
+{
+    UIView * view = [self.viewArr objectAtIndex: 0];
+    CGFloat top = _top + view.marginTop;
+    CGFloat left = 0;
+    
+    if ( _contentAlign == ALContentAlignCenter ) {
+        left = (_maxWidth - _width)/2 + view.marginLeft;
+    } else if ( _contentAlign == ALContentAlignRight ) {
+        left = _maxWidth - _width + view.marginLeft;
+    } else {
+        left = 0;
+    }
+    
+    view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+    // recurive reflow origin or next row
+//    if ( _nextRow ) {
+//        [_nextRow layoutTop];
+//    } else {
+////        _parentView
+//    }
+}
+// 触发row内部的view进行layout，仅重排left值
+- (void) reflowWhenInline
+{
+    NSInteger i = 0;
+    NSInteger len = [self.viewArr count];
+    
+    for ( ; i < len; i++ ) {
+        UIView * view = [self.viewArr objectAtIndex: i];
         UIView * prevView = view.previousSibling;
         CGFloat left = 0;
         CGFloat top = _top + view.marginTop;
@@ -126,6 +191,10 @@
         
         view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
     }
+    // recurive reflow origin or next row
+//    if ( _nextRow ) {
+//        [_nextRow layoutTop];
+//    }
 }
 
 @end
