@@ -1165,6 +1165,35 @@
     }
 }
 
+// 递归触发当前Row的兄弟Row进行reflow origin.top
+- (void) rowRecurNextRowReflow: (ALRow *) currRow
+{
+    NSInteger len = [self.rows count];
+    NSUInteger index = [self.rows indexOfObject: currRow] + 1;
+    if ( index < len ) {
+        ALRow * nextRow = [self.rows objectAtIndex: index];
+        nextRow.top = currRow.height + currRow.top;
+        [nextRow reflowTop];
+        [self rowRecurNextRowReflow: nextRow];
+    } else {
+        if ( self && self.isALEngine ) {
+            [self rowParentRowReflow];
+        }
+    }
+}
+// 递归触发当前Row的父级Row进行reflow size
+- (void) rowParentRowReflow
+{
+    if ( self.position == ALPositionAbsolute ) {
+    
+    // relative 方式排版
+    } else {
+        if ( self.isAutoHeight ) {
+            ALRow * currRow =
+        }
+    }
+}
+
 // 挤：把一个view挤到合适的行
 //- (void) crushToRightRow: (UIView *) view toRow: (NSUInteger) rowNum
 //{
@@ -1390,7 +1419,20 @@
     // 如果lastView不存在，那就返回Nil
     return nil;
 }
-
+/*
+ * 获取父view的宽度
+ * 特殊：使用absolute布局且isAutoWidth=YES的父view，需递归一直往上查找
+ */
+- (CGFloat) getParentWidth
+{
+    if ( self.superview ) {
+        if ( self.superview.isALEngine && self.superview.position == ALPositionAbsolute && self.superview.isAutoWidth ) {
+            return [self.superview getParentWidth];
+        }
+        return self.superview.frame.size.width;
+    }
+    return [[UIScreen mainScreen] bounds].size.width;
+}
 /*
  * 递归获取有固定宽度的父view
  * 1、如果当前view是block类型，那直接返回该view的父view宽度

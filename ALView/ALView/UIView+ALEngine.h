@@ -155,6 +155,8 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 - (void) refreshView;
 
 - (void) rowReflowWithView: (UIView *) view;
+// 获取当前view的父view宽度
+- (CGFloat) getParentWidth;
 
 /*
  * 私有

@@ -62,13 +62,21 @@
         }
         // 更新height值
         [self layout];
-//        [self refreshSize];
-//        if ( _display == ALDisplayBlock ) {
-//            [self reflowWhenBlock];
-//        } else {
-//            [self reflowWhenInline];
-//        }
     }
+}
+// 更新所有尺寸可以调该接口，会触发行内所有view重排
+- (void) updateSize: (CGRect) frame view: (UIView *) view
+{
+    view.frame = frame;
+    [self refreshSize];
+    [self layout];
+}
+
+// 仅更新高度值可以调该接口，可以减少计算
+- (void) updateHeight: (CGRect) frame view: (UIView *) view
+{
+    view.frame = frame;
+    [self reCountHeight];
 }
 
 - (void) layout
@@ -95,12 +103,10 @@
     return nil;
 }
 
-- (void) refreshSize
+- (void) reCountHeight
 {
     if ( [self.viewArr count] > 0 ) {
-        // reset height
         _height = 0;
-        _width = 0;
         
         NSUInteger i = 0;
         NSUInteger len = [self.viewArr count];
@@ -110,16 +116,37 @@
             CGFloat h = view.marginTop +
                         view.marginBottom +
                         view.frame.size.height;
+
+            if ( _height < h ) {
+                _height = h;
+            }
+        }
+    }
+}
+
+- (void) reCountWidth
+{
+    if ( [self.viewArr count] > 0 ) {
+        _width = 0;
+        
+        NSUInteger i = 0;
+        NSUInteger len = [self.viewArr count];
+        
+        for (; i < len; i++) {
+            UIView * view = [self.viewArr objectAtIndex:i];
             CGFloat w = view.marginLeft +
                         view.marginRight +
                         view.frame.size.width;
             
-            if ( _height < h ) {
-                _height = h;
-            }
             _width += w;
         }
     }
+}
+
+- (void) refreshSize
+{
+    [self reCountWidth];
+    [self reCountHeight];
 }
 // 仅刷新top排版
 - (void) reflowTop
@@ -133,11 +160,11 @@
         view.frame = CGRectMake(view.frame.size.width, top, view.frame.size.width, view.frame.size.height);
     }
     // recurive reflow origin or next row
-    if ( _nextRow ) {
-        [_nextRow reflowTop];
-    } else {
-        [_parentView.superview rowReflowWithView:_parentView];
-    }
+//    if ( _nextRow ) {
+//        [_nextRow reflowTop];
+//    } else {
+//        [_parentView.superview rowReflowWithView:_parentView];
+//    }
 }
 
 - (void) reflowWhenBlock

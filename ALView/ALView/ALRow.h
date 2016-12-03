@@ -84,5 +84,12 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 - (UIView *) popView;
 // 重排全部
 - (void) layout;
-
+// 仅重排origin.top值
+- (void) reflowTop;
+// 更新row的size
+- (void) refreshSize;
+// 更新制定view的frame，并触发该行所有view进行重排
+- (void) updateSize: (CGRect) frame view: (UIView *) view;
+// 更新制定view的frame，并重算该行高度
+- (void) updateHeight: (CGRect) frame view: (UIView *) view;
 @end
