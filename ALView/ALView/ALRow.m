@@ -41,6 +41,16 @@
     return _maxWidth > _width + view.frame.size.width + view.marginLeft + view.marginRight;
 }
 
+- (BOOL) need2break
+{
+    [self reCountWidth];
+    // 3、如果当前行已经没有子view，那直接返回YES
+    if ( [self.viewArr count] == 1 ) {
+        return NO;
+    }
+    return _width > _maxWidth;
+}
+
 - (void) addView:(UIView *)view
 {
     if ( view != nil ) {
@@ -87,7 +97,7 @@
     } else {
         [self reflowWhenInline];
     }
-    [self reflowTop];
+//    [self reflowTop];
 }
 
 // 从结尾移除一个view
@@ -97,7 +107,7 @@
     if ( [self.viewArr count] > 0 ) {
         UIView * lastView = [self.viewArr lastObject];
         [self.viewArr removeLastObject];
-        [self refreshSize];
+        [self layout];
         return lastView;
     }
     return nil;
@@ -156,7 +166,7 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [self.viewArr objectAtIndex: i];
-        CGFloat top = _top + view.marginTop;
+        CGFloat top = [self getCurrTop] + view.marginTop;
         view.frame = CGRectMake(view.frame.size.width, top, view.frame.size.width, view.frame.size.height);
     }
     // recurive reflow origin or next row
@@ -170,7 +180,7 @@
 - (void) reflowWhenBlock
 {
     UIView * view = [self.viewArr objectAtIndex: 0];
-    CGFloat top = _top + view.marginTop;
+    CGFloat top = [self getCurrTop] + view.marginTop;
     CGFloat left = 0;
     
     if ( _contentAlign == ALContentAlignCenter ) {
@@ -199,7 +209,7 @@
         UIView * view = [self.viewArr objectAtIndex: i];
         UIView * prevView = view.previousSibling;
         CGFloat left = 0;
-        CGFloat top = _top + view.marginTop;
+        CGFloat top = [self getCurrTop] + view.marginTop;
         
         if ( i == 0 ) {
             if ( _contentAlign == ALContentAlignCenter ) {
@@ -222,6 +232,16 @@
 //    if ( _nextRow ) {
 //        [_nextRow layoutTop];
 //    }
+}
+
+- (CGFloat) getCurrTop
+{
+    CGFloat currTop = 0;
+    if ( self.previousRow ) {
+        currTop = self.previousRow.height + self.previousRow.top;
+    }
+    _top = currTop;
+    return currTop;
 }
 
 @end

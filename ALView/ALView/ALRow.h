@@ -63,7 +63,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 // 当前行插入的view类型
 @property (nonatomic, assign) ALDisplay display;
 // 行坐标
-@property (nonatomic, assign) CGFloat top;
+@property (nonatomic, assign, readonly) CGFloat top;
 // 存储的子view，该属性不允许实例手动去维护，务必要通过addView方法添加view
 @property (nonatomic, retain) NSMutableArray * viewArr;
 // 下一个兄弟Row
@@ -76,6 +76,8 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 //- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign display: (ALDisplay) display;
 // 检查是否能插入该view
 - (BOOL) canAddView: (UIView *) view;
+// 当该Row中某个view更新的布局，重新检查是否需要断行
+- (BOOL) need2break;
 // 在Row头部插入一个view
 - (void) addView: (UIView *) view;
 // 在Row尾部插入一个view

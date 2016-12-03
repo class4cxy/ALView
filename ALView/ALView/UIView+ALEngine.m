@@ -370,6 +370,16 @@
     objc_setAssociatedObject(self, @"rows", rows, OBJC_ASSOCIATION_RETAIN);
 }
 
+@dynamic rowManager;
+- (ALRowManager *) rowManager
+{
+    return objc_getAssociatedObject(self, @"rowManager");
+}
+- (void) setRowManager:(ALRowManager *)rowManager
+{
+    objc_setAssociatedObject(self, @"rowManager", rowManager, OBJC_ASSOCIATION_RETAIN);
+}
+
 #pragma mark - init
 // 继承类需重载该方法，用于初始化对应的配置文件
 - (instancetype) initWithALEngine
@@ -407,6 +417,10 @@
 {
     // 将view add到树中
     [parent addSubview: self];
+    if ( !parent.rowManager ) {
+        // 初始化行管理器
+        parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+    }
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版该view
@@ -476,47 +490,51 @@
 // relation布局时，重排origin跟size
 - (void) reflowOriginAndSizeWhenRelative
 {
+    UIView * parent = self.superview;
     // layout size
     [self reflowSelfSize];
     // layout origin
-    [self reflowOriginWhenRelative];
+    [parent.rowManager appendView: self];
+//    [self reflowOriginWhenRelative];
     // reflow parent's size
 //    [self reflowParentSize];
 }
 // relation布局时，重排origin
-- (void) reflowOriginWhenRelative
-{
-    if ( self.display == ALDisplayBlock ) {
-        [self layoutBlockSizeAndOrigin];
-    } else {
-        [self layoutInlineSizeAndOrigin];
-    }
-}
+//- (void) reflowOriginWhenRelative
+//{
+//    if ( self.display == ALDisplayBlock ) {
+//        [self layoutBlockSizeAndOrigin];
+//    } else {
+//        [self layoutInlineSizeAndOrigin];
+//    }
+//}
 
-- (void) layoutBlockSizeAndOrigin
-{
-    UIView * parent = self.superview;
-    [parent pushView: self];
-    
-    // 触发next Sibling view reflow
-    
-}
+//- (void) layoutBlockSizeAndOrigin
+//{
+//    UIView * parent = self.superview;
+//    [parent.rowManager appendView: self];
+////    self.rowManager appendView:(UIView *)
+////    [parent pushView: self];
+//    
+//    // 触发next Sibling view reflow
+//    
+//}
 
-- (void) layoutInlineSizeAndOrigin
-{
-    UIView * parent = self.superview;
-    UIView * previousView = self.previousSibling;
-    
-    if ( previousView && previousView.display == ALDisplayBlock ) {
-        CGFloat top =   previousView.frame.origin.y +
-                        previousView.frame.size.height +
-                        previousView.marginBottom;
-        // 如果上一个兄弟view是block，那一定要新起一行
-        [parent createNewRowWithView: self previousRow:parent.rows.lastObject top: top];
-    } else {
-        [parent pushView: self];
-    }
-}
+//- (void) layoutInlineSizeAndOrigin
+//{
+//    UIView * parent = self.superview;
+//    UIView * previousView = self.previousSibling;
+//    
+//    if ( previousView && previousView.display == ALDisplayBlock ) {
+//        CGFloat top =   previousView.frame.origin.y +
+//                        previousView.frame.size.height +
+//                        previousView.marginBottom;
+//        // 如果上一个兄弟view是block，那一定要新起一行
+//        [parent createNewRowWithView: self previousRow:parent.rows.lastObject top: top];
+//    } else {
+//        [parent pushView: self];
+//    }
+//}
 
 - (void) reflowParentSize
 {
@@ -557,7 +575,7 @@
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
         // 如果是relative方式布局，需触发下一个兄弟view reflow origin以及父view reflow size
         if ( self.position == ALPositionRelative ) {
-            ALRow * row = [self.superview findTheRowBelong2: self];
+//            ALRow * row = [self.superview findTheRowBelong2: self];
         }
     }
     
@@ -1150,49 +1168,49 @@
     }
 }
 
-- (void) pushView: (UIView *) view
-{
-    // 当前inline view在该容器作为第一行展示
-    if ( [self.rows count] == 0 ) {
-        [self createNewRowWithView: view previousRow:nil top: 0];
-    } else {
-        ALRow * lastRow = self.rows.lastObject;
-        if ( [lastRow canAddView: view] ) {
-            [lastRow pushView: view];
-        } else {
-            [self createNewRowWithView: view previousRow:lastRow top: lastRow.top + lastRow.height];
-        }
-    }
-}
+//- (void) pushView: (UIView *) view
+//{
+//    // 当前inline view在该容器作为第一行展示
+//    if ( [self.rows count] == 0 ) {
+//        [self createNewRowWithView: view previousRow:nil top: 0];
+//    } else {
+//        ALRow * lastRow = self.rows.lastObject;
+//        if ( [lastRow canAddView: view] ) {
+//            [lastRow pushView: view];
+//        } else {
+//            [self createNewRowWithView: view previousRow:lastRow top: lastRow.top + lastRow.height];
+//        }
+//    }
+//}
 
 // 递归触发当前Row的兄弟Row进行reflow origin.top
-- (void) rowRecurNextRowReflow: (ALRow *) currRow
-{
-    NSInteger len = [self.rows count];
-    NSUInteger index = [self.rows indexOfObject: currRow] + 1;
-    if ( index < len ) {
-        ALRow * nextRow = [self.rows objectAtIndex: index];
-        nextRow.top = currRow.height + currRow.top;
-        [nextRow reflowTop];
-        [self rowRecurNextRowReflow: nextRow];
-    } else {
-        if ( self && self.isALEngine ) {
-            [self rowParentRowReflow];
-        }
-    }
-}
+//- (void) rowRecurNextRowReflow: (ALRow *) currRow
+//{
+//    NSInteger len = [self.rows count];
+//    NSUInteger index = [self.rows indexOfObject: currRow] + 1;
+//    if ( index < len ) {
+//        ALRow * nextRow = [self.rows objectAtIndex: index];
+//        nextRow.top = currRow.height + currRow.top;
+//        [nextRow reflowTop];
+//        [self rowRecurNextRowReflow: nextRow];
+//    } else {
+//        if ( self && self.isALEngine ) {
+//            [self rowParentRowReflow];
+//        }
+//    }
+//}
 // 递归触发当前Row的父级Row进行reflow size
-- (void) rowParentRowReflow
-{
-    if ( self.position == ALPositionAbsolute ) {
-    
-    // relative 方式排版
-    } else {
-        if ( self.isAutoHeight ) {
-            ALRow * currRow =
-        }
-    }
-}
+//- (void) rowParentRowReflow
+//{
+//    if ( self.position == ALPositionAbsolute ) {
+//    
+//    // relative 方式排版
+//    } else {
+//        if ( self.isAutoHeight ) {
+//            ALRow * currRow =
+//        }
+//    }
+//}
 
 // 挤：把一个view挤到合适的行
 //- (void) crushToRightRow: (UIView *) view toRow: (NSUInteger) rowNum
@@ -1218,24 +1236,24 @@
 //    }
 //}
 
-- (ALRow *) createNewRowWithView: (UIView *) view previousRow: (ALRow *) previousRow top: (CGFloat) top
-{
-    ALRow * newRow = [[ALRow alloc] init];
-    newRow.contentAlign = self.contentAlign;
-    newRow.top = top;
-    newRow.display = view.display;
-    newRow.maxWidth = [self getStaticWidthFromParent: view];
-    // link row
-    if ( previousRow ) {
-        newRow.previousRow = previousRow;
-        previousRow.nextRow = newRow;
-    }
-    newRow.parentView = self;
-    
-    [newRow pushView: view];
-    [self.rows addObject:newRow];
-    return newRow;
-}
+//- (ALRow *) createNewRowWithView: (UIView *) view previousRow: (ALRow *) previousRow top: (CGFloat) top
+//{
+//    ALRow * newRow = [[ALRow alloc] init];
+//    newRow.contentAlign = self.contentAlign;
+//    newRow.top = top;
+//    newRow.display = view.display;
+//    newRow.maxWidth = [self getStaticWidthFromParent: view];
+//    // link row
+//    if ( previousRow ) {
+//        newRow.previousRow = previousRow;
+//        previousRow.nextRow = newRow;
+//    }
+//    newRow.parentView = self;
+//    
+//    [newRow pushView: view];
+//    [self.rows addObject:newRow];
+//    return newRow;
+//}
 
 // 递归重排下一个兄弟Row以及父Row
 //- (void) rowReflowNextAndParent: (NSInteger) startRowNum
@@ -1265,18 +1283,18 @@
 //    return newRow;
 //}
 
-- (ALRow *) addToLastRowManager
-{
-    if ( self.superview && self.superview.isALEngine ) {
-        ALRow * lastRow = self.superview.rows.lastObject;
-        if ( lastRow != nil ) {
-            [lastRow addView: self];
-            self.row = [self.superview.rows count]-1;
-        }
-        return lastRow;
-    }
-    return nil;
-}
+//- (ALRow *) addToLastRowManager
+//{
+//    if ( self.superview && self.superview.isALEngine ) {
+//        ALRow * lastRow = self.superview.rows.lastObject;
+//        if ( lastRow != nil ) {
+//            [lastRow addView: self];
+//            self.row = [self.superview.rows count]-1;
+//        }
+//        return lastRow;
+//    }
+//    return nil;
+//}
 
 //- (ALRow *) addToNewRowManager: (CGFloat) top
 //{
@@ -1290,13 +1308,13 @@
 //    return nil;
 //}
 
-- (ALRow *) getParentPreviRow
-{
-    if ( self.superview && [self.superview.rows count] > 0 ) {
-        return [self.superview.rows objectAtIndex: [self.superview.rows count]-1];
-    }
-    return nil;
-}
+//- (ALRow *) getParentPreviRow
+//{
+//    if ( self.superview && [self.superview.rows count] > 0 ) {
+//        return [self.superview.rows objectAtIndex: [self.superview.rows count]-1];
+//    }
+//    return nil;
+//}
 
 // 从指定view开始移除，直到last view
 // 但整个row的view被移除完后，默认移除该row

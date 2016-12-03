@@ -8,8 +8,18 @@
 
 @interface ALRowManager : NSObject
 
-@property (nonatomic, retain) UIView * view;
+@property (nonatomic, retain) UIView * ownerView;
 
 - (instancetype)initWithView: (UIView *) view;
+// 在最后一行的最后个位置插入一个view
+- (void) appendView: (UIView *) view;
+// 重排子view
+- (void) reflowChildView: (UIView *) view;
+// 重排自己高度
+//- (void) reflowSelfHeight;
+//// 重排子Row坐标
+//- (void) reflowChildrenRowTop;
+// 重排自己
+- (void) reflowSelfView;
 
 @end

@@ -84,7 +84,7 @@
     ALView * body = [[ALView alloc] init];
     body.contentAlign = ALContentAlignRight;
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-//    body.height = [[UIScreen mainScreen] bounds].size.height;
+    body.height = [[UIScreen mainScreen] bounds].size.height;
     [body addTo: self.view];
     
     
@@ -93,7 +93,7 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: body];
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
-    
+//
     _section1 = [[ALView alloc] init];
     _section1.display = ALDisplayInline;
     _section1.height = 30;
@@ -153,7 +153,7 @@
 //    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
 //    [addBtn addGestureRecognizer: tapAddBtn];
     
-    NSLog(@"%@", body.rows);
+    NSLog(@"%@", body.rowManager);
 }
 
 - (void) subTheHeight

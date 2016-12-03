@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ALRow.h"
+#import "ALRowManager.h"
 #import "ALView.h"
 #import "ALScrollView.h"
 #import "ALLabel.h"
@@ -141,9 +142,11 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 // 管理的行数
 //@property (nonatomic, assign, readonly) NSInteger rowNum;
 // 所属行数
-@property (nonatomic, assign, readonly) NSInteger row;
+@property (nonatomic, assign) NSInteger row;
 // rows，以row为单位管理子view
 @property (nonatomic, retain) NSMutableArray<ALRow *> * rows;
+// rowManager
+@property (nonatomic, retain) ALRowManager * rowManager;
 
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
 - (instancetype) initWithALEngine;
