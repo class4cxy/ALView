@@ -330,16 +330,16 @@
     objc_setAssociatedObject(self, @"previousSibling", previousSibling, OBJC_ASSOCIATION_RETAIN);
 }
 
-//@dynamic nextRow;
-//- (ALRow *) nextRow
-//{
-//    return objc_getAssociatedObject(self, @"nextRow");
-//}
-//- (void) setNextRow:(ALRow *)nextRow
-//{
-//    objc_setAssociatedObject(self, @"nextRow", nextRow, OBJC_ASSOCIATION_RETAIN);
-//}
-//
+@dynamic belongRow;
+- (ALRow *) belongRow
+{
+    return objc_getAssociatedObject(self, @"belongRow");
+}
+- (void) setBelongRow:(ALRow *)belongRow
+{
+    objc_setAssociatedObject(self, @"belongRow", belongRow, OBJC_ASSOCIATION_RETAIN);
+}
+
 //@dynamic previousRow;
 //- (ALRow *) previousRow
 //{
@@ -350,25 +350,25 @@
 //    objc_setAssociatedObject(self, @"previousRow", previousRow, OBJC_ASSOCIATION_RETAIN);
 //}
 
-@dynamic row;
-- (NSInteger) row
-{
-    return [objc_getAssociatedObject(self, @"row") integerValue];
-}
--(void)setRow:(NSInteger)row
-{
-    objc_setAssociatedObject(self, @"row", [NSNumber numberWithInteger:row], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic rows;
-- (NSMutableArray *) rows
-{
-    return objc_getAssociatedObject(self, @"rows");
-}
-- (void) setRows:(NSMutableArray<ALRow *> *)rows
-{
-    objc_setAssociatedObject(self, @"rows", rows, OBJC_ASSOCIATION_RETAIN);
-}
+//@dynamic row;
+//- (NSInteger) row
+//{
+//    return [objc_getAssociatedObject(self, @"row") integerValue];
+//}
+//-(void)setRow:(NSInteger)row
+//{
+//    objc_setAssociatedObject(self, @"row", [NSNumber numberWithInteger:row], OBJC_ASSOCIATION_RETAIN);
+//}
+//
+//@dynamic rows;
+//- (NSMutableArray *) rows
+//{
+//    return objc_getAssociatedObject(self, @"rows");
+//}
+//- (void) setRows:(NSMutableArray<ALRow *> *)rows
+//{
+//    objc_setAssociatedObject(self, @"rows", rows, OBJC_ASSOCIATION_RETAIN);
+//}
 
 @dynamic rowManager;
 - (ALRowManager *) rowManager
@@ -405,7 +405,7 @@
         self.nextSibling = nil;
         self.previousSibling = nil;
         
-        self.rows = [[NSMutableArray alloc] init];
+//        self.rows = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -423,8 +423,35 @@
     }
     // 生成兄弟view关系
     [self linkSiblingView];
-    // 排版该view
-    [self reflow];
+    // 排版size
+    [self reflowSelfSize];
+    // 排版origin
+    if ( self.position == ALPositionRelative ) {
+        [parent.rowManager appendView: self];
+    } else {
+        [self reflowOriginWhenAbsolute];
+    }
+}
+
+- (void) insertBefore: (UIView *) nextSiblingView
+{
+    
+}
+
+// 重排自己
+- (void) reflow
+{
+    // 防止未知错误
+    if ( self.superview && self.superview.rowManager ) {
+        [self reflowSelfSize];
+        [self.superview.rowManager reflowChildView: self];
+    }
+}
+
+- (void) removeFromSuperview
+{
+    [self removeFromSuperview];
+    // TODO
 }
 
 /*
@@ -443,62 +470,89 @@
     }
 }
 
-#pragma mark - reflow & reCount
+/*
+ * 排版自身尺寸
+ */
+- (void) reflowSelfSize
+{
+    UIView * parent = self.superview;
+    // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
+    if ( [self isKindOfClass:[ALLabel class]] ) {
+        [((ALLabel *) self) reflowWithInnerText: parent];
+    } else {
+        CGFloat width = self.width;
+        // 相对定位时
+        if ( self.position == ALPositionRelative ) {
+            // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
+            if ( self.display == ALDisplayBlock && self.isAutoWidth ) {
+                width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
+            }
+            // 绝对定位时
+        } else {
+            // TODO
+        }
+        
+        // reflow
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.height);
+    }
+}
+
+#pragma mark - layout & reflow
+
+//- (void) layout
+//{
+//    switch (self.position) {
+//        case ALPositionRelative:
+//        {
+//            [self reflowOriginAndSizeWhenRelative];
+//        }
+//            break;
+//            
+//        case ALPositionAbsolute:
+//        {
+//            [self reflowOriginAndSizeWhenAbsolute];
+//        }
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
+
 /*
  * 总的排版入口，如果涉及到关联的view或者super view需重排也尽量别直接调到这里来
  */
-- (void) reflow
-{
-    // 检查父view
-//    if ( parent == nil ) {
-//        return;
-//    }
-
-    switch (self.position) {
-        case ALPositionRelative:
-        {
-            [self reflowOriginAndSizeWhenRelative];
-        }
-            break;
-            
-        case ALPositionAbsolute:
-        {
-            [self reflowOriginAndSizeWhenAbsolute];
-        }
-            break;
-            
-        default:
-            break;
-    }
-    
-    // 父view是ALView的实例且当前view是relative布局时
-//    if ( self.position == ALPositionRelative ) {
-//        UIView * p = self.superview;
-//        while (p) {
-//            // 触发父view重算自己的高度
-//            if ( p.isALEngine ) {
-//                [p reflowInnerSizeIfNeed];
-//            }
-//            // 如果父view是ALScrollView，需触发父view重算contentSize
-//            if ([p isKindOfClass:[ALScrollView class]]) {
-//                [((ALScrollView*)p) reflowInnerFrame];
-//            }
-//            p = p.superview;
+//- (void) reflow
+//{
+//    switch (self.position) {
+//        case ALPositionRelative:
+//        {
+//            [self reflowOriginAndSizeWhenRelative];
 //        }
+//            break;
+//            
+//        case ALPositionAbsolute:
+//        {
+//            [self reflowOriginAndSizeWhenAbsolute];
+//        }
+//            break;
+//            
+//        default:
+//            break;
 //    }
-}
+//}
 // relation布局时，重排origin跟size
-- (void) reflowOriginAndSizeWhenRelative
-{
-    UIView * parent = self.superview;
-    // layout size
-    [self reflowSelfSize];
-    // layout origin
-    [parent.rowManager appendView: self];
-//    [self reflowOriginWhenRelative];
-    // reflow parent's size
-//    [self reflowParentSize];
-}
+//- (void) reflowOriginAndSizeWhenRelative
+//{
+//    UIView * parent = self.superview;
+//    // layout size
+//    [self reflowSelfSize];
+//    // layout origin
+//    [parent.rowManager appendView: self];
+////    [self reflowOriginWhenRelative];
+//    // reflow parent's size
+////    [self reflowParentSize];
+//}
 // relation布局时，重排origin
 //- (void) reflowOriginWhenRelative
 //{
@@ -536,94 +590,67 @@
 //    }
 //}
 
-- (void) reflowParentSize
-{
-    UIView * parent = self.superview;
+//- (void) reflowParentSize
+//{
+//    UIView * parent = self.superview;
+//
+//    // 触发父view重算自己的高度
+//    if ( parent.isALEngine ) {
+////        [parent reflowInnerSizeIfNeed];
+//        [parent reflowParentInnerSize];
+//    }
+//    // 如果父view是ALScrollView，需触发父view重算contentSize
+//    if ([parent isKindOfClass:[ALScrollView class]]) {
+//        [((ALScrollView*) parent) reflowInnerFrame];
+//    }
+//}
 
-    // 触发父view重算自己的高度
-    if ( parent.isALEngine ) {
-//        [parent reflowInnerSizeIfNeed];
-        [parent reflowParentInnerSize];
-    }
-    // 如果父view是ALScrollView，需触发父view重算contentSize
-    if ([parent isKindOfClass:[ALScrollView class]]) {
-        [((ALScrollView*) parent) reflowInnerFrame];
-    }
-}
-
-- (void) reflowParentInnerSize
-{
-    // 过滤特殊情况
-    if ( [self.rows count] == 0 ) {
-        return;
-    }
-    
-    // 考虑到排版的复杂度，这里取消支持inline类型的view的isAutoWidth特征
-    // if ( (self.isAutoWidth && self.display == ALDisplayInline) || (self.isAutoWidth && self.position == ALPositionAbsolute) ) {
-    if ( self.isAutoWidth && self.position == ALPositionAbsolute ) {
-        CGFloat innerWidth = 0;
-        for (ALRow * row in self.rows) {
-            if ( innerWidth < row.width ) {
-                innerWidth = row.width;
-            }
-        }
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
-    }
-    
-    if ( self.isAutoHeight ) {
-        CGFloat innerHeight = self.rows.lastObject.top + self.rows.lastObject.height;
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
-        // 如果是relative方式布局，需触发下一个兄弟view reflow origin以及父view reflow size
-        if ( self.position == ALPositionRelative ) {
-//            ALRow * row = [self.superview findTheRowBelong2: self];
-        }
-    }
-    
-    // 如果当前view使用了absolute布局，而且属于isAutoHeight 或者 isAutoWidth
-    // 那需触发该view重新进行定位排版
-    if ( self.position == ALPositionAbsolute ) {
-        if ( self.isAutoWidth || self.isAutoHeight ) {
-            [self reflowOriginWhenAbsolute];
-        }
-    // 如果是relative方式布局，需触发下一个兄弟view reflow origin以及父view reflow size
-    } else {
-        
-    }
-    if ( self.position == ALPositionAbsolute && (self.isAutoWidth || self.isAutoHeight) ) {
-        [self reflowOriginWhenAbsolute];
-        // 如果当前view使用relative布局，而且属于isAutoHeight
-        // 那需递归触发父view进行高度调整
-    } else if ( self.position == ALPositionRelative && self.superview.isALEngine ) {
-        [self.superview reflowParentInnerSize];
-    }
-}
-
-/*
- * 排版自身尺寸
- */
-- (void) reflowSelfSize
-{
-    UIView * parent = self.superview;
-    // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
-    if ( [self isKindOfClass:[ALLabel class]] ) {
-        [((ALLabel *) self) reflowWithInnerText: parent];
-    } else {
-        CGFloat width = self.width;
-        // 相对定位时
-        if ( self.position == ALPositionRelative ) {
-            // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
-            if ( self.display == ALDisplayBlock && self.isAutoWidth ) {
-                width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
-            }
-        // 绝对定位时
-        } else {
-            // TODO
-        }
-        
-        // reflow
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.height);
-    }
-}
+//- (void) reflowParentInnerSize
+//{
+//    // 过滤特殊情况
+//    if ( [self.rows count] == 0 ) {
+//        return;
+//    }
+//    
+//    // 考虑到排版的复杂度，这里取消支持inline类型的view的isAutoWidth特征
+//    // if ( (self.isAutoWidth && self.display == ALDisplayInline) || (self.isAutoWidth && self.position == ALPositionAbsolute) ) {
+//    if ( self.isAutoWidth && self.position == ALPositionAbsolute ) {
+//        CGFloat innerWidth = 0;
+//        for (ALRow * row in self.rows) {
+//            if ( innerWidth < row.width ) {
+//                innerWidth = row.width;
+//            }
+//        }
+//        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
+//    }
+//    
+//    if ( self.isAutoHeight ) {
+//        CGFloat innerHeight = self.rows.lastObject.top + self.rows.lastObject.height;
+//        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
+//        // 如果是relative方式布局，需触发下一个兄弟view reflow origin以及父view reflow size
+//        if ( self.position == ALPositionRelative ) {
+////            ALRow * row = [self.superview findTheRowBelong2: self];
+//        }
+//    }
+//    
+//    // 如果当前view使用了absolute布局，而且属于isAutoHeight 或者 isAutoWidth
+//    // 那需触发该view重新进行定位排版
+//    if ( self.position == ALPositionAbsolute ) {
+//        if ( self.isAutoWidth || self.isAutoHeight ) {
+//            [self reflowOriginWhenAbsolute];
+//        }
+//    // 如果是relative方式布局，需触发下一个兄弟view reflow origin以及父view reflow size
+//    } else {
+//        
+//    }
+//    if ( self.position == ALPositionAbsolute && (self.isAutoWidth || self.isAutoHeight) ) {
+//        [self reflowOriginWhenAbsolute];
+//        // 如果当前view使用relative布局，而且属于isAutoHeight
+//        // 那需递归触发父view进行高度调整
+//    } else if ( self.position == ALPositionRelative && self.superview.isALEngine ) {
+//        [self.superview reflowParentInnerSize];
+//    }
+//}
 
 
 //- (void) reflowBlockTop
@@ -676,210 +703,210 @@
 /*
  * 父view内容左对齐，inline排版的view的left计算逻辑
  */
-- (void) reflowInlineLeftWidthContentAlignLeft
-{
-    CGFloat left = 0;
-    UIView * parent = self.superview;
-    UIView * prevView = self.previousSibling;
-    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
-    if ( prevView && prevView.display == ALDisplayInline ) {
-        CGFloat x = prevView.frame.origin.x +
-                    prevView.frame.size.width +
-                    prevView.marginRight;
-        // 默认取父View的宽高
-        CGFloat parentWidth = parent.frame.size.width;
-        // 如果父view是inline类型view，且没有设置宽度，那就往上找
-        // 如果父view是block类型view，但是用了absolute方式布局，那也要往上找
-        if ( (parent.display == ALDisplayInline || parent.position == ALPositionAbsolute) && parent.isAutoWidth ) {
-            UIView * p = [self getLastNotInlineOrAutoWidthParentView: parent];
-            parentWidth = p.frame.size.width;
-        }
-        // 检查是否需要断行
-        if ( parentWidth < (x + self.marginLeft + self.marginRight + self.frame.size.width) ) { // 断行
-            left = self.marginLeft;
-            
-            self.isInNewLine = YES;
-        } else { // 不断行
-            left =  self.marginLeft +
-                    prevView.frame.origin.x +
-                    prevView.frame.size.width +
-                    prevView.marginRight;
-            
-            self.isInNewLine = NO;
-        }
-    } else { // previousView为的排版类型是block或者nil都在新一行排版
-        left = self.marginLeft;
-        self.isInNewLine = YES;
-    }
-    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
-//    return left;
-}
+//- (void) reflowInlineLeftWidthContentAlignLeft
+//{
+//    CGFloat left = 0;
+//    UIView * parent = self.superview;
+//    UIView * prevView = self.previousSibling;
+//    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
+//    if ( prevView && prevView.display == ALDisplayInline ) {
+//        CGFloat x = prevView.frame.origin.x +
+//                    prevView.frame.size.width +
+//                    prevView.marginRight;
+//        // 默认取父View的宽高
+//        CGFloat parentWidth = parent.frame.size.width;
+//        // 如果父view是inline类型view，且没有设置宽度，那就往上找
+//        // 如果父view是block类型view，但是用了absolute方式布局，那也要往上找
+//        if ( (parent.display == ALDisplayInline || parent.position == ALPositionAbsolute) && parent.isAutoWidth ) {
+//            UIView * p = [self getLastNotInlineOrAutoWidthParentView: parent];
+//            parentWidth = p.frame.size.width;
+//        }
+//        // 检查是否需要断行
+//        if ( parentWidth < (x + self.marginLeft + self.marginRight + self.frame.size.width) ) { // 断行
+//            left = self.marginLeft;
+//            
+//            self.isInNewLine = YES;
+//        } else { // 不断行
+//            left =  self.marginLeft +
+//                    prevView.frame.origin.x +
+//                    prevView.frame.size.width +
+//                    prevView.marginRight;
+//            
+//            self.isInNewLine = NO;
+//        }
+//    } else { // previousView为的排版类型是block或者nil都在新一行排版
+//        left = self.marginLeft;
+//        self.isInNewLine = YES;
+//    }
+//    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+////    return left;
+//}
 
 /*
  * 父view内容居中对齐，inline排版的view的left计算逻辑
  */
 
-- (void) reflowInlineLeftWidthContentAlignCenter
-{
-    UIView * parent = self.superview;
-    // 默认断行的排版坐标
-    CGFloat left = (parent.frame.size.width - self.frame.size.width)/2;
-    UIView * prevView = self.previousSibling;
-    UIView * nextView = self.nextSibling;
-    BOOL callPreviousViewReflow = NO;
-    
-    // 如果存在nextSibling的情况，那就是由下一个兄弟view触发的重排
-    if ( nextView && nextView.display == ALDisplayInline ) {
-        // 如果下一个view是新的一行，那当前view应该是使用最后位置的布局
-        if ( nextView.isInNewLine ) {
-            CGFloat currRowWidth = [self getWidthOfInsideRow:self];
-            CGFloat parentWidth = parent.frame.size.width;
-            
-            left =  (parentWidth + currRowWidth)/2 -
-                    self.marginRight -
-                    self.frame.size.width;
-        } else {
-            left =  nextView.frame.origin.x -
-                    nextView.marginLeft -
-                    self.marginRight -
-                    self.frame.size.width;
-        }
-        // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
-        if ( prevView ) {
-            callPreviousViewReflow = YES;
-        }
-    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
-    } else if ( prevView && prevView.display == ALDisplayInline ) {
-        CGFloat currRowWidth = [self getWidthOfInsideRow:self];
-        CGFloat parentWidth = parent.frame.size.width;
-        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
-            parentWidth = parent.superview.frame.size.width;
-        }
-        // 检查是否需要断行
-        if ( currRowWidth > parentWidth ) { // 断行
-            self.isInNewLine = YES;
-            callPreviousViewReflow = YES;
-        } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
-            left =  (parent.frame.size.width + currRowWidth)/2 -
-                    self.marginRight -
-                    self.frame.size.width;
-            
-            callPreviousViewReflow = YES;
-        }
-    } else { // previousView为的排版类型是block或者nil都在新一行排版
-        self.isInNewLine = YES;
-    }
-    
-    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
-    
-    if ( callPreviousViewReflow ) {
-        [prevView reflowInlineLeftWidthContentAlignCenter];
-    }
-}
+//- (void) reflowInlineLeftWidthContentAlignCenter
+//{
+//    UIView * parent = self.superview;
+//    // 默认断行的排版坐标
+//    CGFloat left = (parent.frame.size.width - self.frame.size.width)/2;
+//    UIView * prevView = self.previousSibling;
+//    UIView * nextView = self.nextSibling;
+//    BOOL callPreviousViewReflow = NO;
+//    
+//    // 如果存在nextSibling的情况，那就是由下一个兄弟view触发的重排
+//    if ( nextView && nextView.display == ALDisplayInline ) {
+//        // 如果下一个view是新的一行，那当前view应该是使用最后位置的布局
+//        if ( nextView.isInNewLine ) {
+//            CGFloat currRowWidth = [self getWidthOfInsideRow:self];
+//            CGFloat parentWidth = parent.frame.size.width;
+//            
+//            left =  (parentWidth + currRowWidth)/2 -
+//                    self.marginRight -
+//                    self.frame.size.width;
+//        } else {
+//            left =  nextView.frame.origin.x -
+//                    nextView.marginLeft -
+//                    self.marginRight -
+//                    self.frame.size.width;
+//        }
+//        // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
+//        if ( prevView ) {
+//            callPreviousViewReflow = YES;
+//        }
+//    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
+//    } else if ( prevView && prevView.display == ALDisplayInline ) {
+//        CGFloat currRowWidth = [self getWidthOfInsideRow:self];
+//        CGFloat parentWidth = parent.frame.size.width;
+//        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+//            parentWidth = parent.superview.frame.size.width;
+//        }
+//        // 检查是否需要断行
+//        if ( currRowWidth > parentWidth ) { // 断行
+//            self.isInNewLine = YES;
+//            callPreviousViewReflow = YES;
+//        } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
+//            left =  (parent.frame.size.width + currRowWidth)/2 -
+//                    self.marginRight -
+//                    self.frame.size.width;
+//            
+//            callPreviousViewReflow = YES;
+//        }
+//    } else { // previousView为的排版类型是block或者nil都在新一行排版
+//        self.isInNewLine = YES;
+//    }
+//    
+//    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+//    
+//    if ( callPreviousViewReflow ) {
+//        [prevView reflowInlineLeftWidthContentAlignCenter];
+//    }
+//}
 
 /*
  * 父view内容右对齐，inline排版的view的left计算逻辑
  */
-- (void) reflowInlineLeftWidthContentAlignRight
-{
-    UIView * parent = self.superview;
-    // 默认断行情况的右对齐的排版
-    CGFloat left =  parent.frame.size.width -
-                    self.frame.size.width -
-                    self.marginRight;
-    UIView * prevView = self.previousSibling;
-    UIView * nextView = self.nextSibling;
-    BOOL callPreviousViewReflow = NO;
-    
-    // 如果存在nextSibling的情况，那就是由下一个兄弟view触发的重排
-    if ( nextView && nextView.display == ALDisplayInline ) {
-        
-        if ( !nextView.isInNewLine ) {
-            left =  nextView.frame.origin.x -
-                    nextView.marginLeft -
-                    self.marginRight -
-                    self.frame.size.width;
-        }
-        // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
-        if ( prevView ) {
-            callPreviousViewReflow = YES;
-        }
-        
-    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
-    } else if ( prevView && prevView.display == ALDisplayInline ) {
-        CGFloat currRowWidth = [self getWidthOfInsideRow:self];
-        CGFloat parentWidth = parent.frame.size.width;
-        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
-            parentWidth = parent.superview.frame.size.width;
-        }
-        // 检查是否需要断行
-        if ( currRowWidth > parentWidth ) { // 断行
-            self.isInNewLine = YES;
-            callPreviousViewReflow = YES;
-        } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
-            callPreviousViewReflow = YES;
-        }
-    } else { // previousView为的排版类型是block或者nil都在新一行排版
-        self.isInNewLine = YES;
-    }
+//- (void) reflowInlineLeftWidthContentAlignRight
+//{
+//    UIView * parent = self.superview;
+//    // 默认断行情况的右对齐的排版
+//    CGFloat left =  parent.frame.size.width -
+//                    self.frame.size.width -
+//                    self.marginRight;
+//    UIView * prevView = self.previousSibling;
+//    UIView * nextView = self.nextSibling;
+//    BOOL callPreviousViewReflow = NO;
+//    
+//    // 如果存在nextSibling的情况，那就是由下一个兄弟view触发的重排
+//    if ( nextView && nextView.display == ALDisplayInline ) {
+//        
+//        if ( !nextView.isInNewLine ) {
+//            left =  nextView.frame.origin.x -
+//                    nextView.marginLeft -
+//                    self.marginRight -
+//                    self.frame.size.width;
+//        }
+//        // 如果当前view不是新的一行，而且上一兄弟view存在，那就继续冒泡触发上一个兄弟view重排
+//        if ( prevView ) {
+//            callPreviousViewReflow = YES;
+//        }
+//        
+//    // 存在上一个兄弟view 且 上一个兄弟view是inline排版类型
+//    } else if ( prevView && prevView.display == ALDisplayInline ) {
+//        CGFloat currRowWidth = [self getWidthOfInsideRow:self];
+//        CGFloat parentWidth = parent.frame.size.width;
+//        if ( parent.isAutoWidth ) { // 自动宽度时，应该拿父view的宽度做计算
+//            parentWidth = parent.superview.frame.size.width;
+//        }
+//        // 检查是否需要断行
+//        if ( currRowWidth > parentWidth ) { // 断行
+//            self.isInNewLine = YES;
+//            callPreviousViewReflow = YES;
+//        } else { // 不断行，也同样排在最右侧，只不过会触发上一个兄弟节点进行重排
+//            callPreviousViewReflow = YES;
+//        }
+//    } else { // previousView为的排版类型是block或者nil都在新一行排版
+//        self.isInNewLine = YES;
+//    }
+//
+//    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+//    NSLog(@"reflowInlineLeftWidthContentAlignRight");
+//    
+//    if ( callPreviousViewReflow ) {
+//        [prevView reflowInlineLeftWidthContentAlignRight];
+//    }
+//}
 
-    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
-    NSLog(@"reflowInlineLeftWidthContentAlignRight");
-    
-    if ( callPreviousViewReflow ) {
-        [prevView reflowInlineLeftWidthContentAlignRight];
-    }
-}
-
-- (void) reflowBlockLeft
-{
-    CGFloat left = 0;
-    CGFloat width = self.frame.size.width;
-    UIView * parent = self.superview;
-    // 根据父view的内容对齐方式计算left
-    if ( parent.isALEngine ) {
-        switch (parent.contentAlign) {
-                // 靠左排版
-            case ALContentAlignLeft:
-            {
-                left += self.marginLeft;
-            }
-                break;
-                // 靠右排版
-            case ALContentAlignRight:
-            {
-                left += parent.frame.size.width - width - self.marginRight;
-            }
-                break;
-                // 居中排版
-            case ALContentAlignCenter:
-            {
-                left += (parent.frame.size.width - width)/2 + self.marginLeft - self.marginRight;
-            }
-                break;
-                
-            default:
-                break;
-        }
-    } else { // 默认靠左
-        left += self.marginLeft;
-    }
-    
-//    self.frame.origin.x = left;
-    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
-}
+//- (void) reflowBlockLeft
+//{
+//    CGFloat left = 0;
+//    CGFloat width = self.frame.size.width;
+//    UIView * parent = self.superview;
+//    // 根据父view的内容对齐方式计算left
+//    if ( parent.isALEngine ) {
+//        switch (parent.contentAlign) {
+//                // 靠左排版
+//            case ALContentAlignLeft:
+//            {
+//                left += self.marginLeft;
+//            }
+//                break;
+//                // 靠右排版
+//            case ALContentAlignRight:
+//            {
+//                left += parent.frame.size.width - width - self.marginRight;
+//            }
+//                break;
+//                // 居中排版
+//            case ALContentAlignCenter:
+//            {
+//                left += (parent.frame.size.width - width)/2 + self.marginLeft - self.marginRight;
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//    } else { // 默认靠左
+//        left += self.marginLeft;
+//    }
+//    
+////    self.frame.origin.x = left;
+//    self.frame = CGRectMake(left, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+//}
 
 // absolute方式的排版：相对父view绝对位置排版
 // 宽高：没有自动宽，高度可由子view撑高，但不能撑开父view，不能触发父view reflow
 // 位置：通过top,left,bottom,right,centerX,centerY相对于父view来定位
 // 注：如果父view为ALScrollView，排版应该是相对于父view的滚动区
 // 注：1、位置不受margin影响；2、不受同级view排版影响。
-- (void) reflowOriginAndSizeWhenAbsolute
-{
-    // 排版size
-    [self reflowSelfSize];
-    [self reflowOriginWhenAbsolute];
-}
+//- (void) reflowOriginAndSizeWhenAbsolute
+//{
+//    // 排版size
+//    [self reflowSelfSize];
+//    [self reflowOriginWhenAbsolute];
+//}
 // 不带重排size
 - (void) reflowOriginWhenAbsolute
 {
@@ -930,73 +957,73 @@
 /*
  * 如果isAutoHeight=YES时，每次子view操作都应当重新计算view的高度
  */
-- (void) reflowInnerSizeIfNeed
-{
-    CGFloat innerHeight = 0;
-    CGFloat innerWidth = 0;
-    // 计算最高的 currInnerHeight
-    UIView * lastView = [self getLastRelativeSubView: self];
-    // 保护
-    if ( lastView == nil ) {
-        return;
-    }
-    // 如果是block，直接取偏移量
-    if ( lastView.display == ALDisplayBlock ) {
-        innerHeight =   lastView.frame.size.height +
-                        lastView.frame.origin.y +
-                        lastView.marginBottom;
-    // 如果是inline，需找到该view所属的row的偏移量
-    } else {
-        ALRow * lastRow = self.rows.lastObject;
-        if ( lastRow ) {
-            innerHeight = lastRow.height + lastRow.top;
-        } else {
-            // TODO : 异常处理
-        }
-    }
-    // 更新属性
-    self.currInnerHeight = innerHeight;
-    
-    // calc inner width - only block view can overflow parent view's width
-    innerWidth = [self getWidthOfInsideRow: lastView];
-    
-    if ( self.currInnerWidth < innerWidth ) {
-        self.currInnerWidth = innerWidth;
-    } else {
-        innerWidth = self.currInnerWidth;
-    }
+//- (void) reflowInnerSizeIfNeed
+//{
+//    CGFloat innerHeight = 0;
+//    CGFloat innerWidth = 0;
+//    // 计算最高的 currInnerHeight
+//    UIView * lastView = [self getLastRelativeSubView: self];
+//    // 保护
+//    if ( lastView == nil ) {
+//        return;
+//    }
+//    // 如果是block，直接取偏移量
+//    if ( lastView.display == ALDisplayBlock ) {
+//        innerHeight =   lastView.frame.size.height +
+//                        lastView.frame.origin.y +
+//                        lastView.marginBottom;
+//    // 如果是inline，需找到该view所属的row的偏移量
+//    } else {
+//        ALRow * lastRow = self.rows.lastObject;
+//        if ( lastRow ) {
+//            innerHeight = lastRow.height + lastRow.top;
+//        } else {
+//            // TODO : 异常处理
+//        }
+//    }
+//    // 更新属性
+//    self.currInnerHeight = innerHeight;
+//    
+//    // calc inner width - only block view can overflow parent view's width
+//    innerWidth = [self getWidthOfInsideRow: lastView];
+//    
+//    if ( self.currInnerWidth < innerWidth ) {
+//        self.currInnerWidth = innerWidth;
+//    } else {
+//        innerWidth = self.currInnerWidth;
+//    }
+//
+//    // 如果没设置高度，那就是系统自动设置（根据子view来算自身高度）
+//    if ( self.isAutoHeight ) {
+//        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
+//    }
+//    // inline类型排版的view如果没设置宽度，则会被子view宽度撑大
+//    // block类型排版的view如果没设置宽度，则默认继承父view的宽度，所以block类型不需要处理该逻辑，但是block类型如果用了absolute方式定位就不会继承父view的宽度
+//    if ( (self.isAutoWidth && self.display == ALDisplayInline) || (self.position == ALPositionAbsolute && self.isAutoWidth) ) {
+//        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
+//        
+//        // 重排自身的宽高之后，如果自身设置了ALContentAlignRight或者ALContentAlignCenter，那就需要触发子view进行重排
+//        if ( self.contentAlign == ALContentAlignRight ) {
+//            [self.subviews.lastObject reflowInlineLeftWidthContentAlignRight];
+//        } else if ( self.contentAlign == ALContentAlignCenter ) {
+//            [self.subviews.lastObject reflowInlineLeftWidthContentAlignCenter];
+//        }
+//    }
+//    
+//    // 如果当前view使用了absolute布局，而且属于isAutoHeight 或者 isAutoWidth
+//    // 那需触发该view重新进行定位排版
+//    if ( self.position == ALPositionAbsolute && (self.isAutoWidth || self.isAutoHeight) ) {
+//        [self reflowOriginWhenAbsolute];
+//    // 如果当前view使用relative布局，而且属于isAutoHeight
+//    // 那需递归触发父view进行高度调整
+//    } else if ( self.position == ALPositionRelative && self.superview.isALEngine ) {
+//        [self.superview reflowInnerSizeIfNeed];
+//    }
+//}
 
-    // 如果没设置高度，那就是系统自动设置（根据子view来算自身高度）
-    if ( self.isAutoHeight ) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, innerHeight);
-    }
-    // inline类型排版的view如果没设置宽度，则会被子view宽度撑大
-    // block类型排版的view如果没设置宽度，则默认继承父view的宽度，所以block类型不需要处理该逻辑，但是block类型如果用了absolute方式定位就不会继承父view的宽度
-    if ( (self.isAutoWidth && self.display == ALDisplayInline) || (self.position == ALPositionAbsolute && self.isAutoWidth) ) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, innerWidth, self.frame.size.height);
-        
-        // 重排自身的宽高之后，如果自身设置了ALContentAlignRight或者ALContentAlignCenter，那就需要触发子view进行重排
-        if ( self.contentAlign == ALContentAlignRight ) {
-            [self.subviews.lastObject reflowInlineLeftWidthContentAlignRight];
-        } else if ( self.contentAlign == ALContentAlignCenter ) {
-            [self.subviews.lastObject reflowInlineLeftWidthContentAlignCenter];
-        }
-    }
-    
-    // 如果当前view使用了absolute布局，而且属于isAutoHeight 或者 isAutoWidth
-    // 那需触发该view重新进行定位排版
-    if ( self.position == ALPositionAbsolute && (self.isAutoWidth || self.isAutoHeight) ) {
-        [self reflowOriginWhenAbsolute];
-    // 如果当前view使用relative布局，而且属于isAutoHeight
-    // 那需递归触发父view进行高度调整
-    } else if ( self.position == ALPositionRelative && self.superview.isALEngine ) {
-        [self.superview reflowInnerSizeIfNeed];
-    }
-}
-
-- (void) refreshView
-{
-    [self reflow];
+//- (void) refreshView
+//{
+//    [self reflow];
 //    UIView * parent = self.superview;
 //    // absolute类型的view的重排逻辑：
 //    // 1、reflow size
@@ -1074,7 +1101,7 @@
 //            }
 //        }
 //    }
-}
+//}
 
 #pragma mark - 链表操作逻辑
 
@@ -1098,41 +1125,41 @@
 /*
  * 递归(兄弟、父)view，（包括自己）然后执行迭代器
  */
-- (void) recurFrom: (UIView *) view recurType: (ALRecursionType) recurType iterator: (void(^)(UIView *)) iterator
-{
-    while ( view ) {
-        // 跳过非AL布局的parent
-        if ( view.isALEngine ) {
-            // 执行迭代器
-            iterator(view);
-        }
-        // 递归
-        view = [self getNextRecurView: view recurType: recurType];
-    }
-}
-
-- (UIView *) getNextRecurView: (UIView *) view recurType: (ALRecursionType) recurType
-{
-    UIView * nextView = nil;
-    
-    switch (recurType) {
-        case ALRecursionPreviousView:
-            nextView = view.previousSibling;
-            break;
-            
-        case ALRecursionParentView:
-            nextView = view.superview;
-            break;
-            
-        case ALRecursionNextView:
-            nextView = view.nextSibling;
-            break;
-            
-        default:
-            break;
-    }
-    return  nextView;
-}
+//- (void) recurFrom: (UIView *) view recurType: (ALRecursionType) recurType iterator: (void(^)(UIView *)) iterator
+//{
+//    while ( view ) {
+//        // 跳过非AL布局的parent
+//        if ( view.isALEngine ) {
+//            // 执行迭代器
+//            iterator(view);
+//        }
+//        // 递归
+//        view = [self getNextRecurView: view recurType: recurType];
+//    }
+//}
+//
+//- (UIView *) getNextRecurView: (UIView *) view recurType: (ALRecursionType) recurType
+//{
+//    UIView * nextView = nil;
+//    
+//    switch (recurType) {
+//        case ALRecursionPreviousView:
+//            nextView = view.previousSibling;
+//            break;
+//            
+//        case ALRecursionParentView:
+//            nextView = view.superview;
+//            break;
+//            
+//        case ALRecursionNextView:
+//            nextView = view.nextSibling;
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    return  nextView;
+//}
 
 #pragma mark - 行管理相关逻辑
 
@@ -1160,13 +1187,13 @@
 //}
 
 // 重排指定的view所在的行
-- (void) rowReflowWithView: (UIView *) view
-{
-    if ( [self.rows count] > view.row ) {
-        ALRow * row = [self.rows objectAtIndex: view.row];
-        [row layout];
-    }
-}
+//- (void) rowReflowWithView: (UIView *) view
+//{
+//    if ( [self.rows count] > view.row ) {
+//        ALRow * row = [self.rows objectAtIndex: view.row];
+//        [row layout];
+//    }
+//}
 
 //- (void) pushView: (UIView *) view
 //{
@@ -1268,13 +1295,13 @@
 //}
 
 // 返回该view所在的Row
-- (ALRow *) findTheRowBelong2: (UIView *) view
-{
-    if ( view.row < [self.rows count] ) {
-        return [self.rows objectAtIndex:view.row];
-    }
-    return nil;
-}
+//- (ALRow *) findTheRowBelong2: (UIView *) view
+//{
+//    if ( view.row < [self.rows count] ) {
+//        return [self.rows objectAtIndex:view.row];
+//    }
+//    return nil;
+//}
 
 //- (ALRow *) addNewRowManager: (CGFloat) top display: (ALDisplay) display
 //{
@@ -1318,53 +1345,53 @@
 
 // 从指定view开始移除，直到last view
 // 但整个row的view被移除完后，默认移除该row
-- (void) removeViewToLastViewFromRow: (UIView *) view
-{
-    if ( view ) {
-        ALRow * lastRow = self.rows.lastObject;
-        if ( lastRow ) {
-            UIView * lastView = lastRow.viewArr.lastObject;
-            // 移除
-            [lastRow.viewArr removeLastObject];
-            // 如果结束，则移除整行
-            if ( [lastRow.viewArr count] == 0 ) {
-                [self.rows removeLastObject];
-            }
-            // 递归
-            if ( lastView && lastView != view ) {
-                [self removeViewToLastViewFromRow: view];
-            }
-        }
-    }
-}
+//- (void) removeViewToLastViewFromRow: (UIView *) view
+//{
+//    if ( view ) {
+//        ALRow * lastRow = self.rows.lastObject;
+//        if ( lastRow ) {
+//            UIView * lastView = lastRow.viewArr.lastObject;
+//            // 移除
+//            [lastRow.viewArr removeLastObject];
+//            // 如果结束，则移除整行
+//            if ( [lastRow.viewArr count] == 0 ) {
+//                [self.rows removeLastObject];
+//            }
+//            // 递归
+//            if ( lastView && lastView != view ) {
+//                [self removeViewToLastViewFromRow: view];
+//            }
+//        }
+//    }
+//}
 
 // 当后期修改导致reflow时，需重置父view的row管理器
-- (void) resetParentRowManager
-{
-    UIView * parent = self.superview;
-    if ( parent ) {
-        switch (parent.contentAlign) {
-            case ALContentAlignLeft:
-            {
-                [parent removeViewToLastViewFromRow: self];
-            }
-                break;
-            case ALContentAlignCenter:
-            {
-                [parent.rows removeAllObjects];
-            }
-                break;
-            case ALContentAlignRight:
-            {
-                [parent.rows removeAllObjects];
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
-}
+//- (void) resetParentRowManager
+//{
+//    UIView * parent = self.superview;
+//    if ( parent ) {
+//        switch (parent.contentAlign) {
+//            case ALContentAlignLeft:
+//            {
+//                [parent removeViewToLastViewFromRow: self];
+//            }
+//                break;
+//            case ALContentAlignCenter:
+//            {
+//                [parent.rows removeAllObjects];
+//            }
+//                break;
+//            case ALContentAlignRight:
+//            {
+//                [parent.rows removeAllObjects];
+//            }
+//                break;
+//                
+//            default:
+//                break;
+//        }
+//    }
+//}
 
 #pragma mark - 私有方法
 /*
@@ -1388,55 +1415,55 @@
  * 获取view所在当前行（row）的宽度
  * 以当前view默认排到上一列而计算出的宽度
  */
-- (CGFloat) getWidthOfInsideRow: (UIView *) view
-{
-    CGFloat width = 0;
-    
-    while (view && view.display == ALDisplayInline) {
-        width += view.marginLeft +
-                 view.marginRight +
-                 view.frame.size.width;
-        
-        // 如果到了这一行的第一个view，那就跳出该计算
-        if ( view.isInNewLine ) {
-            break;
-        } else { // 否则继续递归
-            view = view.previousSibling;
-        }
-    }
-    
-    return width;
-}
+//- (CGFloat) getWidthOfInsideRow: (UIView *) view
+//{
+//    CGFloat width = 0;
+//    
+//    while (view && view.display == ALDisplayInline) {
+//        width += view.marginLeft +
+//                 view.marginRight +
+//                 view.frame.size.width;
+//        
+//        // 如果到了这一行的第一个view，那就跳出该计算
+//        if ( view.isInNewLine ) {
+//            break;
+//        } else { // 否则继续递归
+//            view = view.previousSibling;
+//        }
+//    }
+//    
+//    return width;
+//}
 
 /*
  * 获取当前view最近的非inline方式布局的父view
  */
-- (UIView *) getLastNotInlineOrAutoWidthParentView: (UIView *) view
-{
-    while (view) {
-        if ( (view.superview.display != ALDisplayInline && view.superview.position != ALPositionAbsolute) || !view.superview.isAutoWidth ) {
-            return view.superview;
-        }
-        view = view.superview;
-    }
-    return [[[UIApplication sharedApplication] delegate] window];
-}
+//- (UIView *) getLastNotInlineOrAutoWidthParentView: (UIView *) view
+//{
+//    while (view) {
+//        if ( (view.superview.display != ALDisplayInline && view.superview.position != ALPositionAbsolute) || !view.superview.isAutoWidth ) {
+//            return view.superview;
+//        }
+//        view = view.superview;
+//    }
+//    return [[[UIApplication sharedApplication] delegate] window];
+//}
 
 /*
  * 获取当前view的最后一个使用relative布局的子view
  */
-- (UIView *) getLastRelativeSubView: (UIView *) parent
-{
-    UIView * lastView = parent.subviews.lastObject;
-    while (lastView) {
-        if ( lastView.isALEngine && lastView.position == ALPositionRelative ) {
-            return lastView;
-        }
-        lastView = lastView.previousSibling;
-    }
-    // 如果lastView不存在，那就返回Nil
-    return nil;
-}
+//- (UIView *) getLastRelativeSubView: (UIView *) parent
+//{
+//    UIView * lastView = parent.subviews.lastObject;
+//    while (lastView) {
+//        if ( lastView.isALEngine && lastView.position == ALPositionRelative ) {
+//            return lastView;
+//        }
+//        lastView = lastView.previousSibling;
+//    }
+//    // 如果lastView不存在，那就返回Nil
+//    return nil;
+//}
 /*
  * 获取父view的宽度
  * 特殊：使用absolute布局且isAutoWidth=YES的父view，需递归一直往上查找
@@ -1458,22 +1485,22 @@
  *   - 如果父view是block类型，直接返回父view的宽度
  *   - 如果父view是inline且isAutoWidth=NO，返回该父view宽度
  */
-- (CGFloat) getStaticWidthFromParent: (UIView *) view
-{
-    if ( view.superview != nil ) {
-        if ( view.display == ALDisplayBlock ) {
-            return view.superview.frame.size.width;
-        } else {
-            if ( view.superview.display == ALDisplayBlock || !view.superview.isAutoWidth ) {
-                return view.superview.frame.size.width;
-            } else {
-                return [self getStaticWidthFromParent: view.superview];
-            }
-        }
-    } else if ( view != nil ) {
-        return view.frame.size.width;
-    }
-    return 0;
-}
+//- (CGFloat) getStaticWidthFromParent: (UIView *) view
+//{
+//    if ( view.superview != nil ) {
+//        if ( view.display == ALDisplayBlock ) {
+//            return view.superview.frame.size.width;
+//        } else {
+//            if ( view.superview.display == ALDisplayBlock || !view.superview.isAutoWidth ) {
+//                return view.superview.frame.size.width;
+//            } else {
+//                return [self getStaticWidthFromParent: view.superview];
+//            }
+//        }
+//    } else if ( view != nil ) {
+//        return view.frame.size.width;
+//    }
+//    return 0;
+//}
 
 @end

@@ -20,6 +20,8 @@
 //// 重排子Row坐标
 //- (void) reflowChildrenRowTop;
 // 重排自己
-- (void) reflowSelfView;
+//- (void) reflowSelfView;
+// 重排内部指定的view
+//- (void) reflowSubView: (UIView *) view;
 
 @end

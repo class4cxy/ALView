@@ -82,8 +82,17 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 - (void) addView: (UIView *) view;
 // 在Row尾部插入一个view
 - (void) pushView:(UIView *)view;
-// 弹出最后一个view
+// 移除当前行最后一个view，并返回该view
 - (UIView *) popView;
+// 移除当前行的第一个view，并返回该view
+- (UIView *) shiftView;
+//
+- (UIView *) fisrtView;
+//
+- (UIView *) lastView;
+//
+- (NSUInteger) count;
+
 // 重排全部
 - (void) layout;
 // 仅重排origin.top值
@@ -91,7 +100,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 // 更新row的size
 - (void) refreshSize;
 // 更新制定view的frame，并触发该行所有view进行重排
-- (void) updateSize: (CGRect) frame view: (UIView *) view;
+//- (void) updateSize: (CGRect) frame view: (UIView *) view;
 // 更新制定view的frame，并重算该行高度
-- (void) updateHeight: (CGRect) frame view: (UIView *) view;
+//- (void) updateHeight: (CGRect) frame view: (UIView *) view;
 @end
