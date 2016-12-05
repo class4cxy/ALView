@@ -45,13 +45,13 @@
 {
     // 当前inline view在该容器作为第一行展示
     if ( [_rows count] == 0 ) {
-        [self createNewRowWithView: view previousRow:nil];
+        [self appendNewRowWithView: view previousRow:nil];
     } else {
         ALRow * lastRow = _rows.lastObject;
         if ( [lastRow canAddView: view] ) {
             [lastRow pushView: view];
         } else {
-            [self createNewRowWithView: view previousRow:lastRow];
+            [self appendNewRowWithView: view previousRow:lastRow];
         }
     }
     // 触发父view reflow
@@ -65,12 +65,6 @@
     }
 }
 
-// 在某一行前面插入一行
-- (void) insertRow: (ALRow *) row beforeRow: (ALRow *) beforeRow
-{
-    
-}
-
 // 将一个inline view从指定的一行开始位置插入
 // 如果造成指定Row溢出（宽度超过最大宽度），那会将溢出的内容递归的插入下一个Row
 - (void) crushView2NextRow: (UIView *) view
@@ -79,9 +73,13 @@
     // 存在下一行的情况
     if ( belongRow.nextRow ) {
         ALRow * toRow = belongRow.nextRow;
-        // 如果下一行是block类型的Row
+        // 如果下一行是block类型，新建一行并在block行之前插入
         if ( toRow.display == ALDisplayBlock ) {
-            // TODO
+            ALRow * newRow = [self insertNewRowWithView:view beforeRow:toRow];
+            while (newRow.nextRow) {
+                [newRow.nextRow reflowTop];
+                newRow = newRow.nextRow;
+            }
         } else {
             while ( ![toRow canAddView: view] ) {
                 // 移除溢出的view
@@ -89,84 +87,70 @@
                 // 递归咯
                 [self crushView2NextRow:overflow];
             }
+            [toRow addView: view];
         }
-        [toRow addView: view];
     } else {
-        [self createNewRowWithView: view previousRow:view.belongRow];
+        [self appendNewRowWithView: view previousRow:view.belongRow];
     }
 }
-// 将一个inline view从指定的一行结束位置插入
-// 如果当前行有空隙，那递归下一行的view继续往上一行插入
-//- (void) crushView2PreviousRow: (UIView *) view
-//{
-//    ALRow * belongRow = view.belongRow;
-//    // 存在上一行的情况
-//    if ( belongRow.previousRow ) {
-//        ALRow * toRow = belongRow.previousRow;
-//        // 如果下一行是block类型的Row
-//        if ( toRow.display == ALDisplayBlock ) {
-//            // 往上一行尾部插入一个view不存在该情况
-//        } else {
-//            while ( ![toRow canAddView: view] ) {
-//                // 移除溢出的view
-//                UIView * overflow = [toRow shiftView];
-//                // 递归咯
-//                [self crushView2PreviousRow:overflow];
-//            }
-//        }
-//        [toRow pushView: view];
-//    }
-//    // 不存在上一行的情况是不存在的
-//}
-
-- (void) crushView2PreviousRow: (ALRow *) row
+/*
+ * 将inline行的view往上一行迁移
+ * [检查previous行是否存在]：
+ * 1、如果存在，检查当前行的头一个view是否能插入到previous行：
+ *    + 如果能插入到上一行：
+ *      - 移除当前行的头一个view，插入到previous行的最后面，如果当前行([row count]=0)：
+ *        - 检查next行是否存在，且display=ALDisplayInline
+ *          - 如果符合，递归next行执行迁移
+ *          - 如果不符合，移除当前行，完成！
+ *      - 如果当前行([row count] > 0)，递归检查当前行的头一个view是否能插入到previous行
+ *    + 如果不能插入：
+ *      - 检查next行是否存在，且display=ALDisplayInline ？如果符合，递归next行执行迁移。
+ */
+- (BOOL) crushView2PreviousRow: (ALRow *) row
 {
     // 存在上一行的情况
     if ( row.previousRow ) {
         // 如果当前行已经移除完
-        if ( [row count] == 0 ) {
-            if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
-                [self crushView2PreviousRow: row.nextRow];
-            } else {
-                return [_rows removeObject: row];
-            }
-        } else {
-            UIView * firstView = [row fisrtView];
+        UIView * firstView = [row fisrtView];
+        
+        if ( [row.previousRow canAddView: firstView] ) {
+            // 移除当前行的第一个view，插入到上一行尾部
+            [row.previousRow pushView: [row shiftView]];
             
-            if ( [row.previousRow canAddView: firstView] ) {
-                // 移除当前行的第一个view，插入到上一行尾部
-                [row.previousRow pushView: [row shiftView]];
+            if ( [row count] == 0 ) {
+                if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
+                    [self crushView2PreviousRow: row.nextRow];
+                } else {
+                    [self removeRow: row];
+                    // 重排下一行的top
+                    while (row.nextRow) {
+                        [row.nextRow reflowTop];
+                        row = row.nextRow;
+                    }
+                }
+            } else {
                 // 递归
                 [self crushView2PreviousRow: row];
-            } else if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
-                [self crushView2PreviousRow: row.nextRow];
             }
+            return YES;
+        } else if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
+            [self crushView2PreviousRow: row.nextRow];
         }
+        return NO;
     }
+    return NO;
 }
 
 /*
- * 重排自己
- * 重排自己与兄弟view、父view
+ * 重排当前行管理器中的某一view
+ * 1、找到该view所属的行
+ * 2、检查view重排后会不会导致当前行断行？
+ * 3、如果需要断行，那递归移除当前行尾部的view，并插入到下一行，执行crushView2NextRow即可，
+ * 4、如果不需要断行，那直接重排当前行，检查修改的view是否当前行中第一个view？
+ * 5、如果是：从当前行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
+ * 6、如果不是：从下一行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
+ * 7、重排自身的高度（self.ownerView）
  */
-//- (void) reflowSelfView
-//{
-//    if ( self.ownerView.superview ) {
-//        [self.ownerView.superview.rowManager reflowChildView: self.ownerView];
-//    } else {
-//        
-//    }
-//}
-
-/*
- * 重排Row Manager中的某个子view
- */
-//- (void) reflowSubView: (UIView *) view
-//{
-//    ALRow * belongRow = [self findTheRowInCurrentManager: view];
-//}
-
-// 重排
 - (void) reflowChildView: (UIView *) view
 {
     // 找到该view所属的行，由行去决定如何reflow该view
@@ -180,16 +164,24 @@
             UIView * overflow = [belongRow popView];
             [self crushView2NextRow: overflow];
         }
-
+        for (ALRow * row in _rows) {
+            NSLog(@"%lu", (unsigned long)[row count]);
+        }
+        // 重排自己的高度
+        [self reflowSelfHeight];
     } else {
         [belongRow layout];
         // 如果下一行存在，那检查下一行view能否往上挤
-//        if ( belongRow.nextRow ) {
-            [self crushView2PreviousRow: belongRow];
-//        }
+        BOOL need2ReflowSelfHeight = NO;
+        if ( view == belongRow.fisrtView ) {
+            need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow];
+        } else {
+            need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow.nextRow];
+        }
+        if ( need2ReflowSelfHeight ) {
+            [self reflowSelfHeight];
+        }
     }
-    // 重排自己的高度
-    [self reflowSelfHeight];
 }
 // 重排父view的高
 - (void) reflowSelfHeight
@@ -230,13 +222,10 @@
     }
 }
 
-// 新建一个Row，并初始化
-- (ALRow *) createNewRowWithView: (UIView *) view previousRow: (ALRow *) previousRow
+// 新建一行，初始化，并在当前管理器尾部插入
+- (ALRow *) appendNewRowWithView: (UIView *) view previousRow: (ALRow *) previousRow
 {
-    ALRow * newRow = [[ALRow alloc] init];
-    newRow.contentAlign = self.ownerView.contentAlign;
-    newRow.display = view.display;
-    newRow.maxWidth = [view getParentWidth];
+    ALRow * newRow = [self createRowWithView: view];
     // link row
     if ( previousRow ) {
         newRow.previousRow = previousRow;
@@ -247,30 +236,64 @@
     return newRow;
 }
 
-/*
- * 查找该view所属的Row
- * 1、如果view不是isALEngine，返回nil
- * 2、如果superview不存在，返回nil
- * 3、如果superview不是isALEngine，返回nil
- * 4、如果superview.rows数量比view.row+1小，返回nil
- * 5、返回父view的Row管理器中所在的Row
- */
-//- (ALRow *) findTheRowOfView: (UIView *) view
-//{
-//    if ( view.superview && view.superview.rowManager ) {
-//        return [view.superview.rowManager findTheRowInCurrentManager: view];
-//    }
-//    return nil;
-//}
-//
-//- (ALRow *) findTheRowInCurrentManager: (UIView *) view
-//{
-//    if ( [_rows count] > view.row ) {
-//        return [_rows objectAtIndex: view.row];
-//    }
-//    return nil;
-//
-//}
+// 移除指定的一行
+- (void) removeRow: (ALRow *) row
+{
+    if ( row ) {
+        ALRow * previousRow = row.previousRow;
+        ALRow * nextRow = row.nextRow;
+        // 移除关系：
+        // 如果存在上一行
+        if ( previousRow ) {
+            previousRow.nextRow = nil;
+        }
+        // 如果存在下一行
+        if ( nextRow ) {
+            nextRow.previousRow = nil;
+        }
+        // 如果存在上一行，下一行，那需重新建立它们的联系
+        if ( previousRow && nextRow ) {
+            previousRow.nextRow = nextRow;
+            nextRow.previousRow = previousRow;
+        }
+        // 移除
+        [_rows removeObject: row];
+    }
+}
 
+// 在指定行之前插入新的一行
+- (ALRow *) insertNewRowWithView: (UIView *) view beforeRow: (ALRow *) beforeRow
+{
+    if ( view && beforeRow ) {
+        ALRow * newRow = [self createRowWithView: view];
+        
+        ALRow * beforeRowPreviousRow = beforeRow.previousRow;
+        // 更新指定行与新增行的关系
+        beforeRow.previousRow = newRow;
+        newRow.nextRow = beforeRow;
+        // 如果指定行的previousRow存在，那需指定previousRow与新增行的关系
+        if ( beforeRowPreviousRow ) {
+            beforeRowPreviousRow.nextRow = newRow;
+            newRow.previousRow = beforeRowPreviousRow;
+        }
+        [newRow pushView: view];
+        // 插入
+        NSUInteger index = [_rows indexOfObject: beforeRow];
+        [_rows insertObject: newRow atIndex: index];
+        
+        return newRow;
+    }
+    return nil;
+}
+
+// 新建行，但不插入到行管理器
+- (ALRow *) createRowWithView: (UIView *) view
+{
+    ALRow * newRow = [[ALRow alloc] init];
+    newRow.contentAlign = self.ownerView.contentAlign;
+    newRow.display = view.display;
+    newRow.maxWidth = [view getParentWidth];
+    return newRow;
+}
 
 @end

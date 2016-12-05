@@ -12,6 +12,7 @@
 @interface ViewController () <UIScrollViewDelegate>
 {
     ALView * _section1;
+    ALView * _body;
 }
 @end
 
@@ -86,9 +87,10 @@
     [b addTo: self.view];
 
     
-    ALView * body = [[ALView alloc] init];
-    body.contentAlign = ALContentAlignRight;
-    [body addTo: b];
+    _body = [[ALView alloc] init];
+    _body.contentAlign = ALContentAlignRight;
+    _body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
+    [_body addTo: b];
     
     ALView * body2 = [[ALView alloc] init];
     body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
@@ -96,11 +98,11 @@
     body2.marginBottom = 10;
     [body2 addTo: b];
     
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
 
     _section1 = [[ALView alloc] init];
     _section1.display = ALDisplayInline;
@@ -109,22 +111,22 @@
     _section1.marginBottom = 5;
     _section1.marginRight = 5;
     _section1.backgroundColor = [UIColor yellowColor];
-    [_section1 addTo: body];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: body];
+    [_section1 addTo: _body];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
 
     
-//    ALView * block1 = [[ALView alloc] init];
-//    block1.height = 100;
-//    block1.width = 200;
-//    block1.marginBottom = 10;
-//    block1.backgroundColor = [UIColor redColor];
-//    [block1 addTo: body];
+    ALView * block1 = [[ALView alloc] init];
+    block1.height = 100;
+    block1.width = 200;
+    block1.marginBottom = 10;
+    block1.backgroundColor = [UIColor redColor];
+    [block1 addTo: _body];
 
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: body];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _body];
     
     ALView * panelWrap = [[ALView alloc] init];
     panelWrap.position = ALPositionAbsolute;
@@ -169,13 +171,12 @@
 {
     _section1.width -= 2;
     [_section1 reflow];
-    NSLog(@"%f", _section1.width);
 }
 - (void) addTheHeight
 {
     _section1.width += 2;
     [_section1 reflow];
-    NSLog(@"%f", _section1.width);
+//    NSLog(@"%@", _body.);
 }
 
 - (void) initPaddingLayout
