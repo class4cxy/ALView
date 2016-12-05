@@ -15,13 +15,5 @@
 - (void) appendView: (UIView *) view;
 // 重排子view
 - (void) reflowChildView: (UIView *) view;
-// 重排自己高度
-//- (void) reflowSelfHeight;
-//// 重排子Row坐标
-//- (void) reflowChildrenRowTop;
-// 重排自己
-//- (void) reflowSelfView;
-// 重排内部指定的view
-//- (void) reflowSubView: (UIView *) view;
 
 @end

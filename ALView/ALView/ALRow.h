@@ -70,8 +70,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 @property (nonatomic, retain) ALRow * nextRow;
 // 上一个兄弟Row
 @property (nonatomic, retain) ALRow * previousRow;
-// 父view
-@property (nonatomic, retain) UIView * parentView;
+
 - (instancetype) init;
 //- (instancetype) initWithTop: (CGFloat) top contentAlign: (ALContentAlign) contentAlign display: (ALDisplay) display;
 // 检查是否能插入该view
@@ -87,7 +86,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 // 移除当前行的第一个view，并返回该view
 - (UIView *) shiftView;
 //
-- (UIView *) fisrtView;
+- (UIView *) firstView;
 //
 - (UIView *) lastView;
 //

@@ -135,17 +135,7 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @property (nonatomic, retain, readonly) ALView * nextSibling;
 // 上一个兄弟view
 @property (nonatomic, retain, readonly) ALView * previousSibling;
-// 下一个兄弟Row管理器，block类型的view才会用，为了方便递归
-//@property (nonatomic, retain, readonly) ALRow * nextRow;
-// 上一个兄弟Row管理器，block类型的view才会用，为了方便递归
-//@property (nonatomic, retain, readonly) ALRow * previousRow;
-// 管理的行数
-//@property (nonatomic, assign, readonly) NSInteger rowNum;
-// 所属行数
-//@property (nonatomic, assign) NSInteger row;
-// rows，以row为单位管理子view
-//@property (nonatomic, retain) NSMutableArray<ALRow *> * rows;
-// rowManager
+// 行管理器
 @property (nonatomic, retain) ALRowManager * rowManager;
 // 所属的行实例
 @property (nonatomic, retain) ALRow * belongRow;
@@ -156,10 +146,6 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 //- (instancetype) initWithALVirtuALEngine;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
-// 开放给实例使用，当改变样式属性时，用于刷新UI用
-//- (void) refreshView;
-
-//- (void) rowReflowWithView: (UIView *) view;
 // 获取当前view的父view宽度
 - (CGFloat) getParentWidth;
 
@@ -169,8 +155,6 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 // 提供给子类重新布局当前view用的，实例不要调用该方法
 - (void) reflow;
 // 提供给子类重新排版absolute方式布局的view
-//- (void) reflowWithAbsolute:(UIView *)parent;
-//- (void) reflowOriginAndSizeWhenAbsolute;
 - (void) reflowOriginWhenAbsolute;
 
 @end

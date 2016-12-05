@@ -111,7 +111,7 @@
     // 存在上一行的情况
     if ( row.previousRow ) {
         // 如果当前行已经移除完
-        UIView * firstView = [row fisrtView];
+        UIView * firstView = [row firstView];
         
         if ( [row.previousRow canAddView: firstView] ) {
             // 移除当前行的第一个view，插入到上一行尾部
@@ -173,7 +173,7 @@
         [belongRow layout];
         // 如果下一行存在，那检查下一行view能否往上挤
         BOOL need2ReflowSelfHeight = NO;
-        if ( view == belongRow.fisrtView ) {
+        if ( view == belongRow.firstView ) {
             need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow];
         } else {
             need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow.nextRow];

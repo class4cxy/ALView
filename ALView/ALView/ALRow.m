@@ -25,20 +25,6 @@
     
     return self;
 }
-// 更新所有尺寸可以调该接口，会触发行内所有view重排
-//- (void) updateSize: (CGRect) frame view: (UIView *) view
-//{
-//    view.frame = frame;
-//    [self refreshSize];
-//    [self layout];
-//}
-//
-//// 仅更新高度值可以调该接口，可以减少计算
-//- (void) updateHeight: (CGRect) frame view: (UIView *) view
-//{
-//    view.frame = frame;
-//    [self reCountHeight];
-//}
 
 #pragma mark - 行操作方法
 /*
@@ -102,7 +88,7 @@
     return nil;
 }
 
-- (UIView *) fisrtView
+- (UIView *) firstView
 {
     if ( [self.viewArr count] > 0 ) {
         return [self.viewArr objectAtIndex:0];
@@ -134,7 +120,7 @@
     if ( [self.viewArr count] == 0 ) {
         return YES;
     }
-    return _maxWidth > _width + view.frame.size.width + view.marginLeft + view.marginRight;
+    return _maxWidth >= _width + view.frame.size.width + view.marginLeft + view.marginRight;
 }
 
 - (BOOL) need2break
@@ -227,7 +213,7 @@
     } else if ( _contentAlign == ALContentAlignRight ) {
         left = _maxWidth - _width + view.marginLeft;
     } else {
-        left = 0;
+        left = view.marginLeft;
     }
     
     view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
@@ -250,7 +236,7 @@
             } else if ( _contentAlign == ALContentAlignRight ) {
                 left = _maxWidth - _width + view.marginLeft;
             } else {
-                left = 0;
+                left = view.marginLeft;
             }
         } else {
             left =  view.marginLeft +

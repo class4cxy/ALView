@@ -54,13 +54,13 @@
     [body addTo: self.view];
 
     ALView * sub1 = [[ALView alloc] init];
-//    sub1.position = ALPositionAbsolute;
+    sub1.position = ALPositionAbsolute;
     sub1.display = ALDisplayInline;
     sub1.contentAlign = ALContentAlignCenter;
-//    sub1.width = 200;
-//    sub1.bottom = 10;
+    sub1.width = 200;
+    sub1.bottom = 10;
 //    sub1.centerY = 0;
-//    sub1.centerX = 0;
+    sub1.centerX = 0;
     sub1.backgroundColor = [UIColor yellowColor];
     [sub1 addTo: body];
     
@@ -68,11 +68,11 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.8] addTo:sub1];
     [[self createInlineViewWidth:100 height:30 alpha:0.9] addTo:sub1];
     [[self createInlineViewWidth:150 height:30 alpha:0.8] addTo:sub1];
-//    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
-//    [[self createInlineViewWidth:70 height:30 alpha:0.8] addTo:sub1];
-//    [[self createInlineViewWidth:100 height:30 alpha:0.9] addTo:sub1];
-//    [[self createInlineViewWidth:150 height:30 alpha:0.8] addTo:sub1];
-//    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
+    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
+    [[self createInlineViewWidth:70 height:30 alpha:0.8] addTo:sub1];
+    [[self createInlineViewWidth:100 height:30 alpha:0.9] addTo:sub1];
+    [[self createInlineViewWidth:150 height:30 alpha:0.8] addTo:sub1];
+    [[self createInlineViewWidth:10 height:30 alpha:0.9] addTo:sub1];
 }
 
 - (void) initPositionAutoSizeWhenCenterXAndY
@@ -85,18 +85,23 @@
     ALView * b = [[ALView alloc] init];
     b.height = [[UIScreen mainScreen] bounds].size.height;
     [b addTo: self.view];
+    
+    ALView * b2 = [[ALView alloc] init];
+    b2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
+    [b2 addTo: b];
 
     
     _body = [[ALView alloc] init];
     _body.contentAlign = ALContentAlignRight;
     _body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
-    [_body addTo: b];
+    _body.marginBottom = 10;
+    [_body addTo: b2];
     
-    ALView * body2 = [[ALView alloc] init];
-    body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
-    body2.height = 100;
-    body2.marginBottom = 10;
-    [body2 addTo: b];
+//    ALView * body2 = [[ALView alloc] init];
+//    body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
+//    body2.height = 100;
+//    body2.marginBottom = 10;
+//    [body2 addTo: b];
     
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
@@ -358,7 +363,7 @@
     inlineArticle.display = ALDisplayInline;
     // If you did not set `width` property on inline view
     // It will auto update width by subview's total width, max width is parent's width
-    // inlineArticle.width = 320;
+     inlineArticle.width = 320;
     // inlineArticle.height = 50;
     inlineArticle.backgroundColor = [UIColor redColor];
     [inlineArticle addTo:body];
@@ -471,7 +476,7 @@
 
     ALView * inlinewrap = [[ALView alloc] init];
     inlinewrap.backgroundColor = [UIColor redColor];
-//    inlinewrap.width = 300;
+    inlinewrap.width = 300;
     inlinewrap.contentAlign = ALContentAlignCenter;
     inlinewrap.display = ALDisplayInline;
     [inlinewrap addTo: body];
@@ -916,6 +921,7 @@
     ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
     [body addTo:self.view];
+    body.contentAlign = ALContentAlignRight;
     
     [[self createInlineBox1:0.1] addTo:body];
     [[self createInlineBox1:0.2] addTo:body];
