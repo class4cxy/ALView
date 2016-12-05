@@ -459,19 +459,26 @@
         [((ALLabel *) self) reflowWithInnerText: parent];
     } else {
         CGFloat width = self.width;
+        CGFloat height = self.height;
         // 相对定位时
         if ( self.position == ALPositionRelative ) {
             // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
             if ( self.display == ALDisplayBlock && self.isAutoWidth ) {
                 width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
             }
-            // 绝对定位时
+        // 绝对定位时
         } else {
-            // TODO
+            // 如果使用了isAutoWidth或者isAutoHeight，直接使用现有的宽高，因为子view被插入时，会更新内部的size
+            if ( self.isAutoWidth ) {
+                width = self.frame.size.width;
+            }
+            if ( self.isAutoHeight ) {
+                height = self.frame.size.height;
+            }
         }
         
         // reflow
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.height);
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
     }
 }
 

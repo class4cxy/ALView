@@ -143,6 +143,8 @@
 
 /*
  * 重排当前行管理器中的某一view
+ * 注：该方法主要用于刷新自己，并触发兄弟view、父view重排，通常由父view的行管理器调用；
+ *    对于父view的行管理器来说，自己就是子view，所以命名为reflowChildView
  * 1、找到该view所属的行
  * 2、检查view重排后会不会导致当前行断行？
  * 3、如果需要断行，那递归移除当前行尾部的view，并插入到下一行，执行crushView2NextRow即可，
@@ -164,29 +166,29 @@
             UIView * overflow = [belongRow popView];
             [self crushView2NextRow: overflow];
         }
-        for (ALRow * row in _rows) {
-            NSLog(@"%lu", (unsigned long)[row count]);
-        }
-        // 重排自己的高度
-        [self reflowSelfHeight];
     } else {
         [belongRow layout];
         // 如果下一行存在，那检查下一行view能否往上挤
-        BOOL need2ReflowSelfHeight = NO;
         if ( view == belongRow.firstView ) {
-            need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow];
+            [self crushView2PreviousRow: belongRow];
         } else {
-            need2ReflowSelfHeight = [self crushView2PreviousRow: belongRow.nextRow];
-        }
-        if ( need2ReflowSelfHeight ) {
-            [self reflowSelfHeight];
+            [self crushView2PreviousRow: belongRow.nextRow];
         }
     }
+    // TODO 这里有待优化一下
+    // 还是要重刷一遍下级兄弟view的top
+    while (belongRow.nextRow) {
+        [belongRow.nextRow reflowTop];
+        belongRow = belongRow.nextRow;
+    }
+    // 重排自己的高度
+    [self reflowSelfHeight];
 }
 // 重排父view的高
 - (void) reflowSelfHeight
 {
-    if ( self.ownerView.isAutoHeight ) {
+    // 当ownerView是ALEngine且为高度自动的情况才执行
+    if ( self.ownerView.isALEngine && self.ownerView.isAutoHeight ) {
         ALRow * belongRow = self.ownerView.belongRow;
         
         self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rows.lastObject.height + _rows.lastObject.top);

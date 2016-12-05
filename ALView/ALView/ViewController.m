@@ -97,11 +97,11 @@
     _body.marginBottom = 10;
     [_body addTo: b2];
     
-//    ALView * body2 = [[ALView alloc] init];
-//    body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
-//    body2.height = 100;
-//    body2.marginBottom = 10;
-//    [body2 addTo: b];
+    ALView * body2 = [[ALView alloc] init];
+    body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
+    body2.height = 100;
+    body2.marginBottom = 10;
+    [body2 addTo: b];
     
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
@@ -132,15 +132,19 @@
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _body];
-    
+
+    [[self createCtrlView] addTo:b];
+}
+
+- (ALView *) createCtrlView
+{
     ALView * panelWrap = [[ALView alloc] init];
     panelWrap.position = ALPositionAbsolute;
     panelWrap.bottom = 10;
     panelWrap.centerX = 0;
-    [panelWrap addTo: b];
     
     ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"width: ";
+    widthTx.text = @"height: ";
     widthTx.font = [UIFont systemFontOfSize:12];
     widthTx.height = 30;
     [widthTx addTo: panelWrap];
@@ -170,16 +174,18 @@
     [addBtn addTo: panelWrap];
     UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
     [addBtn addGestureRecognizer: tapAddBtn];
+    
+    return panelWrap;
 }
 
 - (void) subTheHeight
 {
-    _section1.width -= 2;
+    _section1.height -= 5;
     [_section1 reflow];
 }
 - (void) addTheHeight
 {
-    _section1.width += 2;
+    _section1.height += 5;
     [_section1 reflow];
 //    NSLog(@"%@", _body.);
 }
