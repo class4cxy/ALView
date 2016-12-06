@@ -189,8 +189,8 @@
         for (; i < len; i++) {
             UIView * view = [_viewsArr objectAtIndex:i];
             CGFloat h = view.alMarginTop +
-            view.alMarginBottom +
-            view.frame.size.height;
+                        view.alMarginBottom +
+                        view.frame.size.height;
             
             if ( _height < h ) {
                 _height = h;

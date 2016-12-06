@@ -216,14 +216,14 @@
 {
     _section1.alWidth -= 5;
     _section1.alHeight -= 5;
-    _section1.alMarginBottom -= 3;
+//    _section1.alMarginBottom -= 3;
     [_section1 reflow];
 }
 - (void) addTheHeight
 {
     _section1.alWidth += 5;
     _section1.alHeight += 5;
-    _section1.alMarginBottom += 3;
+//    _section1.alMarginBottom += 3;
     [_section1 reflow];
 //    NSLog(@"%@", _body.);
 }

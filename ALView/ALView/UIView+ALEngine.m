@@ -61,9 +61,8 @@
 -(void)setAlWidth:(CGFloat)alWidth
 {
     self.alIsAutoWidth = NO;
-    if ( alWidth > 0 ) {
-        objc_setAssociatedObject(self, @"alWidth", [NSNumber numberWithFloat:alWidth], OBJC_ASSOCIATION_RETAIN);
-    }
+    if ( alWidth < 0 ) { alWidth = 0; }
+    objc_setAssociatedObject(self, @"alWidth", [NSNumber numberWithFloat:alWidth], OBJC_ASSOCIATION_RETAIN);
 }
 
 @dynamic alHeight;
@@ -74,9 +73,8 @@
 -(void)setAlHeight:(CGFloat)alHeight
 {
     self.alIsAutoHeight = NO;
-    if ( alHeight > 0 ) {
-        objc_setAssociatedObject(self, @"alHeight", [NSNumber numberWithFloat:alHeight], OBJC_ASSOCIATION_RETAIN);
-    }
+    if ( alHeight < 0 ) { alHeight = 0; }
+    objc_setAssociatedObject(self, @"alHeight", [NSNumber numberWithFloat:alHeight], OBJC_ASSOCIATION_RETAIN);
 }
 
 
