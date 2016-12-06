@@ -70,75 +70,64 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
 @interface UIView (ALEngine)
 
 @property (nonatomic, assign, readonly) BOOL isALEngine; // 是否为ALEngine布局的view
-/*
- * 虚拟ALView，主要用于辅助常规的ALView去实现某些能力而创建
- * 1、虚拟view的子类layout应当由使用者去定义
- * 2、虚拟view的子类应该透传所有方法、协议、变量给所继承的父类
- */
-//@property (nonatomic, assign, readonly) BOOL isVirtual; // 是否为ALEngine的虚拟view
 
 /*
  * 样式属性
  */
 
-@property (nonatomic, assign) ALPosition position;
-@property (nonatomic, assign) ALDisplay display;
+@property (nonatomic, assign) ALPosition alPosition;
+@property (nonatomic, assign) ALDisplay alDisplay;
 
-@property (nonatomic, assign) CGFloat width;
-@property (nonatomic, assign) CGFloat height;
+@property (nonatomic, assign) CGFloat alWidth;
+@property (nonatomic, assign) CGFloat alHeight;
 
-@property (nonatomic, assign) CGFloat top;
-@property (nonatomic, assign) CGFloat bottom;
-@property (nonatomic, assign) CGFloat left;
-@property (nonatomic, assign) CGFloat right;
+@property (nonatomic, assign) CGFloat alTop;
+@property (nonatomic, assign) CGFloat alBottom;
+@property (nonatomic, assign) CGFloat alLeft;
+@property (nonatomic, assign) CGFloat alRight;
 /*
  * 0表示居中，允许负值
  */
-@property (nonatomic, assign) CGFloat centerX;
-@property (nonatomic, assign) CGFloat centerY;
+@property (nonatomic, assign) CGFloat alCenterX;
+@property (nonatomic, assign) CGFloat alCenterY;
 
 
-@property (nonatomic, assign) CGFloat margin;
-@property (nonatomic, assign) CGFloat marginTop;
-@property (nonatomic, assign) CGFloat marginBottom;
-@property (nonatomic, assign) CGFloat marginLeft;
-@property (nonatomic, assign) CGFloat marginRight;
+@property (nonatomic, assign) CGFloat alMargin;
+@property (nonatomic, assign) CGFloat alMarginTop;
+@property (nonatomic, assign) CGFloat alMarginBottom;
+@property (nonatomic, assign) CGFloat alMarginLeft;
+@property (nonatomic, assign) CGFloat alMarginRight;
 
-@property (nonatomic, assign) ALContentAlign contentAlign;
+@property (nonatomic, assign) ALContentAlign alContentAlign;
 
 /*
  * 其他属性
  */
 
-// 记录当前view的内部高度，该值表示子view最高高度值，未必与height值相等，例如scrollView的情况
-@property (nonatomic, assign, readonly) CGFloat currInnerHeight;
-// 记录当前view的内部高度，该值表示子view最高高度值，未必与width值相等，例如scrollView的情况
-@property (nonatomic, assign, readonly) CGFloat currInnerWidth;
-@property (nonatomic, assign, readonly) BOOL isAutoHeight; // 是否为系统自动设置高度
+@property (nonatomic, assign, readonly) BOOL alIsAutoHeight; // 是否为系统自动设置高度
 // 注：考虑到排版的复杂度，inline类型的view不允许不设置width值
-@property (nonatomic, assign, readonly) BOOL isAutoWidth; // 是否为系统自动设置高度
-@property (nonatomic, assign, readonly) BOOL isInNewLine; // inline-block节点会存在自动断行的逻辑，该属性用于标记当前节点是否是新的一行
+@property (nonatomic, assign, readonly) BOOL alIsAutoWidth; // 是否为系统自动设置高度
 // 记录是否设置过left值
-@property (nonatomic, assign, readonly) BOOL hasSettedLeft;
+@property (nonatomic, assign, readonly) BOOL alHasSettedLeft;
 // 记录是否设置过top值
-@property (nonatomic, assign, readonly) BOOL hasSettedTop;
+@property (nonatomic, assign, readonly) BOOL alHasSettedTop;
 // 记录是否设置过centerX值
-@property (nonatomic, assign, readonly) BOOL hasSettedCenterX;
+@property (nonatomic, assign, readonly) BOOL alHasSettedCenterX;
 // 记录是否设置过centerY值
-@property (nonatomic, assign, readonly) BOOL hasSettedCenterY;
+@property (nonatomic, assign, readonly) BOOL alHasSettedCenterY;
 // 记录是否设置过bottom值
-@property (nonatomic, assign, readonly) BOOL hasSettedBottom;
+@property (nonatomic, assign, readonly) BOOL alHasSettedBottom;
 // 记录是否设置过right值
-@property (nonatomic, assign, readonly) BOOL hasSettedRight;
+@property (nonatomic, assign, readonly) BOOL alHasSettedRight;
 
 // 下一个兄弟view
-@property (nonatomic, retain, readonly) ALView * nextSibling;
+@property (nonatomic, retain, readonly) ALView * alNextSibling;
 // 上一个兄弟view
-@property (nonatomic, retain, readonly) ALView * previousSibling;
+@property (nonatomic, retain, readonly) ALView * alPreviousSibling;
 // 行管理器
-@property (nonatomic, retain) ALRowManager * rowManager;
+@property (nonatomic, retain) ALRowManager * alRowManager;
 // 所属的行实例
-@property (nonatomic, retain) ALRow * belongRow;
+@property (nonatomic, retain) ALRow * alBelongRow;
 
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
 - (instancetype) initWithALEngine;
@@ -154,6 +143,8 @@ typedef NS_ENUM(NSInteger, ALRecursionType) {
  */
 // 提供给子类重新布局当前view用的，实例不要调用该方法
 - (void) reflow;
+// 提供给子类重排自身的size
+- (void) reflowSelfSize;
 // 提供给子类重新排版absolute方式布局的view
 - (void) reflowOriginWhenAbsolute;
 

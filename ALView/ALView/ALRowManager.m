@@ -11,7 +11,7 @@
 
 @interface ALRowManager()
 {
-    NSMutableArray<ALRow *> * _rows;
+    NSMutableArray<ALRow *> * _rowsArr;
 }
 
 @end
@@ -26,7 +26,7 @@
     self = [super init];
     if (self) {
         self.ownerView = view;
-        _rows = [[NSMutableArray alloc] init];
+        _rowsArr = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -44,10 +44,10 @@
 - (void) appendView: (UIView *) view
 {
     // 当前inline view在该容器作为第一行展示
-    if ( [_rows count] == 0 ) {
+    if ( [_rowsArr count] == 0 ) {
         [self appendNewRowWithView: view previousRow:nil];
     } else {
-        ALRow * lastRow = _rows.lastObject;
+        ALRow * lastRow = _rowsArr.lastObject;
         if ( [lastRow canAddView: view] ) {
             [lastRow pushView: view];
         } else {
@@ -55,26 +55,19 @@
         }
     }
     // 触发父view reflow
-    if ( view.superview ) {
-        if ( view.superview.position == ALPositionRelative ) {
-            [view.superview.rowManager reflowSelfHeight];
-        } else {
-            [view.superview.rowManager reflowSelfSizeOfAbsolute];
-            [view.superview reflowOriginWhenAbsolute];
-        }
-    }
+    [self reflowSelfHeight];
 }
 
 // 将一个inline view从指定的一行开始位置插入
 // 如果造成指定Row溢出（宽度超过最大宽度），那会将溢出的内容递归的插入下一个Row
 - (void) crushView2NextRow: (UIView *) view
 {
-    ALRow * belongRow = view.belongRow;
+    ALRow * belongRow = view.alBelongRow;
     // 存在下一行的情况
     if ( belongRow.nextRow ) {
         ALRow * toRow = belongRow.nextRow;
         // 如果下一行是block类型，新建一行并在block行之前插入
-        if ( toRow.display == ALDisplayBlock ) {
+        if ( toRow.alDisplay == ALDisplayBlock ) {
             ALRow * newRow = [self insertNewRowWithView:view beforeRow:toRow];
             while (newRow.nextRow) {
                 [newRow.nextRow reflowTop];
@@ -90,7 +83,7 @@
             [toRow addView: view];
         }
     } else {
-        [self appendNewRowWithView: view previousRow:view.belongRow];
+        [self appendNewRowWithView: view previousRow:view.alBelongRow];
     }
 }
 /*
@@ -118,7 +111,7 @@
             [row.previousRow pushView: [row shiftView]];
             
             if ( [row count] == 0 ) {
-                if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
+                if ( row.nextRow && row.nextRow.alDisplay == ALDisplayInline ) {
                     [self crushView2PreviousRow: row.nextRow];
                 } else {
                     [self removeRow: row];
@@ -133,7 +126,7 @@
                 [self crushView2PreviousRow: row];
             }
             return YES;
-        } else if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
+        } else if ( row.nextRow && row.nextRow.alDisplay == ALDisplayInline ) {
             [self crushView2PreviousRow: row.nextRow];
         }
         return NO;
@@ -156,7 +149,7 @@
 - (void) reflowChildView: (UIView *) view
 {
     // 找到该view所属的行，由行去决定如何reflow该view
-    ALRow * belongRow = view.belongRow;
+    ALRow * belongRow = view.alBelongRow;
     
     // 检查是否需要断行：
     // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
@@ -187,41 +180,65 @@
 // 重排父view的高
 - (void) reflowSelfHeight
 {
-    // 当ownerView是ALEngine且为高度自动的情况才执行
-    if ( self.ownerView.isALEngine && self.ownerView.isAutoHeight ) {
-        ALRow * belongRow = self.ownerView.belongRow;
-        
-        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rows.lastObject.height + _rows.lastObject.top);
-        
-        [belongRow refreshSize];
-        
-        if ( self.ownerView.position == ALPositionRelative ) {
-            while (belongRow.nextRow) {
-                [belongRow.nextRow reflowTop];
-                belongRow = belongRow.nextRow;
+    // 当ownerView是ALEngine情况才执行
+    if ( self.ownerView.isALEngine ) {
+        // 如果是relative类型，且isAutoHeight=YES
+        if ( self.ownerView.alPosition == ALPositionRelative ) {
+            
+            // 当父view是ALScrollView，需更新scrollView的contentSize
+            if ( [self.ownerView isKindOfClass: [ALScrollView class]] ) {
+                [((ALScrollView *) self.ownerView) reflowInnerFrame];
             }
-            if ( self.ownerView.superview ) {
-                [self.ownerView.superview.rowManager reflowSelfHeight];
+            // 如果isAutoHeight=YES，reflow Height
+            if ( self.ownerView.alIsAutoHeight ) {
+                ALRow * belongRow = self.ownerView.alBelongRow;
+                
+                self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rowsArr.lastObject.height + _rowsArr.lastObject.top);
+                
+                [belongRow refreshSize];
+                // 重排同级view
+                while (belongRow.nextRow) {
+                    [belongRow.nextRow reflowTop];
+                    belongRow = belongRow.nextRow;
+                }
+                if ( self.ownerView.superview ) {
+                    [self.ownerView.superview.alRowManager reflowSelfHeight];
+                }
             }
+        // 如果是absolute类型，且isAutoHeight=YES或isAutoWidth=YES
+        } else if ( self.ownerView.alPosition == ALPositionAbsolute && (self.ownerView.alIsAutoHeight || self.ownerView.alIsAutoWidth) ) {
+            // 如果ownerView是absolute类型，那需触发自己size和origin重排
+            [self.ownerView.alRowManager reflowSelfSizeOfAbsolute];
+            [self.ownerView reflowOriginWhenAbsolute];
         }
     }
 }
 // 重排自己的Size，主要给absolute方式的view使用
 - (void) reflowSelfSizeOfAbsolute
 {
-    if ( self.ownerView.isAutoWidth ) {
-        CGFloat width = 0;
-        for (ALRow * row in _rows) {
-            if ( width < row.width ) {
-                width = row.width;
-            }
-        }
-        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, width, self.ownerView.frame.size.height);
+    if ( self.ownerView.alIsAutoWidth ) {
+        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, [self getOnwerViewInnerWidth], self.ownerView.frame.size.height);
     }
     
-    if ( self.ownerView.isAutoHeight ) {
-        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rows.lastObject.height + _rows.lastObject.top);
+    if ( self.ownerView.alIsAutoHeight ) {
+        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, [self getOnwerViewInnerHeight]);
     }
+}
+
+- (CGFloat) getOnwerViewInnerWidth
+{
+    CGFloat width = 0;
+    for (ALRow * row in _rowsArr) {
+        if ( width < row.width ) {
+            width = row.width;
+        }
+    }
+    return width;
+}
+
+- (CGFloat) getOnwerViewInnerHeight
+{
+    return _rowsArr.lastObject.height + _rowsArr.lastObject.top;
 }
 
 // 新建一行，初始化，并在当前管理器尾部插入
@@ -234,7 +251,7 @@
         previousRow.nextRow = newRow;
     }
     [newRow pushView: view];
-    [_rows addObject:newRow];
+    [_rowsArr addObject:newRow];
     return newRow;
 }
 
@@ -259,7 +276,7 @@
             nextRow.previousRow = previousRow;
         }
         // 移除
-        [_rows removeObject: row];
+        [_rowsArr removeObject: row];
     }
 }
 
@@ -280,8 +297,8 @@
         }
         [newRow pushView: view];
         // 插入
-        NSUInteger index = [_rows indexOfObject: beforeRow];
-        [_rows insertObject: newRow atIndex: index];
+        NSUInteger index = [_rowsArr indexOfObject: beforeRow];
+        [_rowsArr insertObject: newRow atIndex: index];
         
         return newRow;
     }
@@ -292,8 +309,8 @@
 - (ALRow *) createRowWithView: (UIView *) view
 {
     ALRow * newRow = [[ALRow alloc] init];
-    newRow.contentAlign = self.ownerView.contentAlign;
-    newRow.display = view.display;
+    newRow.alContentAlign = self.ownerView.alContentAlign;
+    newRow.alDisplay = view.alDisplay;
     newRow.maxWidth = [view getParentWidth];
     return newRow;
 }

@@ -23,331 +23,303 @@
     objc_setAssociatedObject(self, @"isALEngine", [NSNumber numberWithBool:isALEngine], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic position;
-- (ALPosition) position
+@dynamic alPosition;
+- (ALPosition) alPosition
 {
-    return (ALPosition)[objc_getAssociatedObject(self, @"position") intValue];
+    return (ALPosition)[objc_getAssociatedObject(self, @"alPosition") intValue];
 }
--(void)setPosition:(ALPosition)position
+-(void)setAlPosition:(ALPosition)alPosition
 {
-    objc_setAssociatedObject(self, @"position", [NSNumber numberWithInt:position], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic contentAlign;
-- (ALContentAlign) contentAlign
-{
-    return (ALContentAlign)[objc_getAssociatedObject(self, @"contentAlign") intValue];
-}
--(void)setContentAlign:(ALContentAlign)contentAlign
-{
-    objc_setAssociatedObject(self, @"contentAlign", [NSNumber numberWithInt:contentAlign], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alPosition", [NSNumber numberWithInt:alPosition], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic display;
-- (ALDisplay) display
+@dynamic alContentAlign;
+- (ALContentAlign) alContentAlign
 {
-    return (ALDisplay)[objc_getAssociatedObject(self, @"display") intValue];
+    return (ALContentAlign)[objc_getAssociatedObject(self, @"alContentAlign") intValue];
 }
--(void)setDisplay:(ALDisplay)display
+-(void)setAlContentAlign:(ALContentAlign)alContentAlign
 {
-    objc_setAssociatedObject(self, @"display", [NSNumber numberWithInteger:display], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic width;
-- (CGFloat) width
-{
-    return [objc_getAssociatedObject(self, @"width") floatValue];
-}
--(void)setWidth:(CGFloat)width
-{
-    self.isAutoWidth = NO;
-    objc_setAssociatedObject(self, @"width", [NSNumber numberWithFloat:width], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alContentAlign", [NSNumber numberWithInt:alContentAlign], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic height;
-- (CGFloat) height
+@dynamic alDisplay;
+- (ALDisplay) alDisplay
 {
-    return [objc_getAssociatedObject(self, @"height") floatValue];
+    return (ALDisplay)[objc_getAssociatedObject(self, @"alDisplay") intValue];
 }
--(void)setHeight:(CGFloat)height
+-(void)setAlDisplay:(ALDisplay)alDisplay
 {
-    self.isAutoHeight = NO;
-    objc_setAssociatedObject(self, @"height", [NSNumber numberWithFloat:height], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alDisplay", [NSNumber numberWithInteger:alDisplay], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alWidth;
+- (CGFloat) alWidth
+{
+    return [objc_getAssociatedObject(self, @"alWidth") floatValue];
+}
+-(void)setAlWidth:(CGFloat)alWidth
+{
+    self.alIsAutoWidth = NO;
+    if ( alWidth > 0 ) {
+        objc_setAssociatedObject(self, @"alWidth", [NSNumber numberWithFloat:alWidth], OBJC_ASSOCIATION_RETAIN);
+    }
+}
+
+@dynamic alHeight;
+- (CGFloat) alHeight
+{
+    return [objc_getAssociatedObject(self, @"alHeight") floatValue];
+}
+-(void)setAlHeight:(CGFloat)alHeight
+{
+    self.alIsAutoHeight = NO;
+    if ( alHeight > 0 ) {
+        objc_setAssociatedObject(self, @"alHeight", [NSNumber numberWithFloat:alHeight], OBJC_ASSOCIATION_RETAIN);
+    }
 }
 
 
-@dynamic top;
-- (CGFloat) top
+@dynamic alTop;
+- (CGFloat) alTop
 {
-    return [objc_getAssociatedObject(self, @"top") floatValue];
+    return [objc_getAssociatedObject(self, @"alTop") floatValue];
 }
--(void)setTop:(CGFloat)top
+-(void)setAlTop:(CGFloat)alTop
 {
-    self.hasSettedTop = YES;
-    objc_setAssociatedObject(self, @"top", [NSNumber numberWithFloat:top], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic bottom;
-- (CGFloat) bottom
-{
-    return [objc_getAssociatedObject(self, @"bottom") floatValue];
-}
--(void)setBottom:(CGFloat)bottom
-{
-    self.hasSettedBottom = YES;
-    objc_setAssociatedObject(self, @"bottom", [NSNumber numberWithFloat:bottom], OBJC_ASSOCIATION_RETAIN);
+    self.alHasSettedTop = YES;
+    objc_setAssociatedObject(self, @"alTop", [NSNumber numberWithFloat:alTop], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic left;
-- (CGFloat) left
+@dynamic alBottom;
+- (CGFloat) alBottom
 {
-    return [objc_getAssociatedObject(self, @"left") floatValue];
+    return [objc_getAssociatedObject(self, @"alBottom") floatValue];
 }
--(void)setLeft:(CGFloat)left
+-(void)setAlBottom:(CGFloat)alBottom
 {
-    self.hasSettedLeft = YES;
-    objc_setAssociatedObject(self, @"left", [NSNumber numberWithFloat:left], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic right;
-- (CGFloat) right
-{
-    return [objc_getAssociatedObject(self, @"right") floatValue];
-}
--(void)setRight:(CGFloat)right
-{
-    self.hasSettedRight = YES;
-    objc_setAssociatedObject(self, @"right", [NSNumber numberWithFloat:right], OBJC_ASSOCIATION_RETAIN);
+    self.alHasSettedBottom = YES;
+    objc_setAssociatedObject(self, @"alBottom", [NSNumber numberWithFloat:alBottom], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic centerX;
-- (CGFloat) centerX
+@dynamic alLeft;
+- (CGFloat) alLeft
 {
-    return [objc_getAssociatedObject(self, @"centerX") floatValue];
+    return [objc_getAssociatedObject(self, @"alLeft") floatValue];
 }
--(void)setCenterX:(CGFloat)centerX
+-(void)setAlLeft:(CGFloat)alLeft
 {
-    self.hasSettedCenterX = YES;
-    objc_setAssociatedObject(self, @"centerX", [NSNumber numberWithFloat:centerX], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic centerY;
-- (CGFloat) centerY
-{
-    return [objc_getAssociatedObject(self, @"centerY") floatValue];
-}
--(void)setCenterY:(CGFloat)centerY
-{
-    self.hasSettedCenterY = YES;
-    objc_setAssociatedObject(self, @"centerY", [NSNumber numberWithFloat:centerY], OBJC_ASSOCIATION_RETAIN);
+    self.alHasSettedLeft = YES;
+    objc_setAssociatedObject(self, @"alLeft", [NSNumber numberWithFloat:alLeft], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic margin;
-- (CGFloat) margin
+@dynamic alRight;
+- (CGFloat) alRight
+{
+    return [objc_getAssociatedObject(self, @"alRight") floatValue];
+}
+-(void)setAlRight:(CGFloat)alRight
+{
+    self.alHasSettedRight = YES;
+    objc_setAssociatedObject(self, @"alRight", [NSNumber numberWithFloat:alRight], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alCenterX;
+- (CGFloat) alCenterX
+{
+    return [objc_getAssociatedObject(self, @"alCenterX") floatValue];
+}
+-(void)setAlCenterX:(CGFloat)alCenterX
+{
+    self.alHasSettedCenterX = YES;
+    objc_setAssociatedObject(self, @"alCenterX", [NSNumber numberWithFloat:alCenterX], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alCenterY;
+- (CGFloat) alCenterY
+{
+    return [objc_getAssociatedObject(self, @"alCenterY") floatValue];
+}
+-(void)setAlCenterY:(CGFloat)alCenterY
+{
+    self.alHasSettedCenterY = YES;
+    objc_setAssociatedObject(self, @"alCenterY", [NSNumber numberWithFloat:alCenterY], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alMargin;
+- (CGFloat) alMargin
 {
     return [objc_getAssociatedObject(self, @"margin") floatValue];
 }
--(void)setMargin:(CGFloat)margin
+-(void)setAlMargin:(CGFloat)alMargin
 {
-    objc_setAssociatedObject(self, @"margin", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
-    objc_setAssociatedObject(self, @"marginTop", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
-    objc_setAssociatedObject(self, @"marginLeft", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
-    objc_setAssociatedObject(self, @"marginBottom", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
-    objc_setAssociatedObject(self, @"marginRight", [NSNumber numberWithFloat:margin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMargin", [NSNumber numberWithFloat:alMargin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginTop", [NSNumber numberWithFloat:alMargin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginLeft", [NSNumber numberWithFloat:alMargin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginBottom", [NSNumber numberWithFloat:alMargin], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginRight", [NSNumber numberWithFloat:alMargin], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic marginTop;
-- (CGFloat) marginTop
+@dynamic alMarginTop;
+- (CGFloat) alMarginTop
 {
-    return [objc_getAssociatedObject(self, @"marginTop") floatValue];
+    return [objc_getAssociatedObject(self, @"alMarginTop") floatValue];
 }
--(void)setMarginTop:(CGFloat)marginTop
+-(void)setAlMarginTop:(CGFloat)alMarginTop
 {
-    objc_setAssociatedObject(self, @"marginTop", [NSNumber numberWithFloat:marginTop], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic marginBottom;
-- (CGFloat) marginBottom
-{
-    return [objc_getAssociatedObject(self, @"marginBottom") floatValue];
-}
--(void)setMarginBottom:(CGFloat)marginBottom
-{
-    objc_setAssociatedObject(self, @"marginBottom", [NSNumber numberWithFloat:marginBottom], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginTop", [NSNumber numberWithFloat:alMarginTop], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic marginLeft;
-- (CGFloat) marginLeft
+@dynamic alMarginBottom;
+- (CGFloat) alMarginBottom
 {
-    return [objc_getAssociatedObject(self, @"marginLeft") floatValue];
+    return [objc_getAssociatedObject(self, @"alMarginBottom") floatValue];
 }
--(void)setMarginLeft:(CGFloat)marginLeft
+-(void)setAlMarginBottom:(CGFloat)alMarginBottom
 {
-    objc_setAssociatedObject(self, @"marginLeft", [NSNumber numberWithFloat:marginLeft], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic marginRight;
-- (CGFloat) marginRight
-{
-    return [objc_getAssociatedObject(self, @"marginRight") floatValue];
-}
--(void)setMarginRight:(CGFloat)marginRight
-{
-    objc_setAssociatedObject(self, @"marginRight", [NSNumber numberWithFloat:marginRight], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginBottom", [NSNumber numberWithFloat:alMarginBottom], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic currInnerHeight;
-- (CGFloat) currInnerHeight
+@dynamic alMarginLeft;
+- (CGFloat) alMarginLeft
 {
-    return [objc_getAssociatedObject(self, @"currInnerHeight") floatValue];
+    return [objc_getAssociatedObject(self, @"alMarginLeft") floatValue];
 }
--(void)setCurrInnerHeight:(CGFloat)currInnerHeight
+-(void)setAlMarginLeft:(CGFloat)alMarginLeft
 {
-    objc_setAssociatedObject(self, @"currInnerHeight", [NSNumber numberWithFloat:currInnerHeight], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic currInnerWidth;
-- (CGFloat) currInnerWidth
-{
-    return [objc_getAssociatedObject(self, @"currInnerWidth") floatValue];
-}
--(void)setCurrInnerWidth:(CGFloat)currInnerWidth
-{
-    objc_setAssociatedObject(self, @"currInnerWidth", [NSNumber numberWithFloat:currInnerWidth], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginLeft", [NSNumber numberWithFloat:alMarginLeft], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic isAutoHeight;
-- (BOOL) isAutoHeight
+@dynamic alMarginRight;
+- (CGFloat) alMarginRight
 {
-    return [objc_getAssociatedObject(self, @"isAutoHeight") boolValue];
+    return [objc_getAssociatedObject(self, @"alMarginRight") floatValue];
 }
-- (void) setIsAutoHeight:(BOOL)isAutoHeight
+-(void)setAlMarginRight:(CGFloat)alMarginRight
 {
-    objc_setAssociatedObject(self, @"isAutoHeight", [NSNumber numberWithBool:isAutoHeight], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alMarginRight", [NSNumber numberWithFloat:alMarginRight], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alIsAutoHeight;
+- (BOOL) alIsAutoHeight
+{
+    return [objc_getAssociatedObject(self, @"alIsAutoHeight") boolValue];
+}
+- (void) setAlIsAutoHeight:(BOOL)alIsAutoHeight
+{
+    objc_setAssociatedObject(self, @"alIsAutoHeight", [NSNumber numberWithBool:alIsAutoHeight], OBJC_ASSOCIATION_RETAIN);
 }
 
 
-@dynamic isAutoWidth;
-- (BOOL) isAutoWidth
+@dynamic alIsAutoWidth;
+- (BOOL) alIsAutoWidth
 {
-    return [objc_getAssociatedObject(self, @"isAutoWidth") boolValue];
+    return [objc_getAssociatedObject(self, @"alIsAutoWidth") boolValue];
 }
-- (void) setIsAutoWidth:(BOOL)isAutoWidth
+- (void) setAlIsAutoWidth:(BOOL)alIsAutoWidth
 {
-    objc_setAssociatedObject(self, @"isAutoWidth", [NSNumber numberWithBool:isAutoWidth], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alIsAutoWidth", [NSNumber numberWithBool:alIsAutoWidth], OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alHasSettedTop;
+- (BOOL) alHasSettedTop
+{
+    return [objc_getAssociatedObject(self, @"alHasSettedTop") boolValue];
+}
+- (void) setAlHasSettedTop:(BOOL)alHasSettedTop
+{
+    objc_setAssociatedObject(self, @"alHasSettedTop", [NSNumber numberWithBool:alHasSettedTop], OBJC_ASSOCIATION_RETAIN);
 }
 
 
-@dynamic isInNewLine;
-- (BOOL) isInNewLine
+@dynamic alHasSettedLeft;
+- (BOOL) alHasSettedLeft
 {
-    return [objc_getAssociatedObject(self, @"isInNewLine") boolValue];
+    return [objc_getAssociatedObject(self, @"alHasSettedLeft") boolValue];
 }
-- (void) setIsInNewLine:(BOOL)isInNewLine
+- (void) setAlHasSettedLeft:(BOOL)alHasSettedLeft
 {
-    objc_setAssociatedObject(self, @"isInNewLine", [NSNumber numberWithBool:isInNewLine], OBJC_ASSOCIATION_RETAIN);
-}
-
-
-@dynamic hasSettedTop;
-- (BOOL) hasSettedTop
-{
-    return [objc_getAssociatedObject(self, @"hasSettedTop") boolValue];
-}
-- (void) setHasSettedTop:(BOOL)hasSettedTop
-{
-    objc_setAssociatedObject(self, @"hasSettedTop", [NSNumber numberWithBool:hasSettedTop], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alHasSettedLeft", [NSNumber numberWithBool:alHasSettedLeft], OBJC_ASSOCIATION_RETAIN);
 }
 
-
-@dynamic hasSettedLeft;
-- (BOOL) hasSettedLeft
+@dynamic alHasSettedCenterX;
+- (BOOL) alHasSettedCenterX
 {
-    return [objc_getAssociatedObject(self, @"hasSettedLeft") boolValue];
+    return [objc_getAssociatedObject(self, @"alHasSettedCenterX") boolValue];
 }
-- (void) setHasSettedLeft:(BOOL)hasSettedLeft
+- (void) setAlHasSettedCenterX:(BOOL)alHasSettedCenterX
 {
-    objc_setAssociatedObject(self, @"hasSettedLeft", [NSNumber numberWithBool:hasSettedLeft], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic hasSettedCenterX;
-- (BOOL) hasSettedCenterX
-{
-    return [objc_getAssociatedObject(self, @"hasSettedCenterX") boolValue];
-}
-- (void) setHasSettedCenterX:(BOOL)hasSettedCenterX
-{
-    objc_setAssociatedObject(self, @"hasSettedCenterX", [NSNumber numberWithBool:hasSettedCenterX], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alHasSettedCenterX", [NSNumber numberWithBool:alHasSettedCenterX], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic hasSettedCenterY;
-- (BOOL) hasSettedCenterY
+@dynamic alHasSettedCenterY;
+- (BOOL) alHasSettedCenterY
 {
-    return [objc_getAssociatedObject(self, @"hasSettedCenterY") boolValue];
+    return [objc_getAssociatedObject(self, @"alHasSettedCenterY") boolValue];
 }
-- (void) setHasSettedCenterY:(BOOL)hasSettedCenterY
+- (void) setAlHasSettedCenterY:(BOOL)alHasSettedCenterY
 {
-    objc_setAssociatedObject(self, @"hasSettedCenterY", [NSNumber numberWithBool:hasSettedCenterY], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic hasSettedRight;
-- (BOOL) hasSettedRight
-{
-    return [objc_getAssociatedObject(self, @"hasSettedRight") boolValue];
-}
-- (void) setHasSettedRight:(BOOL)hasSettedRight
-{
-    objc_setAssociatedObject(self, @"hasSettedRight", [NSNumber numberWithBool:hasSettedRight], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alHasSettedCenterY", [NSNumber numberWithBool:alHasSettedCenterY], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic hasSettedBottom;
-- (BOOL) hasSettedBottom
+@dynamic alHasSettedRight;
+- (BOOL) alHasSettedRight
 {
-    return [objc_getAssociatedObject(self, @"hasSettedBottom") boolValue];
+    return [objc_getAssociatedObject(self, @"alHasSettedRight") boolValue];
 }
-- (void) setHasSettedBottom:(BOOL)hasSettedBottom
+- (void) setAlHasSettedRight:(BOOL)alHasSettedRight
 {
-    objc_setAssociatedObject(self, @"hasSettedBottom", [NSNumber numberWithBool:hasSettedBottom], OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic nextSibling;
-- (ALView *) nextSibling
-{
-    return objc_getAssociatedObject(self, @"nextSibling");
-}
-- (void) setNextSibling:(ALView *)nextSibling
-{
-    objc_setAssociatedObject(self, @"nextSibling", nextSibling, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alHasSettedRight", [NSNumber numberWithBool:alHasSettedRight], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic previousSibling;
-- (ALView *) previousSibling
+@dynamic alHasSettedBottom;
+- (BOOL) alHasSettedBottom
 {
-    return objc_getAssociatedObject(self, @"previousSibling");
+    return [objc_getAssociatedObject(self, @"alHasSettedBottom") boolValue];
 }
-- (void) setPreviousSibling:(ALView *)previousSibling
+- (void) setAlHasSettedBottom:(BOOL)alHasSettedBottom
 {
-    objc_setAssociatedObject(self, @"previousSibling", previousSibling, OBJC_ASSOCIATION_RETAIN);
-}
-
-@dynamic belongRow;
-- (ALRow *) belongRow
-{
-    return objc_getAssociatedObject(self, @"belongRow");
-}
-- (void) setBelongRow:(ALRow *)belongRow
-{
-    objc_setAssociatedObject(self, @"belongRow", belongRow, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alHasSettedBottom", [NSNumber numberWithBool:alHasSettedBottom], OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic rowManager;
-- (ALRowManager *) rowManager
+@dynamic alNextSibling;
+- (ALView *) alNextSibling
 {
-    return objc_getAssociatedObject(self, @"rowManager");
+    return objc_getAssociatedObject(self, @"alNextSibling");
 }
-- (void) setRowManager:(ALRowManager *)rowManager
+- (void) setAlNextSibling:(ALView *)alNextSibling
 {
-    objc_setAssociatedObject(self, @"rowManager", rowManager, OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"alNextSibling", alNextSibling, OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alPreviousSibling;
+- (ALView *) alPreviousSibling
+{
+    return objc_getAssociatedObject(self, @"alPreviousSibling");
+}
+- (void) setAlPreviousSibling:(ALView *)alPreviousSibling
+{
+    objc_setAssociatedObject(self, @"alPreviousSibling", alPreviousSibling, OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alBelongRow;
+- (ALRow *) alBelongRow
+{
+    return objc_getAssociatedObject(self, @"alBelongRow");
+}
+- (void) setAlBelongRow:(ALRow *)alBelongRow
+{
+    objc_setAssociatedObject(self, @"alBelongRow", alBelongRow, OBJC_ASSOCIATION_RETAIN);
+}
+
+@dynamic alRowManager;
+- (ALRowManager *) alRowManager
+{
+    return objc_getAssociatedObject(self, @"alRowManager");
+}
+- (void) setAlRowManager:(ALRowManager *)alRowManager
+{
+    objc_setAssociatedObject(self, @"alRowManager", alRowManager, OBJC_ASSOCIATION_RETAIN);
 }
 
 #pragma mark - init
@@ -357,23 +329,18 @@
     if ( self = [self initWithFrame:CGRectZero] ) {
         self.isALEngine = YES;
         
-        self.isAutoHeight = YES;
-        self.isAutoWidth = YES;
+        self.alIsAutoHeight = YES;
+        self.alIsAutoWidth = YES;
         
-        self.hasSettedTop = NO;
-        self.hasSettedLeft = NO;
-        self.hasSettedRight = NO;
-        self.hasSettedBottom = NO;
-        self.hasSettedCenterX = NO;
-        self.hasSettedCenterY = NO;
+        self.alHasSettedTop = NO;
+        self.alHasSettedLeft = NO;
+        self.alHasSettedRight = NO;
+        self.alHasSettedBottom = NO;
+        self.alHasSettedCenterX = NO;
+        self.alHasSettedCenterY = NO;
         
-        self.isInNewLine = NO;
-        
-        self.currInnerWidth = 0;
-        self.currInnerHeight = 0;
-        
-        self.nextSibling = nil;
-        self.previousSibling = nil;
+        self.alNextSibling = nil;
+        self.alPreviousSibling = nil;
 
     }
     return self;
@@ -386,17 +353,17 @@
 {
     // 将view add到树中
     [parent addSubview: self];
-    if ( !parent.rowManager ) {
+    if ( !parent.alRowManager ) {
         // 初始化行管理器
-        parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+        parent.alRowManager = [[ALRowManager alloc] initWithView: parent];
     }
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
     [self reflowSelfSize];
     // 排版origin
-    if ( self.position == ALPositionRelative ) {
-        [parent.rowManager appendView: self];
+    if ( self.alPosition == ALPositionRelative ) {
+        [parent.alRowManager appendView: self];
     } else {
         [self reflowOriginWhenAbsolute];
     }
@@ -426,9 +393,9 @@
 - (void) reflow
 {
     // 防止未知错误
-    if ( self.superview && self.superview.rowManager ) {
+    if ( self.superview && self.superview.alRowManager ) {
         [self reflowSelfSize];
-        [self.superview.rowManager reflowChildView: self];
+        [self.superview.alRowManager reflowChildView: self];
     }
 }
 
@@ -443,8 +410,8 @@
     UIView * lastSubView = [self getLastALEngineSubview: parent displayModel:-1];
     
     if ( lastSubView != nil ) {
-        self.previousSibling = (ALView*)lastSubView;
-        lastSubView.nextSibling = (ALView*)self;
+        self.alPreviousSibling = (ALView*)lastSubView;
+        lastSubView.alNextSibling = (ALView*)self;
     }
 }
 
@@ -458,21 +425,21 @@
     if ( [self isKindOfClass:[ALLabel class]] ) {
         [((ALLabel *) self) reflowWithInnerText: parent];
     } else {
-        CGFloat width = self.width;
-        CGFloat height = self.height;
+        CGFloat width = self.alWidth;
+        CGFloat height = self.alHeight;
         // 相对定位时
-        if ( self.position == ALPositionRelative ) {
+        if ( self.alPosition == ALPositionRelative ) {
             // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
-            if ( self.display == ALDisplayBlock && self.isAutoWidth ) {
-                width = self.superview.frame.size.width - self.marginLeft - self.marginRight;
+            if ( self.alDisplay == ALDisplayBlock && self.alIsAutoWidth ) {
+                width = self.superview.frame.size.width - self.alMarginLeft - self.alMarginRight;
             }
         // 绝对定位时
         } else {
             // 如果使用了isAutoWidth或者isAutoHeight，直接使用现有的宽高，因为子view被插入时，会更新内部的size
-            if ( self.isAutoWidth ) {
+            if ( self.alIsAutoWidth ) {
                 width = self.frame.size.width;
             }
-            if ( self.isAutoHeight ) {
+            if ( self.alIsAutoHeight ) {
                 height = self.frame.size.height;
             }
         }
@@ -489,8 +456,8 @@
 {
     UIView * parent = self.superview;
     
-    CGFloat top = self.top;
-    CGFloat left = self.left;
+    CGFloat top = self.alTop;
+    CGFloat left = self.alLeft;
     
     CGFloat width = self.frame.size.width;
     CGFloat height = self.frame.size.height;
@@ -512,19 +479,19 @@
         }
     }
     // 优先级：top > centerY > bottom
-    if ( !self.hasSettedTop ) {
-        if ( self.hasSettedCenterY ) {
-            top = (parentHeight - height) / 2 + self.centerY;
-        } else if ( self.hasSettedBottom ) {
-            top = parentHeight - self.bottom - height;
+    if ( !self.alHasSettedTop ) {
+        if ( self.alHasSettedCenterY ) {
+            top = (parentHeight - height) / 2 + self.alCenterY;
+        } else if ( self.alHasSettedBottom ) {
+            top = parentHeight - self.alBottom - height;
         }
     }
     // 优先级：left > centerX > right
-    if ( !self.hasSettedLeft ) {
-        if ( self.hasSettedCenterX ) {
-            left = (parentWidth - width) / 2 + self.centerX;
-        } else if ( self.hasSettedRight ) {
-            left = parentWidth - self.right - width;
+    if ( !self.alHasSettedLeft ) {
+        if ( self.alHasSettedCenterX ) {
+            left = (parentWidth - width) / 2 + self.alCenterX;
+        } else if ( self.alHasSettedRight ) {
+            left = parentWidth - self.alRight - width;
         }
     }
     
@@ -542,7 +509,7 @@
     
     for (; i >= 0; i--) {
         lastView = [parent.subviews objectAtIndex:i];
-        if ( lastView.isALEngine && (index == -1 || lastView.display == (ALDisplay)index) ) {
+        if ( lastView.isALEngine && (index == -1 || lastView.alDisplay == (ALDisplay)index) ) {
             return lastView;
         }
     }
@@ -556,7 +523,7 @@
 - (CGFloat) getParentWidth
 {
     if ( self.superview ) {
-        if ( self.superview.isALEngine && self.superview.position == ALPositionAbsolute && self.superview.isAutoWidth ) {
+        if ( self.superview.isALEngine && self.superview.alPosition == ALPositionAbsolute && self.superview.alIsAutoWidth ) {
             return [self.superview getParentWidth];
         }
         return self.superview.frame.size.width;

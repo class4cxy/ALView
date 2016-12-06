@@ -15,5 +15,9 @@
 - (void) appendView: (UIView *) view;
 // 重排子view
 - (void) reflowChildView: (UIView *) view;
+// 获取当前onwerView的宽度
+- (CGFloat) getOnwerViewInnerWidth;
+// 获取当前onwerView的高度
+- (CGFloat) getOnwerViewInnerHeight;
 
 @end

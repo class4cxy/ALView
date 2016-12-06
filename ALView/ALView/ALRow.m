@@ -9,6 +9,13 @@
 #import "ALRow.h"
 #import "UIView+ALEngine.h"
 
+@interface ALRow()
+{
+    NSMutableArray * _viewsArr;
+}
+
+@end
+
 @implementation ALRow
 
 - (instancetype) init
@@ -18,9 +25,9 @@
         _width = 0;
         _maxWidth = 0;
         _top = 0;
-        _contentAlign = ALContentAlignLeft;
-        _display = ALDisplayBlock;
-        self.viewArr = [[NSMutableArray alloc] init];
+        _alContentAlign = ALContentAlignLeft;
+        _alDisplay = ALDisplayBlock;
+        _viewsArr = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -34,9 +41,9 @@
 - (void) addView:(UIView *)view
 {
     if ( view != nil ) {
-        if ( ![self.viewArr containsObject: view] ) {
-            [self.viewArr insertObject:view atIndex:0];
-            view.belongRow = self;
+        if ( ![_viewsArr containsObject: view] ) {
+            [_viewsArr insertObject:view atIndex:0];
+            view.alBelongRow = self;
         }
         [self layout];
     }
@@ -49,9 +56,9 @@
 - (void) pushView:(UIView *)view
 {
     if ( view != nil ) {
-        if ( ![self.viewArr containsObject: view] ) {
-            [self.viewArr addObject: view];
-            view.belongRow = self;
+        if ( ![_viewsArr containsObject: view] ) {
+            [_viewsArr addObject: view];
+            view.alBelongRow = self;
         }
         // 更新height值
         [self layout];
@@ -64,9 +71,9 @@
  */
 - (UIView *) popView
 {
-    if ( [self.viewArr count] > 0 ) {
-        UIView * lastView = [self.viewArr lastObject];
-        [self.viewArr removeLastObject];
+    if ( [_viewsArr count] > 0 ) {
+        UIView * lastView = [_viewsArr lastObject];
+        [_viewsArr removeLastObject];
         [self layout];
         return lastView;
     }
@@ -79,9 +86,9 @@
  */
 - (UIView *) shiftView
 {
-    if ( [self.viewArr count] > 0 ) {
-        UIView * firstView = [self.viewArr objectAtIndex: 0];
-        [self.viewArr removeObjectAtIndex: 0];
+    if ( [_viewsArr count] > 0 ) {
+        UIView * firstView = [_viewsArr objectAtIndex: 0];
+        [_viewsArr removeObjectAtIndex: 0];
         [self layout];
         return firstView;
     }
@@ -90,20 +97,20 @@
 
 - (UIView *) firstView
 {
-    if ( [self.viewArr count] > 0 ) {
-        return [self.viewArr objectAtIndex:0];
+    if ( [_viewsArr count] > 0 ) {
+        return [_viewsArr objectAtIndex:0];
     }
     return nil;
 }
 
 - (UIView *) lastView
 {
-    return self.viewArr.lastObject;
+    return _viewsArr.lastObject;
 }
 
 - (NSUInteger) count
 {
-    return [self.viewArr count];
+    return [_viewsArr count];
 }
 
 #pragma mark - Util method
@@ -113,21 +120,21 @@
     // 特殊逻辑：
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO
-    if ( self.display == ALDisplayBlock || view.display == ALDisplayBlock ) {
+    if ( self.alDisplay == ALDisplayBlock || view.alDisplay == ALDisplayBlock ) {
         return NO;
     }
     // 3、如果当前行已经没有子view，那直接返回YES
-    if ( [self.viewArr count] == 0 ) {
+    if ( [_viewsArr count] == 0 ) {
         return YES;
     }
-    return _maxWidth >= _width + view.frame.size.width + view.marginLeft + view.marginRight;
+    return _maxWidth >= _width + view.frame.size.width + view.alMarginLeft + view.alMarginRight;
 }
 
 - (BOOL) need2break
 {
     [self reCountWidth];
     // 3、如果当前行已经没有子view，那直接返回YES
-    if ( [self.viewArr count] == 1 ) {
+    if ( [_viewsArr count] == 1 ) {
         return NO;
     }
     return _width > _maxWidth;
@@ -153,16 +160,16 @@
 
 - (void) reCountWidth
 {
-    if ( [self.viewArr count] > 0 ) {
+    if ( [_viewsArr count] > 0 ) {
         _width = 0;
         
         NSUInteger i = 0;
-        NSUInteger len = [self.viewArr count];
+        NSUInteger len = [_viewsArr count];
         
         for (; i < len; i++) {
-            UIView * view = [self.viewArr objectAtIndex:i];
-            CGFloat w = view.marginLeft +
-                        view.marginRight +
+            UIView * view = [_viewsArr objectAtIndex:i];
+            CGFloat w = view.alMarginLeft +
+                        view.alMarginRight +
                         view.frame.size.width;
             
             _width += w;
@@ -173,16 +180,16 @@
 
 - (void) reCountHeight
 {
-    if ( [self.viewArr count] > 0 ) {
+    if ( [_viewsArr count] > 0 ) {
         _height = 0;
         
         NSUInteger i = 0;
-        NSUInteger len = [self.viewArr count];
+        NSUInteger len = [_viewsArr count];
         
         for (; i < len; i++) {
-            UIView * view = [self.viewArr objectAtIndex:i];
-            CGFloat h = view.marginTop +
-            view.marginBottom +
+            UIView * view = [_viewsArr objectAtIndex:i];
+            CGFloat h = view.alMarginTop +
+            view.alMarginBottom +
             view.frame.size.height;
             
             if ( _height < h ) {
@@ -195,7 +202,7 @@
 - (void) layout
 {
     [self refreshSize];
-    if ( _display == ALDisplayBlock ) {
+    if ( _alDisplay == ALDisplayBlock ) {
         [self reflowWhenBlock];
     } else {
         [self reflowWhenInline];
@@ -204,16 +211,16 @@
 
 - (void) reflowWhenBlock
 {
-    UIView * view = [self.viewArr objectAtIndex: 0];
-    CGFloat top = [self getCurrTop] + view.marginTop;
+    UIView * view = [_viewsArr objectAtIndex: 0];
+    CGFloat top = [self getCurrTop] + view.alMarginTop;
     CGFloat left = 0;
     
-    if ( _contentAlign == ALContentAlignCenter ) {
-        left = (_maxWidth - _width)/2 + view.marginLeft;
-    } else if ( _contentAlign == ALContentAlignRight ) {
-        left = _maxWidth - _width + view.marginLeft;
+    if ( _alContentAlign == ALContentAlignCenter ) {
+        left = (_maxWidth - _width)/2 + view.alMarginLeft;
+    } else if ( _alContentAlign == ALContentAlignRight ) {
+        left = _maxWidth - _width + view.alMarginLeft;
     } else {
-        left = view.marginLeft;
+        left = view.alMarginLeft;
     }
     
     view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
@@ -222,27 +229,27 @@
 - (void) reflowWhenInline
 {
     NSInteger i = 0;
-    NSInteger len = [self.viewArr count];
+    NSInteger len = [_viewsArr count];
     
     for ( ; i < len; i++ ) {
-        UIView * view = [self.viewArr objectAtIndex: i];
-        UIView * prevView = view.previousSibling;
+        UIView * view = [_viewsArr objectAtIndex: i];
+        UIView * prevView = view.alPreviousSibling;
         CGFloat left = 0;
-        CGFloat top = [self getCurrTop] + view.marginTop;
+        CGFloat top = [self getCurrTop] + view.alMarginTop;
         
         if ( i == 0 ) {
-            if ( _contentAlign == ALContentAlignCenter ) {
-                left = (_maxWidth - _width)/2 + view.marginLeft;
-            } else if ( _contentAlign == ALContentAlignRight ) {
-                left = _maxWidth - _width + view.marginLeft;
+            if ( _alContentAlign == ALContentAlignCenter ) {
+                left = (_maxWidth - _width)/2 + view.alMarginLeft;
+            } else if ( _alContentAlign == ALContentAlignRight ) {
+                left = _maxWidth - _width + view.alMarginLeft;
             } else {
-                left = view.marginLeft;
+                left = view.alMarginLeft;
             }
         } else {
-            left =  view.marginLeft +
+            left =  view.alMarginLeft +
                     prevView.frame.origin.x +
                     prevView.frame.size.width +
-                    prevView.marginRight;
+                    prevView.alMarginRight;
         }
         
         view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
@@ -253,11 +260,11 @@
 - (void) reflowTop
 {
     NSInteger i = 0;
-    NSInteger len = [self.viewArr count];
+    NSInteger len = [_viewsArr count];
     
     for ( ; i < len; i++ ) {
-        UIView * view = [self.viewArr objectAtIndex: i];
-        CGFloat top = [self getCurrTop] + view.marginTop;
+        UIView * view = [_viewsArr objectAtIndex: i];
+        CGFloat top = [self getCurrTop] + view.alMarginTop;
         view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
     }
 }
