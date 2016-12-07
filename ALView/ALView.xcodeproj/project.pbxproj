@@ -31,6 +31,9 @@
 		6B700E6E1DF298FB002B49AD /* ALRowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E6D1DF298FB002B49AD /* ALRowManager.m */; };
 		6B700E6F1DF298FB002B49AD /* ALRowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E6D1DF298FB002B49AD /* ALRowManager.m */; };
 		6B700E701DF298FB002B49AD /* ALRowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E6D1DF298FB002B49AD /* ALRowManager.m */; };
+		6BC8B12A1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
+		6BC8B12B1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
+		6BC8B12C1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,8 @@
 		6B700E681DEC35E6002B49AD /* ALRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALRow.m; sourceTree = "<group>"; };
 		6B700E6C1DF298A7002B49AD /* ALRowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALRowManager.h; sourceTree = "<group>"; };
 		6B700E6D1DF298FB002B49AD /* ALRowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALRowManager.m; sourceTree = "<group>"; };
+		6BC8B1281DF7BEB6006F3832 /* ALStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALStyle.h; sourceTree = "<group>"; };
+		6BC8B1291DF7BEF3006F3832 /* ALStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALStyle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +136,8 @@
 			children = (
 				6B700E671DEC34B6002B49AD /* ALRow.h */,
 				6B700E681DEC35E6002B49AD /* ALRow.m */,
+				6BC8B1281DF7BEB6006F3832 /* ALStyle.h */,
+				6BC8B1291DF7BEF3006F3832 /* ALStyle.m */,
 				6B700E6C1DF298A7002B49AD /* ALRowManager.h */,
 				6B700E6D1DF298FB002B49AD /* ALRowManager.m */,
 				6B1D25571DBE5C6800FC4081 /* UIView+ALEngine.h */,
@@ -324,6 +331,7 @@
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B099BE91DD007300031F8EA /* ALLabel.m in Sources */,
+				6BC8B12A1DF7BEF3006F3832 /* ALStyle.m in Sources */,
 				6B700E691DEC35E6002B49AD /* ALRow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,6 +345,7 @@
 				6B700E6A1DEC35E6002B49AD /* ALRow.m in Sources */,
 				6B1D25101DB307A300FC4081 /* ALViewTests.m in Sources */,
 				6B1D25841DBFB23A00FC4081 /* ALView.m in Sources */,
+				6BC8B12B1DF7BEF3006F3832 /* ALStyle.m in Sources */,
 				6B1D257F1DBE5F5700FC4081 /* UIView+ALEngine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,6 +359,7 @@
 				6B700E6B1DEC35E6002B49AD /* ALRow.m in Sources */,
 				6B1D251B1DB307A300FC4081 /* ALViewUITests.m in Sources */,
 				6B1D25851DBFB23A00FC4081 /* ALView.m in Sources */,
+				6BC8B12C1DF7BEF3006F3832 /* ALStyle.m in Sources */,
 				6B1D25801DBE5F5700FC4081 /* UIView+ALEngine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

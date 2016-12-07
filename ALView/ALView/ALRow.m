@@ -25,8 +25,8 @@
         _width = 0;
         _maxWidth = 0;
         _top = 0;
-        _alContentAlign = ALContentAlignLeft;
-        _alDisplay = ALDisplayBlock;
+        _contentAlign = ALContentAlignLeft;
+        _display = ALDisplayBlock;
         _viewsArr = [[NSMutableArray alloc] init];
     }
     
@@ -122,14 +122,14 @@
     // 特殊逻辑：
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO
-    if ( self.alDisplay == ALDisplayBlock || view.alDisplay == ALDisplayBlock ) {
+    if ( self.display == ALDisplayBlock || view.style.display == ALDisplayBlock ) {
         return NO;
     }
     // 3、如果当前行已经没有子view，那直接返回YES
     if ( [_viewsArr count] == 0 ) {
         return YES;
     }
-    return _maxWidth >= _width + view.frame.size.width + view.alMarginLeft + view.alMarginRight;
+    return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
 }
 
 - (BOOL) need2break
@@ -170,8 +170,8 @@
         
         for (; i < len; i++) {
             UIView * view = [_viewsArr objectAtIndex:i];
-            CGFloat w = view.alMarginLeft +
-                        view.alMarginRight +
+            CGFloat w = view.style.marginLeft +
+                        view.style.marginRight +
                         view.frame.size.width;
             
             _width += w;
@@ -190,8 +190,8 @@
         
         for (; i < len; i++) {
             UIView * view = [_viewsArr objectAtIndex:i];
-            CGFloat h = view.alMarginTop +
-                        view.alMarginBottom +
+            CGFloat h = view.style.marginTop +
+                        view.style.marginBottom +
                         view.frame.size.height;
             
             if ( _height < h ) {
@@ -204,7 +204,7 @@
 - (void) layout
 {
     [self refreshSize];
-    if ( _alDisplay == ALDisplayBlock ) {
+    if ( _display == ALDisplayBlock ) {
         [self reflowWhenBlock];
     } else {
         [self reflowWhenInline];
@@ -214,15 +214,15 @@
 - (void) reflowWhenBlock
 {
     UIView * view = [_viewsArr objectAtIndex: 0];
-    CGFloat top = [self getCurrTop] + view.alMarginTop;
+    CGFloat top = [self getCurrTop] + view.style.marginTop;
     CGFloat left = 0;
     
-    if ( _alContentAlign == ALContentAlignCenter ) {
-        left = (_maxWidth - _width)/2 + view.alMarginLeft;
-    } else if ( _alContentAlign == ALContentAlignRight ) {
-        left = _maxWidth - _width + view.alMarginLeft;
+    if ( _contentAlign == ALContentAlignCenter ) {
+        left = (_maxWidth - _width)/2 + view.style.marginLeft;
+    } else if ( _contentAlign == ALContentAlignRight ) {
+        left = _maxWidth - _width + view.style.marginLeft;
     } else {
-        left = view.alMarginLeft;
+        left = view.style.marginLeft;
     }
     
     view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
@@ -237,21 +237,21 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         UIView * prevView = view.alPreviousSibling;
         CGFloat left = 0;
-        CGFloat top = [self getCurrTop] + view.alMarginTop;
+        CGFloat top = [self getCurrTop] + view.style.marginTop;
         
         if ( i == 0 ) {
-            if ( _alContentAlign == ALContentAlignCenter ) {
-                left = (_maxWidth - _width)/2 + view.alMarginLeft;
-            } else if ( _alContentAlign == ALContentAlignRight ) {
-                left = _maxWidth - _width + view.alMarginLeft;
+            if ( _contentAlign == ALContentAlignCenter ) {
+                left = (_maxWidth - _width)/2 + view.style.marginLeft;
+            } else if ( _contentAlign == ALContentAlignRight ) {
+                left = _maxWidth - _width + view.style.marginLeft;
             } else {
-                left = view.alMarginLeft;
+                left = view.style.marginLeft;
             }
         } else {
-            left =  view.alMarginLeft +
+            left =  view.style.marginLeft +
                     prevView.frame.origin.x +
                     prevView.frame.size.width +
-                    prevView.alMarginRight;
+                    prevView.style.marginRight;
         }
         
         view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
@@ -266,7 +266,7 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
-        CGFloat top = [self getCurrTop] + view.alMarginTop;
+        CGFloat top = [self getCurrTop] + view.style.marginTop;
         view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
     }
 }

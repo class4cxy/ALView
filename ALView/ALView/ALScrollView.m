@@ -14,16 +14,9 @@
 - (instancetype)init
 {
     if ( self = [super initWithALEngine] ) {
-        self.alDisplay  = ALDisplayBlock;
+        self.style.display  = ALDisplayBlock;
     }
     return self;
-}
-
-#pragma mark - 重载父类方法
-// ALScrollView的排版方式默认为block类型，不允许修改
-- (void)setAlDisplay:(ALDisplay)alDisplay
-{
-    [super setAlDisplay: ALDisplayBlock];
 }
 
 #pragma mark - 私有排版逻辑
@@ -37,8 +30,8 @@
     for (UIView * subView in self.subviews) {
         if (
             subView.isALEngine &&
-            subView.alPosition== ALPositionAbsolute &&
-            (subView.alHasSettedBottom || subView.alHasSettedRight)
+            subView.style.position== ALPositionAbsolute &&
+            (subView.style.hasSettedBottom || subView.style.hasSettedRight)
         ) {
             [subView reflowOriginWhenAbsolute];
         }

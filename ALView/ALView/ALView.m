@@ -14,8 +14,8 @@
 - (instancetype)init
 {
     if ( self = [super initWithALEngine] ) {
-        self.alPosition= ALPositionRelative;
-        self.alDisplay  = ALDisplayBlock;
+        self.style.position= ALPositionRelative;
+        self.style.display  = ALDisplayBlock;
     }
     return self;
 }

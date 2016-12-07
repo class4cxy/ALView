@@ -14,18 +14,9 @@
 - (instancetype) init
 {
     if ( self = [super initWithALEngine] ) {
-        self.alDisplay = ALDisplayInline;
+        self.style.display = ALDisplayInline;
     }
     return self;
-}
-
--(void)setAlPadding:(CGFloat)alPadding
-{
-    _alPadding = alPadding;
-    _alPaddingTop = alPadding;
-    _alPaddingLeft = alPadding;
-    _alPaddingBottom = alPadding;
-    _alPaddingRight = alPadding;
 }
 
 #pragma mark - 重载父类方法
@@ -44,42 +35,42 @@
         // 根据font大小动态计算
         CGSize fontSize = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
         // label的宽度不能超过parent的宽度
-        if ( fontSize.width + self.alPaddingRight + self.alPaddingLeft > parent.frame.size.width ) {
-            fontSize.width = parent.frame.size.width - self.alPaddingLeft - self.alPaddingRight;
+        if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > parent.frame.size.width ) {
+            fontSize.width = parent.frame.size.width - self.style.paddingLeft - self.style.paddingRight;
         }
         // 自动高度 & 自动宽度
         // 宽度自动，但不能大于父view宽度
-        if ( self.alIsAutoHeight && self.alIsAutoWidth ) {
+        if ( self.style.isAutoHeight && self.style.isAutoWidth ) {
             // 如果numberOfLines不为0时，sizeThatFits的计算会以高度为准，所以在这种情况，就直接用原来的值就行了
             if ( self.numberOfLines == 0 ) {
                 fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, MAXFLOAT)];
             }
         // 自动高度 & 给定宽度
         // 根据给定的宽度自适应
-        } else if ( self.alIsAutoHeight ) {
-            fontSize = [self sizeThatFits:CGSizeMake(self.alWidth, MAXFLOAT)];
+        } else if ( self.style.isAutoHeight ) {
+            fontSize = [self sizeThatFits:CGSizeMake(self.style.width, MAXFLOAT)];
             // sizeThatFits也会重新计算过width值，这里需要重置回来
-            fontSize.width = self.alWidth;
+            fontSize.width = self.style.width;
         // 自动宽度 & 给定高度
         // 宽度自动，但不能大于父view宽度，高度使用给定的高度
-        } else if ( self.alIsAutoWidth ) {
-            fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, self.alHeight)];
+        } else if ( self.style.isAutoWidth ) {
+            fontSize = [self sizeThatFits:CGSizeMake(fontSize.width, self.style.height)];
             // sizeThatFits也会重新计算过height值，这里需要重置回来
-            fontSize.height = self.alHeight;
+            fontSize.height = self.style.height;
         // 如果都有设置了宽高，那就按设置的来
         } else {
-            fontSize.width = self.alWidth;
-            fontSize.height = self.alHeight;
+            fontSize.width = self.style.width;
+            fontSize.height = self.style.height;
         }
         // padding是会导致内增高的
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.alPaddingLeft + self.alPaddingRight, fontSize.height + self.alPaddingTop + self.alPaddingBottom);
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom);
     }
 }
 
 - (void) drawTextInRect:(CGRect)rect
 {
     // 增加padding计算逻辑
-    UIEdgeInsets inset = UIEdgeInsetsMake(self.alPaddingTop, self.alPaddingLeft, self.alPaddingBottom, self.alPaddingRight);
+    UIEdgeInsets inset = UIEdgeInsetsMake(self.style.paddingTop, self.style.paddingLeft, self.style.paddingBottom, self.style.paddingRight);
     
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, inset)];
 }

@@ -78,7 +78,7 @@
     if ( belongRow.nextRow ) {
         ALRow * toRow = belongRow.nextRow;
         // 如果下一行是block类型，新建一行并在block行之前插入
-        if ( toRow.alDisplay == ALDisplayBlock ) {
+        if ( toRow.display == ALDisplayBlock ) {
             ALRow * newRow = [self insertNewRowWithView:view beforeRow:toRow];
             while (newRow.nextRow) {
                 [newRow.nextRow reflowTop];
@@ -122,7 +122,7 @@
             [row.previousRow pushView: [row shiftView]];
             
             if ( [row count] == 0 ) {
-                if ( row.nextRow && row.nextRow.alDisplay == ALDisplayInline ) {
+                if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
                     [self crushView2PreviousRow: row.nextRow];
                 } else {
                     [self removeRow: row];
@@ -137,7 +137,7 @@
                 [self crushView2PreviousRow: row];
             }
             return YES;
-        } else if ( row.nextRow && row.nextRow.alDisplay == ALDisplayInline ) {
+        } else if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
             [self crushView2PreviousRow: row.nextRow];
         }
         return NO;
@@ -194,14 +194,14 @@
     // 当ownerView是ALEngine情况才执行
     if ( self.ownerView.isALEngine ) {
         // 如果是relative类型，且isAutoHeight=YES
-        if ( self.ownerView.alPosition == ALPositionRelative ) {
+        if ( self.ownerView.style.position == ALPositionRelative ) {
             
             // 当父view是ALScrollView，需更新scrollView的contentSize
             if ( [self.ownerView isKindOfClass: [ALScrollView class]] ) {
                 [((ALScrollView *) self.ownerView) reflowInnerFrame];
             }
             // 如果isAutoHeight=YES，reflow Height
-            if ( self.ownerView.alIsAutoHeight ) {
+            if ( self.ownerView.style.isAutoHeight ) {
                 ALRow * belongRow = self.ownerView.alBelongRow;
                 
                 self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rowsArr.lastObject.height + _rowsArr.lastObject.top);
@@ -217,7 +217,7 @@
                 }
             }
         // 如果是absolute类型，且isAutoHeight=YES或isAutoWidth=YES
-        } else if ( self.ownerView.alPosition == ALPositionAbsolute && (self.ownerView.alIsAutoHeight || self.ownerView.alIsAutoWidth) ) {
+        } else if ( self.ownerView.style.position == ALPositionAbsolute && (self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth) ) {
             // 如果ownerView是absolute类型，那需触发自己size和origin重排
             [self.ownerView.alRowManager reflowSelfSizeOfAbsolute];
             [self.ownerView reflowOriginWhenAbsolute];
@@ -227,11 +227,11 @@
 // 重排自己的Size，主要给absolute方式的view使用
 - (void) reflowSelfSizeOfAbsolute
 {
-    if ( self.ownerView.alIsAutoWidth ) {
+    if ( self.ownerView.style.isAutoWidth ) {
         self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, [self getOnwerViewInnerWidth], self.ownerView.frame.size.height);
     }
     
-    if ( self.ownerView.alIsAutoHeight ) {
+    if ( self.ownerView.style.isAutoHeight ) {
         self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, [self getOnwerViewInnerHeight]);
     }
 }
@@ -320,8 +320,8 @@
 - (ALRow *) createRowWithView: (UIView *) view
 {
     ALRow * newRow = [[ALRow alloc] init];
-    newRow.alContentAlign = self.ownerView.alContentAlign;
-    newRow.alDisplay = view.alDisplay;
+    newRow.contentAlign = self.ownerView.style.contentAlign;
+    newRow.display = view.style.display;
     newRow.maxWidth = [view getParentWidth];
     return newRow;
 }
