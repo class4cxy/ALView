@@ -58,6 +58,17 @@
     [self reflowSelfHeight];
 }
 
+- (void) hide: (UIView *) view
+{
+    view.frame = CGRectMake(view.frame.origin.x, view.frame.origin.y, 0, 0);
+    [self reflowChildView: view];
+}
+
+- (void) show: (UIView *) view
+{
+    
+}
+
 // 将一个inline view从指定的一行开始位置插入
 // 如果造成指定Row溢出（宽度超过最大宽度），那会将溢出的内容递归的插入下一个Row
 - (void) crushView2NextRow: (UIView *) view

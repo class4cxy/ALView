@@ -116,6 +116,7 @@
     _section1.alWidth = 150;
     _section1.alMarginBottom = 5;
     _section1.alMarginRight = 5;
+    _section1.alTop = -20;
     _section1.backgroundColor = [UIColor yellowColor];
     [_section1 addTo: _body];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];

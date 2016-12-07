@@ -13,6 +13,19 @@
 - (instancetype)initWithView: (UIView *) view;
 // 在最后一行的最后个位置插入一个view
 - (void) appendView: (UIView *) view;
+/*
+ * 恢复展示该view
+ * 1、设置height=原始值, width=原始值
+ * 2、触发相关的view重排
+ */
+
+- (void) hide: (UIView *) view;
+/*
+ * 恢复展示该view
+ * 1、设置height=原始值, width=原始值
+ * 2、触发相关的view重排
+ */
+- (void) show: (UIView *) view;
 // 重排子view
 - (void) reflowChildView: (UIView *) view;
 // 获取当前onwerView的宽度
