@@ -110,6 +110,25 @@
         [self reflowOriginWhenAbsolute];
     }
 }
+
+/*
+ * 提供给一个普通UIView转为ALView布局
+ */
+- (void) translate2ALEngin
+{
+    // 避免开发者乱玩
+    if ( !self.isALEngine ) {
+        CGSize size = self.frame.size;
+        if ( size.width ) {
+            self.style.width = size.width;
+        }
+        if ( size.height ) {
+            self.style.height = size.height;
+        }
+        self.isALEngine = YES;
+    }
+}
+
 /*
  * 移除该view
  * 1、先执行自身的移除逻辑
