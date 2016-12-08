@@ -128,26 +128,7 @@
 {
     // TODO
 }
-//
-///*
-// * 隐藏该view
-// * 1、设置height=0, width=0
-// * 2、触发相关的view重排
-// */
-//- (void) hide
-//{
-//    [self.superview.alRowManager hide: self];
-//}
-//
-///*
-// * 恢复展示该view
-// * 1、设置height=原始值, width=原始值
-// * 2、触发相关的view重排
-// */
-//- (void) show
-//{
-//    [self.superview.alRowManager show: self];
-//}
+
 
 #pragma mark - 排版逻辑
 
@@ -215,6 +196,7 @@
         
         // reflow
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
+        self.hidden = self.style.hidden;
     }
 }
 

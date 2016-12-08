@@ -13,6 +13,7 @@
 {
     ALView * _section1;
     ALView * _body;
+    ALView * _block;
 }
 @end
 
@@ -135,7 +136,7 @@
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _body];
 
-    [[self createCtrlView] addTo:b];
+    [[self createSizeCtrlView] addTo:b];
 }
 
 - (void) initDynamicAbsolute
@@ -150,42 +151,39 @@
     _section1.style.centerX = 0;
     _section1.style.centerY = 0;
     _section1.style.width = 200;
+    _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo:b];
     
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
     
-    ALView * block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
-    [block addTo: _section1];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: block];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: block];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: block];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: block];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: block];
-//    _section1 = [[ALView alloc] init];
-//    _section1.style.display = ALDisplayInline;
-//    _section1.style.height = 30;
-//    _section1.style.width = 150;
-//    _section1.style.marginBottom = 5;
-//    _section1.style.marginRight = 5;
-//    _section1.backgroundColor = [UIColor yellowColor];
-//    [_section1 addTo: body];
+    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+    _block.style.hidden = YES;
+    _block.style.contentAlign = ALContentAlignRight;
+    [_block addTo: _section1];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     
-    [[self createCtrlView] addTo:b];
+    [[self createSizeCtrlView] addTo:b];
+    [[self createHiddenCtrlView] addTo:b];
 }
 
-- (ALView *) createCtrlView
+- (ALView *) createSizeCtrlView
 {
     ALView * panelWrap = [[ALView alloc] init];
     panelWrap.style.position = ALPositionAbsolute;
     panelWrap.style.bottom = 10;
-    panelWrap.style.centerX = 0;
+    panelWrap.style.left = 10;
     
     ALLabel * widthTx = [[ALLabel alloc] init];
     widthTx.text = @"height: ";
@@ -203,7 +201,7 @@
     subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     subBtn.textAlignment = NSTextAlignmentCenter;
     [subBtn addTo: panelWrap];
-    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheHeight)];
+    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(subTheSize)];
     [subBtn addGestureRecognizer: tapSubBtn];
     
     ALLabel * addBtn = [[ALLabel alloc] init];
@@ -216,20 +214,62 @@
     addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     addBtn.textAlignment = NSTextAlignmentCenter;
     [addBtn addTo: panelWrap];
-    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheHeight)];
+    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addTheSize)];
     [addBtn addGestureRecognizer: tapAddBtn];
     
     return panelWrap;
 }
 
-- (void) subTheHeight
+- (ALView *) createHiddenCtrlView
+{
+    ALView * panelWrap = [[ALView alloc] init];
+    panelWrap.style.position = ALPositionAbsolute;
+    panelWrap.style.bottom = 10;
+    panelWrap.style.right = 10;
+    
+    ALLabel * widthTx = [[ALLabel alloc] init];
+    widthTx.text = @"hidden: ";
+    widthTx.font = [UIFont systemFontOfSize:12];
+    widthTx.style.height = 30;
+    [widthTx addTo: panelWrap];
+    
+    ALLabel * subBtn = [[ALLabel alloc] init];
+    subBtn.userInteractionEnabled = YES;
+    subBtn.text = @"Y";
+    subBtn.style.height = 30;
+    subBtn.style.width = 30;
+    subBtn.style.marginLeft = 10;
+    subBtn.textColor = [UIColor whiteColor];
+    subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    subBtn.textAlignment = NSTextAlignmentCenter;
+    [subBtn addTo: panelWrap];
+    UITapGestureRecognizer * tapSubBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideView)];
+    [subBtn addGestureRecognizer: tapSubBtn];
+    
+    ALLabel * addBtn = [[ALLabel alloc] init];
+    addBtn.userInteractionEnabled = YES;
+    addBtn.text = @"N";
+    addBtn.style.height = 30;
+    addBtn.style.width = 30;
+    addBtn.style.marginLeft = 10;
+    addBtn.textColor = [UIColor whiteColor];
+    addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    addBtn.textAlignment = NSTextAlignmentCenter;
+    [addBtn addTo: panelWrap];
+    UITapGestureRecognizer * tapAddBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showView)];
+    [addBtn addGestureRecognizer: tapAddBtn];
+    
+    return panelWrap;
+}
+
+- (void) subTheSize
 {
     _section1.style.width -= 5;
 //    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
     [_section1 reflow];
 }
-- (void) addTheHeight
+- (void) addTheSize
 {
     _section1.style.width += 5;
 //    _section1.style.height += 5;
@@ -237,6 +277,19 @@
     [_section1 reflow];
 //    NSLog(@"%@", _body.);
 }
+
+- (void) hideView
+{
+    _block.style.hidden = YES;
+    [_block reflow];
+}
+
+- (void) showView
+{
+    _block.style.hidden = NO;
+    [_block reflow];
+}
+
 
 - (ALView *) createBlockViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {

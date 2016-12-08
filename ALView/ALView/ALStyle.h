@@ -85,11 +85,6 @@ typedef NS_ENUM(NSInteger, ALDisplay)
      * 2、紧接着上一个view，在上一个view的右侧开始布局（x = preView.frame.origin.x + preView.frame.size.width; y = preView.frame.origin.y）
      */
     ALDisplayInline,
-    /*
-     * 说明：不排版类型
-     * 布局方式：不展示UI，但有插入到super view中
-     */
-    ALDisplayNone,
 };
 
 @interface ALStyle : NSObject
@@ -99,6 +94,14 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  */
 @property (nonatomic, assign) ALPosition position;
 @property (nonatomic, assign) ALDisplay display;
+
+/*
+ * 说明：控制view是否展示，如果不展示：
+ * 1、自动设置height=0
+ * 2、自动设置width=0
+ * 3、自动设置hidden=YES
+ */
+@property (nonatomic, assign) BOOL hidden;
 
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;

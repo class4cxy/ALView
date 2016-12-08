@@ -10,10 +10,12 @@
 
 @interface ALStyle ()
 {
-    // layout 值是记录最终排版的值，跟view.frame.size的值有一定差异
-//    CGFloat _layoutWidth;
-//    CGFloat _layoutHeight;
-//    
+    // layout 值是记录临时排版的值，例如visitable=ALVisitableHidden的时候，会临时把真实值保存到这里
+    CGFloat _tmpWidth;
+    CGFloat _tmpHeight;
+    BOOL _tmpIsAutoWidth;
+    BOOL _tmpIsAutoHeight;
+//
 //    CGFloat _layoutTop;
 //    CGFloat _layoutLeft;
 //    CGFloat _layoutRight;
@@ -28,8 +30,12 @@
 {
     self = [super init];
     if (self) {
+        _hidden = NO;
+        
         _isAutoHeight = YES;
         _isAutoWidth = YES;
+        _tmpIsAutoWidth = YES;
+        _tmpIsAutoHeight = YES;
         
         _hasSettedTop = NO;
         _hasSettedLeft = NO;
@@ -38,6 +44,8 @@
         _hasSettedCenterX = NO;
         _hasSettedCenterY = NO;
         
+        _tmpWidth = 0;
+        _tmpHeight = 0;
 //        _layoutWidth = 0;
 //        _layoutHeight = 0;
 //        _layoutTop = 0;
@@ -51,16 +59,30 @@
 #pragma mark - 重装属性赋值
 - (void)setWidth: (CGFloat) width
 {
+    _tmpIsAutoWidth = NO;
     _isAutoWidth = NO;
     if ( width < 0 ) { width = 0; }
-    _width = width;
+    _tmpWidth = width;
+    
+    if ( _hidden ) {
+        _width = 0;
+    } else {
+        _width = width;
+    }
 }
 
 - (void)setHeight: (CGFloat) height
 {
+    _tmpIsAutoHeight = NO;
     _isAutoHeight = NO;
     if ( height < 0 ) { height = 0; }
-    _height = height;
+    _tmpHeight = height;
+    
+    if ( _hidden ) {
+        _height = 0;
+    } else {
+        _height = height;
+    }
 }
 
 - (void)setTop: (CGFloat) top
@@ -115,6 +137,23 @@
     _paddingLeft = padding;
     _paddingRight = padding;
     _paddingBottom = padding;
+}
+
+- (void) setHidden: (BOOL) hidden
+{
+    if ( hidden ) {
+        _height = 0;
+        _width = 0;
+        _isAutoWidth = NO;
+        _isAutoHeight = NO;
+    } else {
+        _width = _tmpWidth;
+        _height = _tmpHeight;
+        _isAutoWidth = _tmpIsAutoWidth;
+        _isAutoHeight = _tmpIsAutoHeight;
+    }
+    
+    _hidden = hidden;
 }
 
 @end

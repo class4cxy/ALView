@@ -226,6 +226,7 @@
     }
     
     view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+    NSLog(@"reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
 }
 // 触发row内部的view进行layout，仅重排left值
 - (void) reflowWhenInline
@@ -255,6 +256,7 @@
         }
         
         view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+        NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
 
@@ -268,6 +270,7 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
+        NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
 
