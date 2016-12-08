@@ -128,36 +128,43 @@
 {
     // TODO
 }
-
-/*
- * 隐藏该view
- * 1、设置height=0, width=0
- * 2、触发相关的view重排
- */
-- (void) hide
-{
-    [self.superview.alRowManager hide: self];
-}
-
-/*
- * 恢复展示该view
- * 1、设置height=原始值, width=原始值
- * 2、触发相关的view重排
- */
-- (void) show
-{
-    [self.superview.alRowManager show: self];
-}
+//
+///*
+// * 隐藏该view
+// * 1、设置height=0, width=0
+// * 2、触发相关的view重排
+// */
+//- (void) hide
+//{
+//    [self.superview.alRowManager hide: self];
+//}
+//
+///*
+// * 恢复展示该view
+// * 1、设置height=原始值, width=原始值
+// * 2、触发相关的view重排
+// */
+//- (void) show
+//{
+//    [self.superview.alRowManager show: self];
+//}
 
 #pragma mark - 排版逻辑
 
 // 重排自己
 - (void) reflow
 {
-    // 防止未知错误
-    if ( self.superview && self.superview.alRowManager ) {
-        [self reflowSelfSize];
-        [self.superview.alRowManager reflowChildView: self];
+    [self reflowSelfSize];
+    if ( self.style.position == ALPositionRelative ) {
+        // 防止未知错误
+        if ( self.superview && self.superview.alRowManager ) {
+            [self.superview.alRowManager reflowRow: self stopRecur:NO];
+        }
+    } else {
+        [self reflowOriginWhenAbsolute];
+        if ( self.alRowManager ) {
+            [self.alRowManager reflowOwnerViewInnerView];
+        }
     }
 }
 

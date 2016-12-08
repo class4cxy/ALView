@@ -58,17 +58,6 @@
     [self reflowSelfHeight];
 }
 
-- (void) hide: (UIView *) view
-{
-    view.frame = CGRectMake(view.frame.origin.x, view.frame.origin.y, 0, 0);
-    [self reflowChildView: view];
-}
-
-- (void) show: (UIView *) view
-{
-    
-}
-
 // 将一个inline view从指定的一行开始位置插入
 // 如果造成指定Row溢出（宽度超过最大宽度），那会将溢出的内容递归的插入下一个Row
 - (void) crushView2NextRow: (UIView *) view
@@ -157,36 +146,83 @@
  * 6、如果不是：从下一行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
  * 7、重排自身的高度（self.ownerView）
  */
-- (void) reflowChildView: (UIView *) view
+- (void) reflowRow: (UIView *) subView stopRecur: (BOOL) stopRecur
 {
     // 找到该view所属的行，由行去决定如何reflow该view
-    ALRow * belongRow = view.alBelongRow;
+    ALRow * belongRow = subView.alBelongRow;
     
     // 检查是否需要断行：
     // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
     // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
-    if ( [belongRow need2break] ) {
-        while ( [belongRow need2break] ) {
-            UIView * overflow = [belongRow popView];
-            [self crushView2NextRow: overflow];
-        }
-    } else {
-        [belongRow layout];
-        // 如果下一行存在，那检查下一行view能否往上挤
-        if ( view == belongRow.firstView ) {
-            [self crushView2PreviousRow: belongRow];
+    if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
+        if ( [belongRow need2break] ) {
+            while ( [belongRow need2break] ) {
+                UIView * overflow = [belongRow popView];
+                [self crushView2NextRow: overflow];
+            }
         } else {
-            [self crushView2PreviousRow: belongRow.nextRow];
+            [belongRow layout];
+            // 如果下一行存在，那检查下一行view能否往上挤
+            if ( subView == belongRow.firstView ) {
+                [self crushView2PreviousRow: belongRow];
+            } else {
+                [self crushView2PreviousRow: belongRow.nextRow];
+            }
+        }
+        // TODO 这里有待优化一下
+        // 还是要重刷一遍下级兄弟view的top
+        while (belongRow.nextRow) {
+            [belongRow.nextRow reflowTop];
+            belongRow = belongRow.nextRow;
+        }
+        // 重排自己的高度
+        [self reflowSelfHeight];
+        if ( !stopRecur ) {
+            // 重排自己内部子view
+            [self reflowOwnerViewInnerView];
         }
     }
-    // TODO 这里有待优化一下
-    // 还是要重刷一遍下级兄弟view的top
-    while (belongRow.nextRow) {
-        [belongRow.nextRow reflowTop];
-        belongRow = belongRow.nextRow;
+}
+
+/*
+ * 重排ownerview的subview
+ * 遍历rowManager中的rowArr；
+ * 1、如果当前行是block行：
+ *    - 重排当前block view的size，因为有可能block view使用了isAutoWidth或者isAutoHeight
+ *    - 触发当前行位置重排
+ *    - 检查是否有子view，如果有则递归执行该方法
+ * 2、如果当前行是inline行：
+ *    - 重当前行的第一个view开始重排后面的view（调用reflowRow即可），直到遇到下一个block行为止，不在执行该行为
+ */
+- (void) reflowOwnerViewInnerView
+{
+//    BOOL isBlock = YES;
+    ALRow * row = [self firstRow];
+    
+    while ( row ) {
+        if ( [row count] > 0 ) {
+            // 更新行宽
+            row.maxWidth = self.ownerView.frame.size.width;
+            
+            if ( row.display == ALDisplayBlock ) {
+                UIView * view = [row firstView];
+                // 重排当前block的size，因为父view有可能改变了宽度
+                [view reflowSelfSize];
+                // 重排行
+                [row layout];
+                // 递归触发subview重排
+                if ( view.alRowManager ) {
+                    [view.alRowManager reflowOwnerViewInnerView];
+                }
+//                isBlock = YES;
+            } else if ( row.display == ALDisplayInline ) {
+                UIView * view = [row firstView];
+                [self reflowRow: view stopRecur: YES];
+//                isBlock = NO;
+            }
+        }
+        row = row.nextRow;
     }
-    // 重排自己的高度
-    [self reflowSelfHeight];
 }
 // 重排父view的高
 - (void) reflowSelfHeight
@@ -289,6 +325,19 @@
         // 移除
         [_rowsArr removeObject: row];
     }
+}
+
+- (ALRow *) firstRow
+{
+    if ( [_rowsArr count] > 0 ) {
+        return [_rowsArr objectAtIndex: 0];
+    }
+    return nil;
+}
+
+- (ALRow *) lastRow
+{
+    return [_rowsArr lastObject];
 }
 
 // 在指定行之前插入新的一行

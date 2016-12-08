@@ -32,7 +32,7 @@
 //    [self initSiblingLayout];
 //    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
-    [self initALLabelAutoHeightWidthLayout];
+//    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
 //    [self initBlockLayout];
@@ -41,7 +41,7 @@
 //    [self initPaddingLayout];
     
 //    [self initDynamicLayout];
-//    [self initDynamicAbsolute];
+    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -144,29 +144,38 @@
     b.style.height = [[UIScreen mainScreen] bounds].size.height;
     [b addTo: self.view];
     
-    ALView * body = [[ALView alloc] init];
-    body.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-    body.style.position = ALPositionAbsolute;
-    body.style.centerX = 0;
-    body.style.centerY = 0;
-    [body addTo:b];
-    
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
     _section1 = [[ALView alloc] init];
-    _section1.style.display = ALDisplayInline;
-    _section1.style.height = 30;
-    _section1.style.width = 150;
-    _section1.style.marginBottom = 5;
-    _section1.style.marginRight = 5;
-    _section1.backgroundColor = [UIColor yellowColor];
-    [_section1 addTo: body];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: body];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: body];
+    _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
+    _section1.style.position = ALPositionAbsolute;
+    _section1.style.centerX = 0;
+    _section1.style.centerY = 0;
+    _section1.style.width = 200;
+    [_section1 addTo:b];
+    
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
+    
+    ALView * block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+    [block addTo: _section1];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: block];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: block];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: block];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: block];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: block];
+//    _section1 = [[ALView alloc] init];
+//    _section1.style.display = ALDisplayInline;
+//    _section1.style.height = 30;
+//    _section1.style.width = 150;
+//    _section1.style.marginBottom = 5;
+//    _section1.style.marginRight = 5;
+//    _section1.backgroundColor = [UIColor yellowColor];
+//    [_section1 addTo: body];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     
     [[self createCtrlView] addTo:b];
 }
@@ -216,17 +225,32 @@
 - (void) subTheHeight
 {
     _section1.style.width -= 5;
-    _section1.style.height -= 5;
+//    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
     [_section1 reflow];
 }
 - (void) addTheHeight
 {
     _section1.style.width += 5;
-    _section1.style.height += 5;
+//    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
     [_section1 reflow];
 //    NSLog(@"%@", _body.);
+}
+
+- (ALView *) createBlockViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+{
+    ALView * view = [[ALView alloc] init];
+    view.style.marginRight = 5;
+    view.style.marginBottom = 5;
+    if ( height ) {
+        view.style.height = height;
+    }
+    if ( width ) {
+        view.style.width = width;
+    }
+    view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:alpha];
+    return view;
 }
 
 - (void) initPaddingLayout

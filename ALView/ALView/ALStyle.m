@@ -11,13 +11,13 @@
 @interface ALStyle ()
 {
     // layout 值是记录最终排版的值，跟view.frame.size的值有一定差异
-    CGFloat _layoutWidth;
-    CGFloat _layoutHeight;
-    
-    CGFloat _layoutTop;
-    CGFloat _layoutLeft;
-    CGFloat _layoutRight;
-    CGFloat _layoutBottom;
+//    CGFloat _layoutWidth;
+//    CGFloat _layoutHeight;
+//    
+//    CGFloat _layoutTop;
+//    CGFloat _layoutLeft;
+//    CGFloat _layoutRight;
+//    CGFloat _layoutBottom;
 }
 
 @end
@@ -38,12 +38,12 @@
         _hasSettedCenterX = NO;
         _hasSettedCenterY = NO;
         
-        _layoutWidth = 0;
-        _layoutHeight = 0;
-        _layoutTop = 0;
-        _layoutLeft = 0;
-        _layoutRight = 0;
-        _layoutBottom = 0;
+//        _layoutWidth = 0;
+//        _layoutHeight = 0;
+//        _layoutTop = 0;
+//        _layoutLeft = 0;
+//        _layoutRight = 0;
+//        _layoutBottom = 0;
     }
     return self;
 }
