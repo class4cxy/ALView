@@ -37,11 +37,11 @@
 //    [self initBlockAndInlineLayout2];
 //    [self initBlockLayout];
 //    [self initInlineLayout];
-    [self initMarginLayout];
+//    [self initMarginLayout];
 //    [self initPaddingLayout];
     
 //    [self initDynamicLayout];
-//    [self initDynamicAbsolute];
+    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -150,7 +150,7 @@
 //    _section1.style.centerX = 0;
 //    _section1.style.centerY = 0;
     _section1.style.center = (CGPoint){0, 0};
-    _section1.style.width = 200;
+//    _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo:b];
     
@@ -501,7 +501,7 @@
 {
     ALView * inlineView = [[ALView alloc] init];
     inlineView.style.display = ALDisplayInline;
-    inlineView.style.margin = (ALRect){0, 0, 5, 5};
+    inlineView.style.margin = (ALRect){0, 5, 5, 0};
     inlineView.style.size = (CGSize){width, height};
     inlineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
     return inlineView;

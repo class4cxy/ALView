@@ -363,13 +363,22 @@
     return nil;
 }
 
+- (void) calcNewRowMaxWidth: (ALRow *) row
+{
+    CGFloat maxWidth = 0;
+    if ( row.display == ALDisplayBlock ) {
+        
+    }
+}
+
 // 新建行，但不插入到行管理器
 - (ALRow *) createRowWithView: (UIView *) view
 {
     ALRow * newRow = [[ALRow alloc] init];
     newRow.contentAlign = self.ownerView.style.contentAlign;
     newRow.display = view.style.display;
-    newRow.maxWidth = [view getParentWidth];
+    if (  )
+//    newRow.maxWidth = [view getParentWidth];
     return newRow;
 }
 
