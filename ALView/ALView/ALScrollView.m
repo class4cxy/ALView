@@ -25,7 +25,7 @@
 - (void) reflowInnerFrame
 {
     // 触发內建UIScrollView进行layout
-    self.contentSize = CGSizeMake([self.alRowManager getOnwerViewInnerWidth], [self.alRowManager getOnwerViewInnerHeight]);
+    self.contentSize = CGSizeMake([self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]);
     // 触发子view中使用了absolute布局且使用了bottom或者right方式定位的重新布局
     for (UIView * subView in self.subviews) {
         if (

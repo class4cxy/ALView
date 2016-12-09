@@ -87,6 +87,16 @@ typedef NS_ENUM(NSInteger, ALDisplay)
     ALDisplayInline,
 };
 
+
+/* ALRect. */
+struct ALRect {
+    CGFloat top;
+    CGFloat right;
+    CGFloat bottom;
+    CGFloat left;
+};
+typedef struct ALRect ALRect;
+
 @interface ALStyle : NSObject
 
 /*
@@ -103,24 +113,27 @@ typedef NS_ENUM(NSInteger, ALDisplay)
  */
 @property (nonatomic, assign) BOOL hidden;
 
+// 聚合width, height
+@property (nonatomic, assign) CGSize size;
+
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;
 
-@property (nonatomic, assign) CGFloat layoutWidth;
-@property (nonatomic, assign) CGFloat layoutHeight;
-
+@property (nonatomic, assign) ALRect origin;
 @property (nonatomic, assign) CGFloat top;
 @property (nonatomic, assign) CGFloat bottom;
 @property (nonatomic, assign) CGFloat left;
 @property (nonatomic, assign) CGFloat right;
+
 /*
  * 0表示居中，允许负值
  */
+@property (nonatomic, assign) CGPoint center;
 @property (nonatomic, assign) CGFloat centerX;
 @property (nonatomic, assign) CGFloat centerY;
 
 
-@property (nonatomic, assign) CGFloat margin;
+@property (nonatomic, assign) ALRect margin;
 @property (nonatomic, assign) CGFloat marginTop;
 @property (nonatomic, assign) CGFloat marginBottom;
 @property (nonatomic, assign) CGFloat marginLeft;
@@ -129,7 +142,7 @@ typedef NS_ENUM(NSInteger, ALDisplay)
 /*
  * padding是ALLabel特有的属性，用于撑开文字与边框的距离
  */
-@property (nonatomic, assign) CGFloat padding;
+@property (nonatomic, assign) ALRect padding;
 @property (nonatomic, assign) CGFloat paddingTop;
 @property (nonatomic, assign) CGFloat paddingBottom;
 @property (nonatomic, assign) CGFloat paddingLeft;

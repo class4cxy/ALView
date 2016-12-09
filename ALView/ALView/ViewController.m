@@ -30,7 +30,6 @@
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
-//    [self initSiblingLayout];
 //    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
@@ -38,11 +37,11 @@
 //    [self initBlockAndInlineLayout2];
 //    [self initBlockLayout];
 //    [self initInlineLayout];
-//    [self initMarginLayout];
+    [self initMarginLayout];
 //    [self initPaddingLayout];
     
 //    [self initDynamicLayout];
-    [self initDynamicAbsolute];
+//    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
     
     // Do any additional setup after loading the view, typically from a nib.
@@ -148,8 +147,9 @@
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
     _section1.style.position = ALPositionAbsolute;
-    _section1.style.centerX = 0;
-    _section1.style.centerY = 0;
+//    _section1.style.centerX = 0;
+//    _section1.style.centerY = 0;
+    _section1.style.center = (CGPoint){0, 0};
     _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo:b];
@@ -170,6 +170,7 @@
     
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
+    
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
@@ -313,20 +314,19 @@
     [body addTo: self.view];
     
     ALView * article = [[ALView alloc] init];
-    article.style.marginRight = 20;
-    article.style.marginLeft = 20;
-    article.style.marginTop = 50;
+    article.style.margin = (ALRect) {50, 20, 0, 20};
+//    article.style.marginRight = 20;
+//    article.style.marginLeft = 20;
+//    article.style.marginTop = 50;
     article.style.height = 100;
     article.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     [article addTo: body];
     
     ALLabel * tx = [[ALLabel alloc] init];
-    tx.style.marginTop = 20;
-    tx.style.marginLeft = 20;
-    tx.style.paddingTop = 20;
-    tx.style.paddingLeft = 30;
-    tx.style.paddingBottom = 30;
-    tx.style.paddingRight = 50;
+//    tx.style.marginTop = 20;
+//    tx.style.marginLeft = 20;
+    tx.style.margin = (ALRect){20, 0, 0, 20};
+    tx.style.padding = (ALRect){20, 30, 20, 30};
     tx.text = @"我是一个ALLabel";
     tx.font = [UIFont systemFontOfSize:12];
     tx.backgroundColor = [UIColor yellowColor];
@@ -340,9 +340,10 @@
     [body addTo: self.view];
     
     ALView * article = [[ALView alloc] init];
-    article.style.marginRight = 20;
-    article.style.marginLeft = 20;
-    article.style.marginTop = 50;
+    article.style.margin = (ALRect) {50, 20, 0, 20};
+//    article.style.marginRight = 20;
+//    article.style.marginLeft = 20;
+//    article.style.marginTop = 50;
     article.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     [article addTo: body];
     
@@ -500,10 +501,8 @@
 {
     ALView * inlineView = [[ALView alloc] init];
     inlineView.style.display = ALDisplayInline;
-    inlineView.style.marginRight = 5;
-    inlineView.style.marginBottom = 5;
-    inlineView.style.height = height;
-    inlineView.style.width = width;
+    inlineView.style.margin = (ALRect){0, 0, 5, 5};
+    inlineView.style.size = (CGSize){width, height};
     inlineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
     return inlineView;
 }
@@ -580,7 +579,7 @@
     tx1.text = text;
     tx1.style.marginTop = 2;
     tx1.style.marginRight = 2;
-    tx1.style.padding = 10;
+    tx1.style.padding = (ALRect){10, 10, 10, 10};
     tx1.numberOfLines = num;
     tx1.lineBreakMode = NSLineBreakByTruncatingTail;
     tx1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
@@ -615,32 +614,6 @@
     //    [[self createInlineBox1:0.8] addTo:inlinewrap];
 }
 
-- (void) initSiblingLayout
-{
-    ALView * body = [[ALView alloc] init];
-    body.style.marginTop = 20;
-    [body addTo: self.view];
-    
-    ALScrollView * artivle1 = [[ALScrollView alloc] init];
-    artivle1.style.marginBottom = 20;
-    artivle1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-    [artivle1 addTo: body];
-    
-    NSLog(@"%@", artivle1.alPreviousSibling);
-    NSLog(@"%@", artivle1.alNextSibling);
-    
-    ALScrollView * artivle2 = [[ALScrollView alloc] init];
-    artivle2.style.marginBottom = 20;
-    artivle2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-    [artivle2 addTo: body];
-    
-    NSLog(@"%@", artivle1);
-    NSLog(@"%@", artivle2);
-    NSLog(@"previousSibling: %@", artivle1.alPreviousSibling);
-    NSLog(@"nextSibling: %@", artivle1.alNextSibling);
-    NSLog(@"previousSibling: %@", artivle2.alPreviousSibling);
-    NSLog(@"nextSibling: %@", artivle2.alNextSibling);
-}
 - (void) initBlockContentInlineLayout
 {
     ALView * body = [[ALView alloc] init];
@@ -939,28 +912,34 @@
     [yellowBox addTo:scbox];
 //
     ALView * absoluteGradView = [[ALView alloc] init];
-    absoluteGradView.style.height = 50;
-    absoluteGradView.style.width = 50;
-    absoluteGradView.style.top = 20;
-    absoluteGradView.style.left = 20;
+//    absoluteGradView.style.height = 50;
+//    absoluteGradView.style.width = 50;
+    absoluteGradView.style.size = (CGSize) {50, 50};
+//    absoluteGradView.style.top = 20;
+//    absoluteGradView.style.left = 20;
+    absoluteGradView.style.origin = (ALRect) {20, 0, 0, 20};
     absoluteGradView.backgroundColor = [UIColor grayColor];
     absoluteGradView.style.position = ALPositionAbsolute;
     [absoluteGradView addTo:scbox];
     
     ALView * absoluteGradView2 = [[ALView alloc] init];
-    absoluteGradView2.style.height = 50;
-    absoluteGradView2.style.width = 50;
-    absoluteGradView2.style.top = 20;
-    absoluteGradView2.style.right = 20;
+//    absoluteGradView2.style.height = 50;
+//    absoluteGradView2.style.width = 50;
+    absoluteGradView2.style.size = (CGSize) {50, 50};
+//    absoluteGradView2.style.top = 20;
+//    absoluteGradView2.style.right = 20;
+    absoluteGradView2.style.origin = (ALRect) {20, 20, 0, 0};
     absoluteGradView2.backgroundColor = [UIColor grayColor];
     absoluteGradView2.style.position = ALPositionAbsolute;
     [absoluteGradView2 addTo:scbox];
     
     ALView * absoluteGradView3 = [[ALView alloc] init];
-    absoluteGradView3.style.height = 50;
-    absoluteGradView3.style.width = 50;
-    absoluteGradView3.style.bottom = 20;
-    absoluteGradView3.style.right = 20;
+//    absoluteGradView3.style.height = 50;
+//    absoluteGradView3.style.width = 50;
+    absoluteGradView3.style.size = (CGSize) {50, 50};
+//    absoluteGradView3.style.bottom = 20;
+//    absoluteGradView3.style.right = 20;
+    absoluteGradView3.style.origin = (ALRect) {0, 0, 20, 20};
     absoluteGradView3.backgroundColor = [UIColor grayColor];
     absoluteGradView3.style.position = ALPositionAbsolute;
     [absoluteGradView3 addTo:scbox];
@@ -981,9 +960,10 @@
     ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
     body.style.height = 200;
-    body.style.marginTop = 50;
-    body.style.marginLeft = 50;
-    body.style.marginRight = 50;
+    body.style.margin = (ALRect) {50, 50, 0, 50};
+//    body.style.marginTop = 50;
+//    body.style.marginLeft = 50;
+//    body.style.marginRight = 50;
     [body addTo:self.view];
     
     // If you had set `left` property, then `right` propert is ignore
@@ -993,9 +973,10 @@
     ALView * body2 = [[ALView alloc] init];
     body2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
     body2.style.height = 200;
-    body2.style.marginTop = 50;
-    body2.style.marginLeft = 50;
-    body2.style.marginRight = 50;
+    body2.style.margin = (ALRect) {50, 50, 0, 50};
+//    body2.style.marginTop = 50;
+//    body2.style.marginLeft = 50;
+//    body2.style.marginRight = 50;
     [body2 addTo:self.view];
     
     // If you had set `top` property, then `bottom` propert is ignore
@@ -1008,9 +989,10 @@
     ALView * body = [[ALView alloc] init];
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
     body.style.height = 200;
-    body.style.marginTop = 100;
-    body.style.marginLeft = 50;
-    body.style.marginRight = 50;
+    body.style.margin = (ALRect) {100, 50, 0, 50};
+//    body.style.marginTop = 100;
+//    body.style.marginLeft = 50;
+//    body.style.marginRight = 50;
     [body addTo:self.view];
     
     [[self createAbsoluteBox:20 left:20 right:0 bottom:0 alpha:0.1] addTo: body];
@@ -1027,13 +1009,15 @@
 - (ALView *) createAbsoluteBox: (CGFloat) top left: (CGFloat) left right: (CGFloat) right bottom: (CGFloat) bottom alpha: (CGFloat) alpha
 {
     ALView * box = [[ALView alloc] init];
-    box.style.height = 40;
-    box.style.width = 40;
+//    box.style.height = 40;
+//    box.style.width = 40;
+    box.style.size = (CGSize) {40, 40};
     box.style.position = ALPositionAbsolute;
-    if (top) box.style.top = top;
-    if (left) box.style.left = left;
-    if (right) box.style.right = right;
-    if (bottom) box.style.bottom = bottom;
+    box.style.origin = (ALRect) {top, left, bottom, right};
+//    if (top) box.style.top = top;
+//    if (left) box.style.left = left;
+//    if (right) box.style.right = right;
+//    if (bottom) box.style.bottom = bottom;
     box.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
     return box;
 }

@@ -62,7 +62,7 @@
 // 如果造成指定Row溢出（宽度超过最大宽度），那会将溢出的内容递归的插入下一个Row
 - (void) crushView2NextRow: (UIView *) view
 {
-    ALRow * belongRow = view.alBelongRow;
+    ALRow * belongRow = view.belongRow;
     // 存在下一行的情况
     if ( belongRow.nextRow ) {
         ALRow * toRow = belongRow.nextRow;
@@ -83,7 +83,7 @@
             [toRow addView: view];
         }
     } else {
-        [self appendNewRowWithView: view previousRow:view.alBelongRow];
+        [self appendNewRowWithView: view previousRow:view.belongRow];
     }
 }
 /*
@@ -149,7 +149,7 @@
 - (void) reflowRow: (UIView *) subView stopRecur: (BOOL) stopRecur
 {
     // 找到该view所属的行，由行去决定如何reflow该view
-    ALRow * belongRow = subView.alBelongRow;
+    ALRow * belongRow = subView.belongRow;
     
     // 检查是否需要断行：
     // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
@@ -196,7 +196,6 @@
  */
 - (void) reflowOwnerViewInnerView
 {
-//    BOOL isBlock = YES;
     ALRow * row = [self firstRow];
     
     while ( row ) {
@@ -211,18 +210,17 @@
                 // 重排行
                 [row layout];
                 // 递归触发subview重排
-                if ( view.alRowManager ) {
-                    [view.alRowManager reflowOwnerViewInnerView];
+                if ( view.rowManager ) {
+                    [view.rowManager reflowOwnerViewInnerView];
                 }
-//                isBlock = YES;
             } else if ( row.display == ALDisplayInline ) {
                 UIView * view = [row firstView];
                 [self reflowRow: view stopRecur: YES];
-//                isBlock = NO;
             }
         }
         row = row.nextRow;
     }
+    
 }
 // 重排父view的高
 - (void) reflowSelfHeight
@@ -238,7 +236,7 @@
             }
             // 如果isAutoHeight=YES，reflow Height
             if ( self.ownerView.style.isAutoHeight ) {
-                ALRow * belongRow = self.ownerView.alBelongRow;
+                ALRow * belongRow = self.ownerView.belongRow;
                 
                 self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rowsArr.lastObject.height + _rowsArr.lastObject.top);
                 
@@ -249,13 +247,13 @@
                     belongRow = belongRow.nextRow;
                 }
                 if ( self.ownerView.superview ) {
-                    [self.ownerView.superview.alRowManager reflowSelfHeight];
+                    [self.ownerView.superview.rowManager reflowSelfHeight];
                 }
             }
         // 如果是absolute类型，且isAutoHeight=YES或isAutoWidth=YES
         } else if ( self.ownerView.style.position == ALPositionAbsolute && (self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth) ) {
             // 如果ownerView是absolute类型，那需触发自己size和origin重排
-            [self.ownerView.alRowManager reflowSelfSizeOfAbsolute];
+            [self.ownerView.rowManager reflowSelfSizeOfAbsolute];
             [self.ownerView reflowOriginWhenAbsolute];
         }
     }

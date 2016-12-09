@@ -15,16 +15,16 @@
     CGFloat _tmpHeight;
     BOOL _tmpIsAutoWidth;
     BOOL _tmpIsAutoHeight;
-//
-//    CGFloat _layoutTop;
-//    CGFloat _layoutLeft;
-//    CGFloat _layoutRight;
-//    CGFloat _layoutBottom;
 }
 
 @end
 
+
 @implementation ALStyle
+
+@synthesize center = _center;
+@synthesize margin = _margin;
+@synthesize padding = _padding;
 
 - (instancetype)init
 {
@@ -46,12 +46,6 @@
         
         _tmpWidth = 0;
         _tmpHeight = 0;
-//        _layoutWidth = 0;
-//        _layoutHeight = 0;
-//        _layoutTop = 0;
-//        _layoutLeft = 0;
-//        _layoutRight = 0;
-//        _layoutBottom = 0;
     }
     return self;
 }
@@ -85,6 +79,32 @@
     }
 }
 
+- (void) setSize: (CGSize) size
+{
+    self.width = size.width;
+    self.height = size.height;
+    _size = size;
+}
+
+- (CGSize) getSize
+{
+    return CGSizeMake(_width, _height);
+}
+
+- (void) setOrigin: (ALRect) origin
+{
+    if ( origin.top ) { self.top = origin.top; }
+    if ( origin.left ) { self.left = origin.left; }
+    if ( origin.right ) { self.right = origin.right; }
+    if ( origin.bottom ) { self.bottom = origin.bottom; }
+
+    _origin = origin;
+}
+- (ALRect) getOrigin
+{
+    return (ALRect){_top, _left, _bottom, _right};
+}
+
 - (void)setTop: (CGFloat) top
 {
     _hasSettedTop = YES;
@@ -109,7 +129,19 @@
     _bottom = bottom;
 }
 
-- (void)setCenterX: (CGFloat) centerX
+- (CGPoint)center
+{
+    return (CGPoint) {_centerX, _centerY};
+}
+
+- (void) setCenter: (CGPoint) center
+{
+    self.centerX = center.x;
+    self.centerY = center.y;
+    _center = center;
+}
+
+- (void) setCenterX: (CGFloat) centerX
 {
     _hasSettedCenterX = YES;
     _centerX = centerX;
@@ -121,22 +153,32 @@
     _centerY = centerY;
 }
 
-- (void)setMargin: (CGFloat) margin
+- (void)setMargin: (ALRect) margin
 {
     _margin = margin;
-    _marginTop = margin;
-    _marginLeft = margin;
-    _marginRight = margin;
-    _marginBottom = margin;
+    _marginTop = margin.top;
+    _marginLeft = margin.left;
+    _marginRight = margin.right;
+    _marginBottom = margin.bottom;
 }
 
-- (void)setPadding: (CGFloat) padding
+- (ALRect) margin
+{
+    return (ALRect) {_marginTop, _marginLeft, _marginBottom, _marginRight};
+}
+
+- (void)setPadding: (ALRect) padding
 {
     _padding = padding;
-    _paddingTop = padding;
-    _paddingLeft = padding;
-    _paddingRight = padding;
-    _paddingBottom = padding;
+    _paddingTop = padding.top;
+    _paddingLeft = padding.left;
+    _paddingRight = padding.right;
+    _paddingBottom = padding.bottom;
+}
+
+- (ALRect) padding
+{
+    return (ALRect) {_paddingTop, _paddingLeft, _paddingBottom, _paddingRight};
 }
 
 - (void) setHidden: (BOOL) hidden

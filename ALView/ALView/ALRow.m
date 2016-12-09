@@ -43,7 +43,7 @@
     if ( view != nil ) {
         if ( ![_viewsArr containsObject: view] ) {
             [_viewsArr insertObject:view atIndex:0];
-            view.alBelongRow = self;
+            view.belongRow = self;
         }
         [self layout];
     }
@@ -58,7 +58,7 @@
     if ( view != nil ) {
         if ( ![_viewsArr containsObject: view] ) {
             [_viewsArr addObject: view];
-            view.alBelongRow = self;
+            view.belongRow = self;
         }
         // 更新height值
         [self layout];
@@ -236,7 +236,6 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
-        UIView * prevView = view.alPreviousSibling;
         CGFloat left = 0;
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         
@@ -249,6 +248,7 @@
                 left = view.style.marginLeft;
             }
         } else {
+            UIView * prevView = [_viewsArr objectAtIndex: i-1];
             left =  view.style.marginLeft +
                     prevView.frame.origin.x +
                     prevView.frame.size.width +
