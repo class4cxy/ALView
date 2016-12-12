@@ -56,7 +56,7 @@
         }
     }
     // 触发父view reflow
-    [self reflowOwnerViewSizeWithReflowInner: NO];
+    [self reflowOwnerViewSizeWithReflowInner: YES];
     [row layout];
 }
 
@@ -164,6 +164,7 @@
         if ( [belongRow need2break] ) {
             do {
                 UIView * overflow = [belongRow popView];
+                [belongRow layout];
                 [self crushView2NextRow: overflow];
             } while ([belongRow need2break]);
         } else {
@@ -184,12 +185,12 @@
         
         // 递归重排父view的size
         if ( subView.superview && subView.superview.rowManager ) {
-            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner:NO];
+            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner:isReflow];
         }
 
         if ( isReflow ) {
             // 重排自己内部子view
-            [self reflowOwnerViewInnerView];
+            [subView.rowManager reflowOwnerViewInnerView];
         }
     }
 }
@@ -233,11 +234,9 @@
 {
     ALRow * row = [self firstRow];
     
+    // TODO这里重排inline类型的子view有待优化：递归重排逐个子view
     while ( row ) {
         if ( [row count] > 0 ) {
-            // 更新行宽
-//            row.maxWidth = self.ownerView.frame.size.width;
-            
             if ( row.display == ALDisplayBlock ) {
                 UIView * view = [row firstView];
                 // 重排当前block的size，因为父view有可能改变了宽度
@@ -249,7 +248,7 @@
                     [view.rowManager reflowOwnerViewInnerView];
                 }
             } else if ( row.display == ALDisplayInline ) {
-                UIView * view = [row firstView];
+                UIView * view = [row lastView];
                 [self reflowRow: view reflowInnerView: NO];
             }
         }
@@ -362,6 +361,7 @@
         previousRow.nextRow = newRow;
     }
     [newRow pushView: view];
+    [newRow layout];
     [_rowsArr addObject:newRow];
     return newRow;
 }
@@ -420,6 +420,7 @@
             newRow.previousRow = beforeRowPreviousRow;
         }
         [newRow pushView: view];
+        [newRow layout];
         // 插入
         NSUInteger index = [_rowsArr indexOfObject: beforeRow];
         [_rowsArr insertObject: newRow atIndex: index];
