@@ -142,35 +142,37 @@
 {
     ALView * b = [[ALView alloc] init];
     b.style.height = [[UIScreen mainScreen] bounds].size.height;
+    b.style.contentAlign = ALContentAlignCenter;
     [b addTo: self.view];
     
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-    _section1.style.position = ALPositionAbsolute;
+    _section1.style.display = ALDisplayInline;
+//    _section1.style.position = ALPositionAbsolute;
 //    _section1.style.centerX = 0;
 //    _section1.style.centerY = 0;
-    _section1.style.center = (CGPoint){0, 0};
+//    _section1.style.center = (CGPoint){0, 0};
 //    _section1.style.width = 200;
-    _section1.style.contentAlign = ALContentAlignCenter;
+    _section1.style.contentAlign = ALContentAlignRight;
     [_section1 addTo:b];
     
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
-    
-    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
-    _block.style.hidden = YES;
-    _block.style.contentAlign = ALContentAlignRight;
-    [_block addTo: _section1];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-    
+//
+//    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+//    _block.style.hidden = YES;
+//    _block.style.contentAlign = ALContentAlignRight;
+//    [_block addTo: _section1];
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+//    
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
-    
+//
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];

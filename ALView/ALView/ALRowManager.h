@@ -8,7 +8,8 @@
 
 @interface ALRowManager : NSObject
 
-@property (nonatomic, retain) UIView * ownerView;
+@property (nonatomic, strong) UIView * ownerView;
+@property (nonatomic, assign) CGFloat maxWidth;
 
 - (instancetype)initWithView: (UIView *) view;
 // 在最后一行的最后个位置插入一个view

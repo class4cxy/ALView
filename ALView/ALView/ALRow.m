@@ -61,7 +61,8 @@
             view.belongRow = self;
         }
         // 更新height值
-        [self layout];
+        [self refreshSize];
+//        [self layout];
     }
 }
 
@@ -158,6 +159,7 @@
 {
     [self reCountWidth];
     [self reCountHeight];
+    [self getCurrTop];
 }
 
 - (void) reCountWidth
@@ -216,11 +218,12 @@
     UIView * view = [_viewsArr objectAtIndex: 0];
     CGFloat top = [self getCurrTop] + view.style.marginTop;
     CGFloat left = 0;
+    CGFloat parentWidth = _parent.frame.size.width;
     
     if ( _contentAlign == ALContentAlignCenter ) {
-        left = (_maxWidth - _width)/2 + view.style.marginLeft;
+        left = (parentWidth - _width)/2 + view.style.marginLeft;
     } else if ( _contentAlign == ALContentAlignRight ) {
-        left = _maxWidth - _width + view.style.marginLeft;
+        left = parentWidth - _width + view.style.marginLeft;
     } else {
         left = view.style.marginLeft;
     }
@@ -238,12 +241,13 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat left = 0;
         CGFloat top = [self getCurrTop] + view.style.marginTop;
+        CGFloat parentWidth = _parent.frame.size.width;
         
         if ( i == 0 ) {
             if ( _contentAlign == ALContentAlignCenter ) {
-                left = (_maxWidth - _width)/2 + view.style.marginLeft;
+                left = (parentWidth - _width)/2 + view.style.marginLeft;
             } else if ( _contentAlign == ALContentAlignRight ) {
-                left = _maxWidth - _width + view.style.marginLeft;
+                left = parentWidth - _width + view.style.marginLeft;
             } else {
                 left = view.style.marginLeft;
             }

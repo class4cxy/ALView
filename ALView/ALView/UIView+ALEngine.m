@@ -99,9 +99,7 @@
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALEngin];
     // 初始化行管理器
-    if ( !parent.rowManager ) {
-        parent.rowManager = [[ALRowManager alloc] initWithView: parent];
-    }
+    [self initParentRowManager];
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
@@ -111,6 +109,24 @@
         [parent.rowManager appendView: self];
     } else {
         [self reflowOriginWhenAbsolute];
+    }
+}
+
+- (void) initParentRowManager
+{
+    UIView * parent = self.superview;
+    if ( parent && !parent.rowManager ) {
+        parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+
+        if ( parent.isALEngine && parent.style.isAutoWidth ) {
+            if ( parent.belongRow ) {
+                parent.rowManager.maxWidth = parent.belongRow.maxWidth;
+            } else {
+                parent.rowManager.maxWidth = parent.superview.frame.size.width;
+            }
+        } else {
+            parent.rowManager.maxWidth = parent.frame.size.width;
+        }
     }
 }
 
@@ -255,6 +271,11 @@
             // reflow
             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
             self.hidden = self.style.hidden;
+            
+            // 更新自己的行管理器maxWidth值
+            if ( !self.style.isAutoWidth && self.rowManager ) {
+                self.rowManager.maxWidth = self.style.width;
+            }
         }
     }
 }

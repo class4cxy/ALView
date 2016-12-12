@@ -44,18 +44,20 @@
 - (void) appendView: (UIView *) view
 {
     // 当前inline view在该容器作为第一行展示
+    ALRow * row = nil;
     if ( [_rowsArr count] == 0 ) {
-        [self appendNewRowWithView: view previousRow:nil];
+        row = [self appendNewRowWithView: view previousRow:nil];
     } else {
-        ALRow * lastRow = _rowsArr.lastObject;
-        if ( [lastRow canAddView: view] ) {
-            [lastRow pushView: view];
+        row = _rowsArr.lastObject;
+        if ( [row canAddView: view] ) {
+            [row pushView: view];
         } else {
-            [self appendNewRowWithView: view previousRow:lastRow];
+            row = [self appendNewRowWithView: view previousRow:row];
         }
     }
     // 触发父view reflow
     [self reflowSelfHeight];
+    [row layout];
 }
 
 // 将一个inline view从指定的一行开始位置插入
@@ -156,10 +158,17 @@
     // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
     if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
         if ( [belongRow need2break] ) {
-            while ( [belongRow need2break] ) {
+            do
+            {
                 UIView * overflow = [belongRow popView];
                 [self crushView2NextRow: overflow];
             }
+            while ([belongRow need2break]);
+            
+//            while ( [belongRow need2break] ) {
+//                UIView * overflow = [belongRow popView];
+//                [self crushView2NextRow: overflow];
+//            }
         } else {
             [belongRow layout];
             // 如果下一行存在，那检查下一行view能否往上挤
@@ -201,7 +210,7 @@
     while ( row ) {
         if ( [row count] > 0 ) {
             // 更新行宽
-            row.maxWidth = self.ownerView.frame.size.width;
+//            row.maxWidth = self.ownerView.frame.size.width;
             
             if ( row.display == ALDisplayBlock ) {
                 UIView * view = [row firstView];
@@ -249,6 +258,9 @@
                 if ( self.ownerView.superview ) {
                     [self.ownerView.superview.rowManager reflowSelfHeight];
                 }
+            }
+            if ( self.ownerView.style.isAutoWidth ) {
+                
             }
         // 如果是absolute类型，且isAutoHeight=YES或isAutoWidth=YES
         } else if ( self.ownerView.style.position == ALPositionAbsolute && (self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth) ) {
@@ -363,13 +375,13 @@
     return nil;
 }
 
-- (void) calcNewRowMaxWidth: (ALRow *) row
-{
-    CGFloat maxWidth = 0;
-    if ( row.display == ALDisplayBlock ) {
-        
-    }
-}
+//- (void) calcNewRowMaxWidth: (ALRow *) row
+//{
+//    CGFloat maxWidth = 0;
+//    if ( row.display == ALDisplayBlock ) {
+//        
+//    }
+//}
 
 // 新建行，但不插入到行管理器
 - (ALRow *) createRowWithView: (UIView *) view
@@ -377,9 +389,19 @@
     ALRow * newRow = [[ALRow alloc] init];
     newRow.contentAlign = self.ownerView.style.contentAlign;
     newRow.display = view.style.display;
-    if (  )
-//    newRow.maxWidth = [view getParentWidth];
+    newRow.maxWidth = self.maxWidth;
+    newRow.parent = self.ownerView;
     return newRow;
+}
+
+// 重载setMaxWidth
+- (void) setMaxWidth: (CGFloat) maxWidth
+{
+    // 更新行管理器的maxWidth时，要同步更新当前所有行的maxWidth值
+    for (ALRow * row in _rowsArr) {
+        row.maxWidth = maxWidth;
+    }
+    _maxWidth = maxWidth;
 }
 
 @end

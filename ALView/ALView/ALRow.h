@@ -19,6 +19,8 @@
 @property (nonatomic, assign, readonly) CGFloat width;
 // 当前行的最大宽度
 @property (nonatomic, assign) CGFloat maxWidth;
+// 当前行的父view
+@property (nonatomic, strong) UIView * parent;
 // 当前行的排版方式
 @property (nonatomic, assign) ALContentAlign contentAlign;
 // 当前行插入的view类型
