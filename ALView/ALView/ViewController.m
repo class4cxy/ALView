@@ -145,40 +145,70 @@
     b.style.contentAlign = ALContentAlignCenter;
     [b addTo: self.view];
     
-    _section1 = [[ALView alloc] init];
-    _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-    _section1.style.display = ALDisplayInline;
-//    _section1.style.position = ALPositionAbsolute;
-//    _section1.style.centerX = 0;
-//    _section1.style.centerY = 0;
-//    _section1.style.center = (CGPoint){0, 0};
-//    _section1.style.width = 200;
-    _section1.style.contentAlign = ALContentAlignCenter;
-    [_section1 addTo: b];
-
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
-
-    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
-    _block.style.hidden = YES;
-    _block.style.contentAlign = ALContentAlignRight;
-    [_block addTo: _section1];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    ALView * section = [self createAutoSizeInlineView: 0.1];
+    [section addTo:b];
     
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _section1];
+    [[self createInlineViewWidth:300 height:30 alpha:0.5] addTo: section];
+    
+    ALView * section2 = [self createAutoSizeInlineView: 0.2];
+    [section2 addTo:section];
+    
+//    ALView * section3 = [self createAutoSizeInlineView: 0.3];
+//    [section3 addTo:section2];
+    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: section2];
 //
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:240 height:30 alpha:0.5] addTo: section];
+//    
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: section3];
 
-    [[self createSizeCtrlView] addTo:b];
-    [[self createHiddenCtrlView] addTo:b];
+//    [[self createInlineViewWidth:130 height:30 alpha:0.5] addTo: section3];
+//
+//    [[self createInlineViewWidth:150 height:30 alpha:0.5] addTo: section3];
+    
+//    _section1 = [[ALView alloc] init];
+//    _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
+//    _section1.style.display = ALDisplayInline;
+////    _section1.style.position = ALPositionAbsolute;
+////    _section1.style.centerX = 0;
+////    _section1.style.centerY = 0;
+////    _section1.style.center = (CGPoint){0, 0};
+////    _section1.style.width = 200;
+//    _section1.style.contentAlign = ALContentAlignCenter;
+//    [_section1 addTo: b];
+//
+//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
+//
+//    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+//    _block.style.hidden = YES;
+//    _block.style.contentAlign = ALContentAlignRight;
+//    [_block addTo: _section1];
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+//    
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _section1];
+////
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
+//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
+//
+//    [[self createSizeCtrlView] addTo:b];
+//    ALView * ctrlView = [self createHiddenCtrlView];
+//    [ctrlView addTo:b];
+}
+
+- (ALView *) createAutoSizeInlineView: (CGFloat) alpha
+{
+    ALView * inlineView = [[ALView alloc] init];
+    inlineView.style.display = ALDisplayInline;
+    inlineView.style.marginRight = 10;
+    inlineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return inlineView;
 }
 
 - (ALView *) createSizeCtrlView
