@@ -169,4 +169,8 @@ typedef struct ALRect ALRect;
 // 记录是否设置过right值
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
+// 私有方法，用于更新width/height值，但不改变isAutoWidth/isAutoHeight
+- (void) setHeightWithoutAutoHeight:(CGFloat)height;
+- (void) setWidthWithoutAutoWidth:(CGFloat)width;
+
 @end

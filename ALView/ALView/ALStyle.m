@@ -64,6 +64,12 @@
         _width = width;
     }
 }
+- (void) setWidthWithoutAutoWidth:(CGFloat)width
+{
+    if ( width < 0 ) { width = 0; }
+    _tmpWidth = width;
+    _width = width;
+}
 
 - (void)setHeight: (CGFloat) height
 {
@@ -77,6 +83,12 @@
     } else {
         _height = height;
     }
+}
+- (void) setHeightWithoutAutoHeight:(CGFloat)height
+{
+    if ( height < 0 ) { height = 0; }
+    _tmpHeight = height;
+    _height = height;
 }
 
 - (void) setSize: (CGSize) size

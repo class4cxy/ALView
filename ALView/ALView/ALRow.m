@@ -45,7 +45,8 @@
             [_viewsArr insertObject:view atIndex:0];
             view.belongRow = self;
         }
-        [self layout];
+        [self refreshSize];
+//        [self layout];
     }
 }
 
@@ -77,7 +78,8 @@
     if ( [_viewsArr count] > 0 ) {
         UIView * lastView = [_viewsArr lastObject];
         [_viewsArr removeLastObject];
-        [self layout];
+//        [self layout];
+        [self refreshSize];
         return lastView;
     }
     return nil;
@@ -92,7 +94,8 @@
     if ( [_viewsArr count] > 0 ) {
         UIView * firstView = [_viewsArr objectAtIndex: 0];
         [_viewsArr removeObjectAtIndex: 0];
-        [self layout];
+//        [self layout];
+        [self refreshSize];
         return firstView;
     }
     return nil;
@@ -205,7 +208,7 @@
 
 - (void) layout
 {
-    [self refreshSize];
+//    [self refreshSize];
     if ( _display == ALDisplayBlock ) {
         [self reflowWhenBlock];
     } else {

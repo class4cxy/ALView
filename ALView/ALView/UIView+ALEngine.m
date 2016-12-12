@@ -199,7 +199,7 @@
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
             if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager reflowRow: self stopRecur:NO];
+                [self.superview.rowManager reflowRow: self reflowInnerView: YES];
             }
         } else {
             [self reflowOriginWhenAbsolute];
@@ -271,6 +271,9 @@
             // reflow
             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
             self.hidden = self.style.hidden;
+            // 更新内部值
+            [self.style setWidthWithoutAutoWidth: width];
+            [self.style setHeightWithoutAutoHeight: height];
             
             // 更新自己的行管理器maxWidth值
             if ( !self.style.isAutoWidth && self.rowManager ) {

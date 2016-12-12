@@ -15,7 +15,7 @@
 // 在最后一行的最后个位置插入一个view
 - (void) appendView: (UIView *) view;
 // 重排指定view的行
-- (void) reflowRow: (UIView *) subView stopRecur: (BOOL) stopRecur;
+- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow;
 // 重排当前行管理器的subview
 - (void) reflowOwnerViewInnerView;
 // 获取当前onwerView的宽度
