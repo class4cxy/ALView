@@ -99,7 +99,9 @@
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALEngin];
     // 初始化行管理器
-    [self initParentRowManager];
+    if ( self.style.position == ALPositionRelative ) {
+        [self initParentRowManager];
+    }
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
@@ -108,6 +110,15 @@
     if ( self.style.position == ALPositionRelative ) {
         [parent.rowManager appendView: self];
     } else {
+        if ( self.rowManager ) {
+            if ( self.style.isAutoWidth ) {
+                self.rowManager.maxWidth = self.superview.frame.size.width;
+            } else {
+                self.rowManager.maxWidth = self.frame.size.width;
+            }
+
+            [self.rowManager reflowOwnerViewInnerView];
+        }
         [self reflowOriginWhenAbsolute];
     }
 }
@@ -115,8 +126,10 @@
 - (void) initParentRowManager
 {
     UIView * parent = self.superview;
-    if ( parent && !parent.rowManager ) {
-        parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+    if ( parent ) {
+        if ( !parent.rowManager ) {
+            parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+        }
 
         if ( parent.isALEngine && parent.style.isAutoWidth ) {
             if ( parent.belongRow ) {

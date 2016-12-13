@@ -22,5 +22,6 @@
 - (CGFloat) getOnwerViewInnerWidth;
 // 获取当前onwerView的高度
 - (CGFloat) getOnwerViewInnerHeight;
-
+// 重排子view
+//- (void) reflowOwnerViewInnerView;
 @end

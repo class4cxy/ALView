@@ -55,6 +55,10 @@
             row = [self appendNewRowWithView: view previousRow:row];
         }
     }
+    // 如果存在子view，那先重排子view
+    if ( view.rowManager ) {
+        [view.rowManager reflowOwnerViewInnerView];
+    }
     // 触发父view reflow
     [self reflowOwnerViewSizeWithReflowInner: YES];
     [row layout];

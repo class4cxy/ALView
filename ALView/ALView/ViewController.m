@@ -145,17 +145,17 @@
     b.style.contentAlign = ALContentAlignCenter;
     [b addTo: self.view];
     
-    ALView * section = [self createAutoSizeInlineView: 0.1];
-    [section addTo:b];
-    
-    [[self createInlineViewWidth:300 height:30 alpha:0.5] addTo: section];
-    
-    ALView * section2 = [self createAutoSizeInlineView: 0.2];
-    [section2 addTo:section];
-    
-//    ALView * section3 = [self createAutoSizeInlineView: 0.3];
-//    [section3 addTo:section2];
-    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: section2];
+//    ALView * section = [self createAutoSizeInlineView: 0.1];
+//    [section addTo:b];
+//    
+//    [[self createInlineViewWidth:300 height:30 alpha:0.5] addTo: section];
+//    
+//    ALView * section2 = [self createAutoSizeInlineView: 0.2];
+//    [section2 addTo:section];
+//    
+////    ALView * section3 = [self createAutoSizeInlineView: 0.3];
+////    [section3 addTo:section2];
+//    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: section2];
 //
 //    [[self createInlineViewWidth:240 height:30 alpha:0.5] addTo: section];
 //    
@@ -198,8 +198,8 @@
 //    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
 //
 //    [[self createSizeCtrlView] addTo:b];
-//    ALView * ctrlView = [self createHiddenCtrlView];
-//    [ctrlView addTo:b];
+    ALView * ctrlView = [self createHiddenCtrlView];
+    [ctrlView addTo:b];
 }
 
 - (ALView *) createAutoSizeInlineView: (CGFloat) alpha
