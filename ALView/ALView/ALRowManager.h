@@ -17,11 +17,12 @@
 // 重排指定view的行
 - (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow;
 // 重排当前行管理器的subview
-- (void) reflowOwnerViewInnerView;
+- (void) reflowSubView;
+//- (void) reflowOwnerViewInnerView;
 // 获取当前onwerView的宽度
 - (CGFloat) getOnwerViewInnerWidth;
 // 获取当前onwerView的高度
 - (CGFloat) getOnwerViewInnerHeight;
-// 重排子view
-//- (void) reflowOwnerViewInnerView;
+// 更新onwerView的size
+- (void) reflowSelfSizeWhenAutoSize;
 @end

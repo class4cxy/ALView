@@ -9,12 +9,12 @@
 #import "ALRow.h"
 #import "UIView+ALEngine.h"
 
-@interface ALRow()
-{
-    NSMutableArray * _viewsArr;
-}
-
-@end
+//@interface ALRow()
+//{
+//    NSMutableArray * _viewsArr;
+//}
+//
+//@end
 
 @implementation ALRow
 
@@ -123,6 +123,7 @@
 
 - (BOOL) canAddView: (UIView *) view
 {
+    [self reCountWidth];
     // 特殊逻辑：
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO

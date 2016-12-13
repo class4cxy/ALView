@@ -98,9 +98,18 @@
     [parent addSubview: self];
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALEngin];
-    // 初始化行管理器
+    // 初始化父view的行管理器
     if ( self.style.position == ALPositionRelative ) {
         [self initParentRowManager];
+    }
+    // 如果自己存在行管理器，那就需要重新更新行管理器的数据
+    // TODO: 获取maxWidth方法待改造
+    if ( self.rowManager ) {
+        if ( self.style.isAutoWidth ) {
+            self.rowManager.maxWidth = self.superview.frame.size.width;
+        } else {
+            self.rowManager.maxWidth = self.frame.size.width;
+        }
     }
     // 生成兄弟view关系
     [self linkSiblingView];
@@ -110,14 +119,11 @@
     if ( self.style.position == ALPositionRelative ) {
         [parent.rowManager appendView: self];
     } else {
-        if ( self.rowManager ) {
-            if ( self.style.isAutoWidth ) {
-                self.rowManager.maxWidth = self.superview.frame.size.width;
-            } else {
-                self.rowManager.maxWidth = self.frame.size.width;
-            }
-
-            [self.rowManager reflowOwnerViewInnerView];
+        if ( self.rowManager && self.style.isAutoWidth ) {
+            // 重排子view
+            [self.rowManager reflowSubView];
+            // 更新自己
+            [self.rowManager reflowSelfSizeWhenAutoSize];
         }
         [self reflowOriginWhenAbsolute];
     }
@@ -215,10 +221,10 @@
                 [self.superview.rowManager reflowRow: self reflowInnerView: YES];
             }
         } else {
-            [self reflowOriginWhenAbsolute];
             if ( self.rowManager ) {
-                [self.rowManager reflowOwnerViewInnerView];
+                [self.rowManager reflowSubView];
             }
+            [self reflowOriginWhenAbsolute];
         }
         
         // 重排子view中使用absolute排版的

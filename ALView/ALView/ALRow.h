@@ -29,9 +29,11 @@
 // 行坐标
 @property (nonatomic, assign, readonly) CGFloat top;
 // 下一个兄弟Row
-@property (nonatomic, retain) ALRow * nextRow;
+@property (nonatomic, strong) ALRow * nextRow;
 // 上一个兄弟Row
-@property (nonatomic, retain) ALRow * previousRow;
+@property (nonatomic, strong) ALRow * previousRow;
+
+@property (nonatomic, strong) NSMutableArray * viewsArr;
 
 - (instancetype) init;
 // 检查是否能插入该view
