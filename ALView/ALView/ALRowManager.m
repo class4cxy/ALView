@@ -9,16 +9,9 @@
 #import "ALRowManager.h"
 #import "ALRow.h"
 
-@interface ALRowManager()
-{
-    NSMutableArray<ALRow *> * _rowsArr;
-    NSMutableArray<ALRow *> * _tmpArr;
-}
-
-@end
-
 @implementation ALRowManager
 
+#pragma mark - 初始化
 /*
  * 初始化
  */
@@ -28,48 +21,57 @@
     if (self) {
         self.ownerView = view;
         _rowsArr = [[NSMutableArray alloc] init];
-        _tmpArr = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-/*
- * 在行管理器最后一行尾部插入指定view
- * 1 如果当前view存在rowManager(子view)，检查是否需要重排子view（主要的场景是：父view只被初始化，但没add到任何view中）
- * 2 如果当前管理器还没有row，那新建一个Row，top=0；
- * 3 如果最后的Row为block类型的，那新建一个Row，top=previousRow.top+previousRow.height
- * 4 如果最后的Row为inline类型的，调用canAddView检查是否能插入：
- *   - 如果能插入，那在尾部插入
- *   - 如果不能插入，那新建一个Row，top=previousRow.top+previousRow.height
- * 5 触发父view重排
- * 6 触发当前行重排
- */
+#pragma mark - 行排版逻辑
 
-- (void) appendView: (UIView *) view
+
+/*
+ * 重排当前行管理器中的某一view
+ * 注：该方法主要用于刷新自己，并触发兄弟view、父view重排，通常由父view的行管理器调用；
+ *    对于父view的行管理器来说，自己就是子view，所以命名为reflowChildView
+ * 1、找到该view所属的行
+ * 2、检查view重排后会不会导致当前行断行？
+ * 3、如果需要断行，那递归移除当前行尾部的view，并插入到下一行，执行crushView2NextRow即可，
+ * 4、如果不需要断行，那直接重排当前行，检查修改的view是否当前行中第一个view？
+ * 5、如果是：从当前行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
+ * 6、如果不是：从下一行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
+ * 7、重排自身的高度（self.ownerView）
+ */
+- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow
 {
-    // 如果存在子view，检查是否需要重排子view
-    if ( [self checkNeed2ReflowInnerView: view] ) {
-        [view.rowManager reflowSubView];
-    }
-    // 当前inline view在该容器作为第一行展示
-    ALRow * row = nil;
-    if ( [_rowsArr count] == 0 ) {
-        row = [self appendNewRowWithView: view previousRow:nil];
-    } else {
-        row = _rowsArr.lastObject;
-        if ( [row canAddView: view] ) {
-            [row pushView: view];
+    // 找到该view所属的行，由行去决定如何reflow该view
+    ALRow * belongRow = subView.belongRow;
+    
+    // 检查是否需要断行：
+    // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
+    // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
+    if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
+        if ( [belongRow need2break] ) {
+            [self crush2NextRow: belongRow];
         } else {
-            row = [self appendNewRowWithView: view previousRow:row];
+            ALRow * startRow = nil;
+            if ( subView == belongRow.firstView && belongRow.previousRow ) {
+                startRow = belongRow.previousRow;
+            } else {
+                startRow = belongRow;
+            }
+            
+            [self crush2PreviousRow: startRow];
         }
-    }
-    // 触发ownerView reflow
-    [self reflowOwnerViewSizeWithReflowInner: NO];
-    // 如果ownerView不是左对齐，那还是需要重刷一遍所有行
-    if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth ) {
-        [self reflowAllRow];
-    } else {
-        [row layout];
+        
+        // 递归重排父view的size
+        if ( subView.superview && subView.superview.rowManager ) {
+            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner:isReflow];
+        }
+        
+        if ( isReflow && subView.rowManager ) {
+            // 重排自己内部子view
+            [subView.rowManager reflowSubView];
+            [subView.rowManager reflowOwnerViewHeight];
+        }
     }
 }
 
@@ -180,53 +182,6 @@
 }
 
 /*
- * 重排当前行管理器中的某一view
- * 注：该方法主要用于刷新自己，并触发兄弟view、父view重排，通常由父view的行管理器调用；
- *    对于父view的行管理器来说，自己就是子view，所以命名为reflowChildView
- * 1、找到该view所属的行
- * 2、检查view重排后会不会导致当前行断行？
- * 3、如果需要断行，那递归移除当前行尾部的view，并插入到下一行，执行crushView2NextRow即可，
- * 4、如果不需要断行，那直接重排当前行，检查修改的view是否当前行中第一个view？
- * 5、如果是：从当前行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
- * 6、如果不是：从下一行开始递归检查是否有需要将view往上一行挤，执行crushView2PreviousRow即可
- * 7、重排自身的高度（self.ownerView）
- */
-- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow
-{
-    // 找到该view所属的行，由行去决定如何reflow该view
-    ALRow * belongRow = subView.belongRow;
-    
-    // 检查是否需要断行：
-    // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
-    // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
-    if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
-        if ( [belongRow need2break] ) {
-            [self crush2NextRow: belongRow];
-        } else {
-            ALRow * startRow = nil;
-            if ( subView == belongRow.firstView && belongRow.previousRow ) {
-                startRow = belongRow.previousRow;
-            } else {
-                startRow = belongRow;
-            }
-            
-            [self crush2PreviousRow: startRow];
-        }
-        
-        // 递归重排父view的size
-        if ( subView.superview && subView.superview.rowManager ) {
-            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner:isReflow];
-        }
-
-        if ( isReflow && subView.rowManager ) {
-            // 重排自己内部子view
-            [subView.rowManager reflowSubView];
-            [subView.rowManager reflowSelfHeight];
-        }
-    }
-}
-
-/*
  * 操作（修改、插入、删除）子view而触发的重排父view，也就是行管理器的ownerView
  * 1、如果ownerView.isALEngine=NO，不需操作，因为原生view都有给固定的height与width
  * 2、如果ownerView.isALEngine=YES：
@@ -237,7 +192,7 @@
 {
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        [self reflowSelfSizeWhenAutoSize];
+        [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
         
         if ( self.ownerView.style.isAutoWidth ) {
             // 存在所属行，重排所属行
@@ -250,23 +205,7 @@
         }
     }
 }
-//- (void) reflowOwnerViewSize
-//{
-//    if ( self.ownerView.isALEngine ) {
-//        // 更新ownerView的size
-//        [self reflowSelfSizeWhenAutoSize];
-//        
-//        if ( self.ownerView.style.isAutoWidth ) {
-//            // 存在所属行，重排所属行
-//            if ( self.ownerView.belongRow ) {
-//                [self reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
-//                // 如果所属行是absolute布局，那重排ownerView的origin
-//            } else if ( self.ownerView.style.position == ALPositionAbsolute ) {
-//                [self.ownerView reflowOriginWhenAbsolute];
-//            }
-//        }
-//    }
-//}
+
 /*
  * 重排ownerview的subview
  * 遍历rowManager中的rowArr；
@@ -288,7 +227,7 @@
             if ( row.display == ALDisplayBlock ) {
                 UIView * view = [row firstView];
                 // 重排当前block的size，因为父view有可能改变了宽度
-                [view reflowSelfSize];
+                [view reflowSize];
                 // 重排行
                 [row layout];
                 // 递归触发subview重排
@@ -320,7 +259,7 @@
         if ( row.display == ALDisplayBlock ) {
             UIView * view = [row firstView];
             // 重排当前block的size，因为父view有可能改变了宽度
-            [view reflowSelfSize];
+            [view reflowSize];
             // 重排行
             [row layout];
             // 递归触发subview重排
@@ -359,21 +298,15 @@
     }
 }
 
-// 重排父view的高
-- (void) reflowSelfHeight
+// 重排ownerView的height，并重排兄弟view的top，以及递归父view的height
+- (void) reflowOwnerViewHeight
 {
-    // 当ownerView是ALEngine情况才执行
     if ( self.ownerView.isALEngine ) {
-        // 当父view是ALScrollView，需更新scrollView的contentSize
-        if ( [self.ownerView isKindOfClass: [ALScrollView class]] ) {
-            [((ALScrollView *) self.ownerView) reflowInnerFrame];
-        }
-        // 如果isAutoHeight=YES，reflow Height
+        // 重排ownerView的高度
+        [self.ownerView reflowHeightWhenAutoHeightWithHeight: [self getOnwerViewInnerHeight]];
+        // 递归兄弟view以及superView
         if ( self.ownerView.style.isAutoHeight ) {
             ALRow * belongRow = self.ownerView.belongRow;
-            
-            self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rowsArr.lastObject.height + _rowsArr.lastObject.top);
-            [self.ownerView.style setHeightWithoutAutoHeight:_rowsArr.lastObject.height + _rowsArr.lastObject.top];
             
             [belongRow refreshSize];
             // 重排同级view
@@ -382,64 +315,51 @@
                 belongRow = belongRow.nextRow;
             }
             if ( self.ownerView.superview ) {
-                [self.ownerView.superview.rowManager reflowSelfHeight];
+                [self.ownerView.superview.rowManager reflowOwnerViewHeight];
             }
         }
     }
 }
-// 重排自己的size，使用场景：isAutoWidth=YES情况
-- (void) reflowSelfSizeWhenAutoSize
-{
-    // 当ownerView是ALEngine情况才执行
-    if ( self.ownerView.isALEngine ) {
-        if ( self.ownerView.style.isAutoHeight ) {
-            self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, _rowsArr.lastObject.height + _rowsArr.lastObject.top);
-            [self.ownerView.style setHeightWithoutAutoHeight:_rowsArr.lastObject.height + _rowsArr.lastObject.top];
-        }
-        if ( self.ownerView.style.isAutoWidth && (self.ownerView.style.display != ALDisplayBlock || self.ownerView.style.position == ALPositionAbsolute) ) {
-            self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, [self getOnwerViewInnerWidth], self.ownerView.frame.size.height);
-            [self.ownerView.style setWidthWithoutAutoWidth:[self getOnwerViewInnerWidth]];
-        }
-        // 如果是ownerView是relative类型，需额外做以下逻辑：
-        // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
-        // 2、更新ownerView所属行的size
-        if ( self.ownerView.style.position == ALPositionRelative ) {
-            
-            // 当父view是ALScrollView，需更新scrollView的contentSize
-            if ( [self.ownerView isKindOfClass: [ALScrollView class]] ) {
-                [((ALScrollView *) self.ownerView) reflowInnerFrame];
-            }
 
-            [self.ownerView.belongRow refreshSize];
+#pragma mark - 行操作逻辑
+/*
+ * 在行管理器最后一行尾部插入指定view
+ * 1 如果当前view存在rowManager(子view)，检查是否需要重排子view（主要的场景是：父view只被初始化，但没add到任何view中）
+ * 2 如果当前管理器还没有row，那新建一个Row，top=0；
+ * 3 如果最后的Row为block类型的，那新建一个Row，top=previousRow.top+previousRow.height
+ * 4 如果最后的Row为inline类型的，调用canAddView检查是否能插入：
+ *   - 如果能插入，那在尾部插入
+ *   - 如果不能插入，那新建一个Row，top=previousRow.top+previousRow.height
+ * 5 触发父view重排
+ * 6 触发当前行重排
+ */
+
+- (void) appendView: (UIView *) view
+{
+    // 如果存在子view，检查是否需要重排子view
+    if ( [self checkNeed2ReflowInnerView: view] ) {
+        [view.rowManager reflowSubView];
+    }
+    // 当前inline view在该容器作为第一行展示
+    ALRow * row = nil;
+    if ( [_rowsArr count] == 0 ) {
+        row = [self appendNewRowWithView: view previousRow:nil];
+    } else {
+        row = _rowsArr.lastObject;
+        if ( [row canAddView: view] ) {
+            [row pushView: view];
+        } else {
+            row = [self appendNewRowWithView: view previousRow:row];
         }
     }
-}
-// 重排自己的Size，主要给absolute方式的view使用
-- (void) reflowSelfSizeOfAbsolute
-{
-    if ( self.ownerView.style.isAutoWidth ) {
-        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, [self getOnwerViewInnerWidth], self.ownerView.frame.size.height);
+    // 触发ownerView reflow
+    [self reflowOwnerViewSizeWithReflowInner: NO];
+    // 如果ownerView不是左对齐，那还是需要重刷一遍所有行
+    if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth ) {
+        [self reflowAllRow];
+    } else {
+        [row layout];
     }
-    
-    if ( self.ownerView.style.isAutoHeight ) {
-        self.ownerView.frame = CGRectMake(self.ownerView.frame.origin.x, self.ownerView.frame.origin.y, self.ownerView.frame.size.width, [self getOnwerViewInnerHeight]);
-    }
-}
-
-- (CGFloat) getOnwerViewInnerWidth
-{
-    CGFloat width = 0;
-    for (ALRow * row in _rowsArr) {
-        if ( width < row.width ) {
-            width = row.width;
-        }
-    }
-    return width;
-}
-
-- (CGFloat) getOnwerViewInnerHeight
-{
-    return _rowsArr.lastObject.height + _rowsArr.lastObject.top;
 }
 
 // 新建一行，初始化，并在当前管理器尾部插入
@@ -452,7 +372,6 @@
         previousRow.nextRow = newRow;
     }
     [newRow pushView: view];
-//    [newRow layout];
     [_rowsArr addObject:newRow];
     return newRow;
 }
@@ -513,7 +432,6 @@
             newRow.previousRow = beforeRowPreviousRow;
         }
         [newRow pushView: view];
-//        [newRow layout];
         // 插入
         NSUInteger index = [_rowsArr indexOfObject: beforeRow];
         [_rowsArr insertObject: newRow atIndex: index];
@@ -522,14 +440,6 @@
     }
     return nil;
 }
-
-//- (void) calcNewRowMaxWidth: (ALRow *) row
-//{
-//    CGFloat maxWidth = 0;
-//    if ( row.display == ALDisplayBlock ) {
-//        
-//    }
-//}
 
 // 新建行，但不插入到行管理器
 - (ALRow *) createRowWithView: (UIView *) view
@@ -540,6 +450,24 @@
     newRow.maxWidth = self.maxWidth;
     newRow.parent = self.ownerView;
     return newRow;
+}
+
+#pragma mark - 行管理器相关信息
+
+- (CGFloat) getOnwerViewInnerWidth
+{
+    CGFloat width = 0;
+    for (ALRow * row in _rowsArr) {
+        if ( width < row.width ) {
+            width = row.width;
+        }
+    }
+    return width;
+}
+
+- (CGFloat) getOnwerViewInnerHeight
+{
+    return _rowsArr.lastObject.height + _rowsArr.lastObject.top;
 }
 
 // 重载setMaxWidth

@@ -9,13 +9,6 @@
 #import "ALRow.h"
 #import "UIView+ALEngine.h"
 
-//@interface ALRow()
-//{
-//    NSMutableArray * _viewsArr;
-//}
-//
-//@end
-
 @implementation ALRow
 
 - (instancetype) init
@@ -46,7 +39,6 @@
             view.belongRow = self;
         }
         [self refreshSize];
-//        [self layout];
     }
 }
 
@@ -63,7 +55,6 @@
         }
         // 更新height值
         [self refreshSize];
-//        [self layout];
     }
 }
 
@@ -78,7 +69,6 @@
     if ( [_viewsArr count] > 0 ) {
         UIView * lastView = [_viewsArr lastObject];
         [_viewsArr removeLastObject];
-//        [self layout];
         [self refreshSize];
         return lastView;
     }
@@ -94,7 +84,6 @@
     if ( [_viewsArr count] > 0 ) {
         UIView * firstView = [_viewsArr objectAtIndex: 0];
         [_viewsArr removeObjectAtIndex: 0];
-//        [self layout];
         [self refreshSize];
         return firstView;
     }

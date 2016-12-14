@@ -45,14 +45,18 @@
 - (instancetype) translate2ALEnginWithPosition: (ALPosition) position;
 - (instancetype) translate2ALEnginWithPosition: (ALPosition) position andDisplay: (ALDisplay) display;
 
-// 获取当前view的父view宽度
-- (CGFloat) getParentWidth;
-/*
- * 私有
- */
+#pragma mark - 私有方法，仅提供子类调用，实例不能使用
 // 提供给子类重排自身的size
-- (void) reflowSelfSize;
+- (void) reflowSize;
 // 提供给子类重新排版absolute方式布局的view
 - (void) reflowOriginWhenAbsolute;
+/*
+ * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
+ */
+- (void) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
+/*
+ * 如果当前view是auto height，那么根据指定的height排版当前view height
+ */
+- (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
 
 @end

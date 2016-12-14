@@ -98,55 +98,51 @@
     [parent addSubview: self];
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALEngin];
-    // 初始化父view的行管理器
-    if ( self.style.position == ALPositionRelative ) {
-        [self initParentRowManager];
-    }
-    // 如果自己存在行管理器，那就需要重新更新行管理器的数据
-    // TODO: 获取maxWidth方法待改造
-    if ( self.rowManager ) {
-        if ( self.style.isAutoWidth ) {
-            self.rowManager.maxWidth = self.superview.frame.size.width;
-        } else {
-            self.rowManager.maxWidth = self.frame.size.width;
-        }
+    // 如果自己存在行管理器而且isAutoWidth==YES，那就需要重新更新行管理器的数据
+    if ( self.rowManager && self.style.isAutoWidth ) {
+        self.rowManager.maxWidth = [self getRowMaxWidthOf: self];
     }
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
-    [self reflowSelfSize];
+    [self reflowSize];
     // 排版origin
     if ( self.style.position == ALPositionRelative ) {
+        // 初始化父view的行管理器
+        if ( !parent.rowManager ) {
+            parent.rowManager = [[ALRowManager alloc] initWithView: parent];
+            parent.rowManager.maxWidth = [self getRowMaxWidthOf: parent];
+        }
         [parent.rowManager appendView: self];
     } else {
         if ( self.rowManager && self.style.isAutoWidth ) {
             // 重排子view
             [self.rowManager reflowSubView];
             // 更新自己
-            [self.rowManager reflowSelfSizeWhenAutoSize];
+            [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
         }
         [self reflowOriginWhenAbsolute];
     }
 }
 
-- (void) initParentRowManager
+/*
+ * 获取子view中的最后一个ALView，可通过display类型来查找
+ */
+- (UIView *) getPreviousSiblingALEngineView
 {
     UIView * parent = self.superview;
     if ( parent ) {
-        if ( !parent.rowManager ) {
-            parent.rowManager = [[ALRowManager alloc] initWithView: parent];
-        }
-
-        if ( parent.isALEngine && parent.style.isAutoWidth ) {
-            if ( parent.belongRow ) {
-                parent.rowManager.maxWidth = parent.belongRow.maxWidth;
-            } else {
-                parent.rowManager.maxWidth = parent.superview.frame.size.width;
+        UIView * lastView = nil;
+        NSInteger i = parent.subviews.count - 2; // 跳过自己
+        
+        for (; i >= 0; i--) {
+            lastView = [parent.subviews objectAtIndex:i];
+            if ( lastView.isALEngine ) {
+                return lastView;
             }
-        } else {
-            parent.rowManager.maxWidth = parent.frame.size.width;
         }
     }
+    return nil;
 }
 
 /*
@@ -206,6 +202,20 @@
     // TODO
 }
 
+/*
+ * link view by nextSibling & previousSibling
+ */
+
+- (void) linkSiblingView
+{
+    UIView * lastSubView = [self getPreviousSiblingALEngineView];
+    
+    if ( lastSubView != nil ) {
+        self.previousSibling = (ALView*)lastSubView;
+        lastSubView.nextSibling = (ALView*)self;
+    }
+}
+
 
 #pragma mark - 排版逻辑
 
@@ -214,7 +224,7 @@
 {
     // SuperView不存在情况表明该view还没渲染出来
     if ( self.superview && self.isALEngine ) {
-        [self reflowSelfSize];
+        [self reflowSize];
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
             if ( self.superview && self.superview.rowManager ) {
@@ -223,7 +233,7 @@
         } else {
             if ( self.rowManager ) {
                 [self.rowManager reflowSubView];
-                [self.rowManager reflowSelfSizeOfAbsolute];
+                [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
             }
             [self reflowOriginWhenAbsolute];
         }
@@ -244,24 +254,12 @@
     }
 }
 
-/*
- * link view by nextSibling & previousSibling
- */
-
-- (void) linkSiblingView
-{
-    UIView * lastSubView = [self getPreviousSiblingALEngineView];
-    
-    if ( lastSubView != nil ) {
-        self.previousSibling = (ALView*)lastSubView;
-        lastSubView.nextSibling = (ALView*)self;
-    }
-}
+#pragma mark - 排版逻辑
 
 /*
- * 排版自身尺寸
+ * 自动排版当前view尺寸
  */
-- (void) reflowSelfSize
+- (void) reflowSize
 {
     if ( self.superview && self.isALEngine ) {
         UIView * parent = self.superview;
@@ -354,40 +352,72 @@
     }
 }
 
-#pragma mark - 私有方法
 /*
- * 获取子view中的最后一个ALView，可通过display类型来查找
+ * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (UIView *) getPreviousSiblingALEngineView
+- (void) reflowSizeWhenAutoSizeWithSize: (CGSize) size
 {
-    UIView * parent = self.superview;
-    if ( parent ) {
-        UIView * lastView = nil;
-        NSInteger i = parent.subviews.count - 2; // 跳过自己
+    if ( self.isALEngine ) {
+        if ( self.style.isAutoHeight ) {
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height);
+            [self.style setHeightWithoutAutoHeight:size.height];
+        }
         
-        for (; i >= 0; i--) {
-            lastView = [parent.subviews objectAtIndex:i];
-            if ( lastView.isALEngine ) {
-                return lastView;
+        if ( self.style.isAutoWidth && (self.style.display != ALDisplayBlock || self.style.position == ALPositionAbsolute) ) {
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
+            [self.style setWidthWithoutAutoWidth:size.width];
+        }
+        // 如果是ownerView是relative类型，需额外做以下逻辑：
+        // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
+        // 2、更新ownerView所属行的size
+        if ( self.style.isAutoHeight || self.style.isAutoWidth ) {
+            
+            // 当父view是ALScrollView，需更新scrollView的contentSize
+            if ( [self isKindOfClass: [ALScrollView class]] ) {
+                [((ALScrollView *) self) reflowInnerFrame];
+            }
+            if ( self.style.position == ALPositionRelative ) {
+                [self.belongRow refreshSize];
             }
         }
     }
-    return nil;
+}
+
+/*
+ * 如果当前view是auto height，那么根据指定的height排版当前view height
+ */
+- (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height
+{
+    if ( self.isALEngine ) {
+        // 当父view是ALScrollView，需更新scrollView的contentSize
+        if ( [self isKindOfClass: [ALScrollView class]] ) {
+            [((ALScrollView *) self) reflowInnerFrame];
+        }
+
+        if ( self.style.isAutoHeight ) {
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+            [self.style setHeightWithoutAutoHeight: height];
+        }
+    }
 }
 
 /*
  * 获取父view的宽度
  * 特殊：使用absolute布局且isAutoWidth=YES的父view，需递归一直往上查找
  */
-- (CGFloat) getParentWidth
+- (CGFloat) getRowMaxWidthOf: (UIView *) ownerView
 {
-    if ( self.superview ) {
-        if ( self.superview.isALEngine && self.superview.style.position == ALPositionAbsolute && self.superview.style.isAutoWidth ) {
-            return [self.superview getParentWidth];
+    CGFloat maxWidth = 0;
+    if ( ownerView.isALEngine && ownerView.style.isAutoWidth ) {
+        if ( ownerView.belongRow ) {
+            maxWidth = ownerView.belongRow.maxWidth;
+        } else if ( ownerView.superview ) {
+            return [self getRowMaxWidthOf: ownerView.superview];
         }
-        return self.superview.frame.size.width;
+    } else {
+        maxWidth = ownerView.frame.size.width;
     }
-    return [[UIScreen mainScreen] bounds].size.width;
+    return maxWidth;
 }
 
 @end
