@@ -223,6 +223,7 @@
         } else {
             if ( self.rowManager ) {
                 [self.rowManager reflowSubView];
+                [self.rowManager reflowSelfSizeOfAbsolute];
             }
             [self reflowOriginWhenAbsolute];
         }

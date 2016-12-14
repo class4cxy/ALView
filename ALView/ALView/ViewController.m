@@ -167,11 +167,11 @@
     
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-    _section1.style.display = ALDisplayInline;
-//    _section1.style.position = ALPositionAbsolute;
+//    _section1.style.display = ALDisplayInline;
+    _section1.style.position = ALPositionAbsolute;
 //    _section1.style.centerX = 0;
 //    _section1.style.centerY = 0;
-//    _section1.style.center = (CGPoint){0, 0};
+    _section1.style.center = (CGPoint){0, 0};
 //    _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo: b];

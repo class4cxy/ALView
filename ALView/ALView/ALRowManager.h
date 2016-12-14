@@ -25,4 +25,6 @@
 - (CGFloat) getOnwerViewInnerHeight;
 // 更新onwerView的size
 - (void) reflowSelfSizeWhenAutoSize;
+
+- (void) reflowSelfSizeOfAbsolute;
 @end
