@@ -19,7 +19,7 @@
 @property (nonatomic, assign, readonly) CGFloat width;
 // 当前行的最大宽度
 @property (nonatomic, assign) CGFloat maxWidth;
-@property (nonatomic, assign) BOOL isAutoWidth;
+//@property (nonatomic, assign) BOOL isAutoWidth;
 // 当前行的父view
 @property (nonatomic, strong) UIView * parent;
 // 当前行的排版方式

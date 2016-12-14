@@ -40,23 +40,54 @@
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
     
-//    [self initDynamicLayout];
-    [self initDynamicAbsolute];
+    [self initDynamicLayout];
+//    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
+//    [self initMixAutoWidthLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initMixAutoWidthLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.height = [[UIScreen mainScreen] bounds].size.height;
+    [body addTo: self.view];
+    
+    
+    ALView * section = [self createAutoSizeInlineView: 0.1];
+    [section addTo:body];
+
+    [[self createInlineViewWidth:300 height:30 alpha:0.5] addTo: section];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: section];
+
+    ALView * section2 = [self createAutoSizeInlineView: 0.2];
+    [section2 addTo:section];
+    
+    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: section2];
+//
+    ALView * section3 = [self createAutoSizeInlineView: 0.3];
+    [section3 addTo:section2];
+//
+//    [[self createInlineViewWidth:240 height:30 alpha:0.5] addTo: section];
+
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: section3];
+
+    [[self createInlineViewWidth:130 height:30 alpha:0.5] addTo: section3];
+
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: section3];
 }
 
 - (void) initPositionAutoSizeWhenBottomAndRight
 {
     ALView * body = [[ALView alloc] init];
     body.style.height = [[UIScreen mainScreen] bounds].size.height;
-    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+//    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
     [body addTo: self.view];
 
     ALView * sub1 = [[ALView alloc] init];
     sub1.style.position = ALPositionAbsolute;
-    sub1.style.display = ALDisplayInline;
+//    sub1.style.display = ALDisplayInline;
     sub1.style.contentAlign = ALContentAlignCenter;
     sub1.style.width = 200;
     sub1.style.bottom = 10;
@@ -145,33 +176,13 @@
     b.style.contentAlign = ALContentAlignCenter;
     [b addTo: self.view];
     
-//    ALView * section = [self createAutoSizeInlineView: 0.1];
-//    [section addTo:b];
-//    
-//    [[self createInlineViewWidth:300 height:30 alpha:0.5] addTo: section];
-//    
-//    ALView * section2 = [self createAutoSizeInlineView: 0.2];
-//    [section2 addTo:section];
-//    
-////    ALView * section3 = [self createAutoSizeInlineView: 0.3];
-////    [section3 addTo:section2];
-//    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: section2];
-//
-//    [[self createInlineViewWidth:240 height:30 alpha:0.5] addTo: section];
-//    
-//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: section3];
-
-//    [[self createInlineViewWidth:130 height:30 alpha:0.5] addTo: section3];
-//
-//    [[self createInlineViewWidth:150 height:30 alpha:0.5] addTo: section3];
-    
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-//    _section1.style.display = ALDisplayInline;
-    _section1.style.position = ALPositionAbsolute;
+    _section1.style.display = ALDisplayInline;
+//    _section1.style.position = ALPositionAbsolute;
 //    _section1.style.centerX = 0;
 //    _section1.style.centerY = 0;
-    _section1.style.center = (CGPoint){0, 0};
+//    _section1.style.center = (CGPoint){0, 0};
 //    _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo: b];
@@ -180,16 +191,16 @@
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
 //
-//    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
 //    _block.style.hidden = YES;
-//    _block.style.contentAlign = ALContentAlignRight;
-//    [_block addTo: _section1];
-//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-//    
+    _block.style.contentAlign = ALContentAlignRight;
+    [_block addTo: _section1];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+//
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _section1];
 //
@@ -1046,7 +1057,7 @@
 //    box.style.width = 40;
     box.style.size = (CGSize) {40, 40};
     box.style.position = ALPositionAbsolute;
-    box.style.origin = (ALRect) {top, left, bottom, right};
+    box.style.origin = (ALRect) {top, right, bottom, left};
 //    if (top) box.style.top = top;
 //    if (left) box.style.left = left;
 //    if (right) box.style.right = right;

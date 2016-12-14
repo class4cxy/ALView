@@ -98,14 +98,14 @@
     [parent addSubview: self];
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALEngin];
-    // 如果自己存在行管理器而且isAutoWidth==YES，那就需要重新更新行管理器的数据
-    if ( self.rowManager && self.style.isAutoWidth ) {
-        self.rowManager.maxWidth = [self getRowMaxWidthOf: self];
-    }
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
     [self reflowSize];
+    // 如果自己存在行管理器而且isAutoWidth==YES，那就需要重新更新行管理器的数据
+    if ( self.rowManager && self.style.isAutoWidth ) {
+        self.rowManager.maxWidth = [self getRowMaxWidthOf: self];
+    }
     // 排版origin
     if ( self.style.position == ALPositionRelative ) {
         // 初始化父view的行管理器
@@ -254,8 +254,6 @@
     }
 }
 
-#pragma mark - 排版逻辑
-
 /*
  * 自动排版当前view尺寸
  */
@@ -294,7 +292,8 @@
             [self.style setHeightWithoutAutoHeight: height];
             
             // 更新自己的行管理器maxWidth值
-            if ( !self.style.isAutoWidth && self.rowManager ) {
+//            if ( !self.style.isAutoWidth && self.rowManager ) {
+            if ( self.rowManager ) {
                 self.rowManager.maxWidth = self.style.width;
             }
         }
@@ -408,7 +407,7 @@
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView
 {
     CGFloat maxWidth = 0;
-    if ( ownerView.isALEngine && ownerView.style.isAutoWidth ) {
+    if ( ownerView.isALEngine && ownerView.style.isAutoWidth && (ownerView.style.display == ALDisplayInline || ownerView.style.position == ALPositionAbsolute) ) {
         if ( ownerView.belongRow ) {
             maxWidth = ownerView.belongRow.maxWidth;
         } else if ( ownerView.superview ) {

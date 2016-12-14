@@ -49,22 +49,33 @@
     // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
     // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
     if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
-        if ( [belongRow need2break] ) {
-            [self crush2NextRow: belongRow];
-        } else {
-            ALRow * startRow = nil;
-            if ( subView == belongRow.firstView && belongRow.previousRow ) {
-                startRow = belongRow.previousRow;
-            } else {
-                startRow = belongRow;
+        // 如果是block行可以简单点处理
+        if ( belongRow.display == ALDisplayBlock ) {
+            [belongRow refreshSize];
+            [belongRow layout];
+            // 检查下一行重排top值
+            while ( belongRow.nextRow ) {
+                [belongRow.nextRow reflowTop];
+                belongRow = belongRow.nextRow;
             }
-            
-            [self crush2PreviousRow: startRow];
+        } else {
+            if ( [belongRow need2break] ) {
+                [self crush2NextRow: belongRow];
+            } else {
+                ALRow * startRow = nil;
+                if ( subView == belongRow.firstView && belongRow.previousRow ) {
+                    startRow = belongRow.previousRow;
+                } else {
+                    startRow = belongRow;
+                }
+                
+                [self crush2PreviousRow: startRow];
+            }
         }
         
         // 递归重排父view的size
         if ( subView.superview && subView.superview.rowManager ) {
-            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner:isReflow];
+            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner: NO];
         }
         
         if ( isReflow && subView.rowManager ) {
@@ -84,13 +95,13 @@
         if ( [row need2break] ) {
             do
             {
-                UIView * lastView = [row shiftView];
+                UIView * lastView = [row popView];
                 // 如果不存在下一行，那新建并append到行管理器尾部
                 if ( !row.nextRow ) {
                     [self appendNewRowWithView:lastView previousRow: row];
                 // 如果下一行是block类型，那新建并插入到当前行之前
                 } else if ( row.nextRow.display == ALDisplayBlock ) {
-                    [self insertNewRowWithView:lastView beforeRow:row];
+                    [self insertNewRowWithView:lastView beforeRow:row.nextRow];
                 } else {
                     [row.nextRow addView: lastView];
                 }
@@ -194,14 +205,16 @@
         // 更新ownerView的size
         [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
         
-        if ( self.ownerView.style.isAutoWidth ) {
-            // 存在所属行，重排所属行
-            if ( self.ownerView.belongRow ) {
-                [self reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
-            // 如果所属行是absolute布局，那重排ownerView的origin
-            } else if ( self.ownerView.style.position == ALPositionAbsolute ) {
-                [self.ownerView reflowOriginWhenAbsolute];
+        if ( self.ownerView.style.position == ALPositionRelative ) {
+            if ( self.ownerView.style.isAutoWidth ) {
+                // 存在所属行，重排所属行
+                if ( self.ownerView.belongRow ) {
+                    [self.ownerView.superview.rowManager reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
+                }
             }
+        // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
+        } else if ( self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth ) {
+            [self.ownerView reflowOriginWhenAbsolute];
         }
     }
 }
@@ -260,11 +273,13 @@
             UIView * view = [row firstView];
             // 重排当前block的size，因为父view有可能改变了宽度
             [view reflowSize];
+            [row refreshSize];
             // 重排行
             [row layout];
             // 递归触发subview重排
             if ( view.rowManager && view.style.isAutoWidth ) {
                 [view.rowManager reflowSubView];
+                [view.rowManager reflowOwnerViewSizeWithReflowInner: NO];
             }
             isBlockRow = YES;
         } else if ( row.display == ALDisplayInline && isBlockRow ) {
@@ -292,6 +307,17 @@
 {
     ALRow * row = [self firstRow];
     while (row) {
+        // 更新block行
+        if ( row.display == ALDisplayBlock && row.firstView && row.firstView.style.isAutoWidth ) {
+            [row.firstView reflowSize];
+            [row refreshSize];
+            // 递归触发subview重排
+            if ( row.firstView.rowManager ) {
+                [row.firstView.rowManager reflowSubView];
+                [row.firstView.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+            }
+        }
+        
         [row layout];
         // 递归
         row = row.nextRow;
