@@ -264,6 +264,7 @@
         // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
         if ( [self isKindOfClass:[ALLabel class]] ) {
             [((ALLabel *) self) reflowWithInnerText: parent];
+            self.hidden = self.style.hidden;
         } else {
             CGFloat width = self.style.width;
             CGFloat height = self.style.height;

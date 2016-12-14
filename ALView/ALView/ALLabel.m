@@ -35,8 +35,8 @@
         // 根据font大小动态计算
         CGSize fontSize = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
         // label的宽度不能超过parent的宽度
-        if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > parent.frame.size.width ) {
-            fontSize.width = parent.frame.size.width - self.style.paddingLeft - self.style.paddingRight;
+        if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > self.belongRow.maxWidth ) {
+            fontSize.width = self.belongRow.maxWidth - self.style.paddingLeft - self.style.paddingRight;
         }
         // 自动高度 & 自动宽度
         // 宽度自动，但不能大于父view宽度
@@ -64,6 +64,10 @@
         }
         // padding是会导致内增高的
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom);
+        
+        // 更新内部值
+        [self.style setWidthWithoutAutoWidth: fontSize.width];
+        [self.style setHeightWithoutAutoHeight: fontSize.height];
     }
 }
 
