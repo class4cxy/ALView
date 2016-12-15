@@ -20,4 +20,20 @@
     return self;
 }
 
+- (instancetype) initInlineView
+{
+    if ( self = [super initWithALEngine] ) {
+        self.style.display  = ALDisplayInline;
+    }
+    return self;
+}
+
+- (instancetype) initAbsoluteView
+{
+    if ( self = [super initWithALEngine] ) {
+        self.style.position  = ALPositionAbsolute;
+    }
+    return self;
+}
+
 @end

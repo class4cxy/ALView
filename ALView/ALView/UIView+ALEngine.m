@@ -97,7 +97,7 @@
     // 将view add到树中
     [parent addSubview: self];
     // 如果当前view并不是ALEngine，那默认把它转成
-    [self translate2ALEngin];
+    [self translate2ALView];
     // 生成兄弟view关系
     [self linkSiblingView];
     // 排版size
@@ -149,7 +149,7 @@
  * 提供给一个普通UIView转为ALView布局
  * 1、初始化size
  */
-- (instancetype) translate2ALEngin
+- (instancetype) translate2ALView
 {
     // 避免开发者乱玩
     if ( !self.isALEngine ) {
@@ -169,19 +169,19 @@
     }
     return self;
 }
-- (instancetype) translate2ALEnginWithPosition: (ALPosition) position
+- (instancetype) translate2InlineALView
 {
-    [self translate2ALEngin];
-    self.style.position = position;
+    [self translate2ALView];
+    self.style.display = ALDisplayInline;
     return self;
 }
-- (instancetype) translate2ALEnginWithPosition: (ALPosition) position andDisplay: (ALDisplay) display
+- (instancetype) translate2AbsoluteALView
 {
-    [self translate2ALEngin];
-    self.style.display = display;
-    self.style.position = position;
+    [self translate2ALView];
+    self.style.position = ALPositionAbsolute;
     return self;
 }
+
 
 /*
  * 移除该view

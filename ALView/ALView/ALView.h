@@ -11,5 +11,7 @@
 @interface ALView : UIView
 
 - (instancetype) init;
+- (instancetype) initInlineView;
+- (instancetype) initAbsoluteView;
 
 @end

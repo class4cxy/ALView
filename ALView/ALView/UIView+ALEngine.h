@@ -41,9 +41,9 @@
  * 提供给一个普通UIView转为ALView布局
  * 1、初始化size
  */
-- (instancetype) translate2ALEngin;
-- (instancetype) translate2ALEnginWithPosition: (ALPosition) position;
-- (instancetype) translate2ALEnginWithPosition: (ALPosition) position andDisplay: (ALDisplay) display;
+- (instancetype) translate2ALView;
+- (instancetype) translate2InlineALView;
+- (instancetype) translate2AbsoluteALView;
 
 #pragma mark - 私有方法，仅提供子类调用，实例不能使用
 // 提供给子类重排自身的size
