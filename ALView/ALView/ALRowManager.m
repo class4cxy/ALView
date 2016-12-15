@@ -213,8 +213,11 @@
                 }
             }
         // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
-        } else if ( self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth ) {
+        } else {
             [self.ownerView reflowOriginWhenAbsolute];
+        }
+        
+        if ( self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth ) {
             // 如果ownerView不是左对齐，那还是需要重刷一遍所有行
             if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth ) {
                 [self reflowAllRow];

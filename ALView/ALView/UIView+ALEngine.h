@@ -59,4 +59,6 @@
  */
 - (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
 
+- (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
+
 @end

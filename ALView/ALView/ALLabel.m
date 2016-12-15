@@ -35,7 +35,8 @@
         // 根据font大小动态计算
         CGSize fontSize = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
         // label的宽度不能超过parent的宽度
-        if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > self.belongRow.maxWidth ) {
+        CGFloat maxWidth = [self getRowMaxWidthOf: parent];
+        if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > maxWidth ) {
             fontSize.width = self.belongRow.maxWidth - self.style.paddingLeft - self.style.paddingRight;
         }
         // 自动高度 & 自动宽度

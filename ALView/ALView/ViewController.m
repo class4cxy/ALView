@@ -15,6 +15,9 @@
     ALView * _body;
     ALView * _block;
     ALLabel * _allabel;
+    
+    ALLabel * _nicklabel;
+    ALLabel * _timelabel;
 }
 @end
 
@@ -45,10 +48,48 @@
 //    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
-    [self initDynamicALLabel];
+//    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
+    [self initALLabelAndAutoBlockLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initALLabelAndAutoBlockLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+    ALView * wrap = [[ALView alloc] initAbsoluteView];
+    [wrap addTo: body];
+    
+    ALView * avatar = [[ALView alloc] initInlineView];
+    avatar.style.size = (CGSize) {35, 35};
+    avatar.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
+    [avatar addTo: wrap];
+    
+    ALView * infoWrap = [[ALView alloc] initInlineView];
+    [infoWrap addTo:wrap];
+    
+    ALView * nickWrap = [[ALView alloc] init];
+    [nickWrap addTo:infoWrap];
+    
+    ALView * timeWrap = [[ALView alloc] init];
+    [timeWrap addTo:infoWrap];
+    
+    _nicklabel = [[ALLabel alloc] init];
+    _nicklabel.text = @"";
+    _nicklabel.font = [UIFont systemFontOfSize:12];
+    [_nicklabel addTo: nickWrap];
+    
+    _timelabel = [[ALLabel alloc] init];
+    _timelabel.text = @"";
+    _timelabel.font = [UIFont systemFontOfSize:12];
+    [_timelabel addTo: timeWrap];
+    
+    [[self createHiddenCtrlView] addTo:body];
 }
 
 - (void) initDynamicSizeWhenAutoWidth
@@ -395,16 +436,24 @@
 {
 //    _block.style.hidden = YES;
 //    [_block reflow];
-    _allabel.text = @"jdochennnnnn";
-    [_allabel reflow];
+//    _allabel.text = @"jdochennnnnn";
+//    [_allabel reflow];
+    _nicklabel.text = @"";
+    [_nicklabel reflow];
+    _timelabel.text = @"";
+    [_timelabel reflow];
 }
 
 - (void) showView
 {
-    _allabel.text = @"jdochen";
-    [_allabel reflow];
+//    _allabel.text = @"jdochen";
+//    [_allabel reflow];
 //    _block.style.hidden = NO;
-//    [_block reflow];
+    //    [_block reflow];
+    _nicklabel.text = @"jdochen";
+    [_nicklabel reflow];
+    _timelabel.text = @"10:00";
+    [_timelabel reflow];
 }
 
 

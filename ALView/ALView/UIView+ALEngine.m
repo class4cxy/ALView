@@ -408,7 +408,7 @@
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView
 {
     CGFloat maxWidth = 0;
-    if ( ownerView.isALEngine && ownerView.style.isAutoWidth && (ownerView.style.display == ALDisplayInline || ownerView.style.position == ALPositionAbsolute) ) {
+    if ( ownerView.isALEngine && ownerView.style.isAutoWidth ) {
         if ( ownerView.belongRow ) {
             maxWidth = ownerView.belongRow.maxWidth;
         } else if ( ownerView.superview ) {
