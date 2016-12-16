@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    [self initLayoutWithMargin];
+    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
 //    [self initLayoutWithAbsolutePriority];
@@ -50,7 +50,7 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-    [self initALLabelAndAutoBlockLayout];
+//    [self initALLabelAndAutoBlockLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -71,12 +71,14 @@
     [avatar addTo: wrap];
     
     ALView * infoWrap = [[ALView alloc] initInlineView];
+    infoWrap.style.marginLeft = 10;
     [infoWrap addTo:wrap];
     
     ALView * nickWrap = [[ALView alloc] init];
     [nickWrap addTo:infoWrap];
     
     ALView * timeWrap = [[ALView alloc] init];
+    timeWrap.style.marginTop = 4;
     [timeWrap addTo:infoWrap];
     
     _nicklabel = [[ALLabel alloc] init];
@@ -88,6 +90,13 @@
     _timelabel.text = @"";
     _timelabel.font = [UIFont systemFontOfSize:12];
     [_timelabel addTo: timeWrap];
+    
+    ALLabel * focus = [[ALLabel alloc] init];
+    focus.text = @"关注";
+    focus.font = [UIFont systemFontOfSize:13];
+    focus.style.margin = (ALRect){5, 0, 0, 5};
+    focus.style.padding = (ALRect){5, 10, 5, 10};
+    [focus addTo:wrap];
     
     [[self createHiddenCtrlView] addTo:body];
 }
