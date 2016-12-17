@@ -1219,7 +1219,7 @@
     article2.style.marginLeft = 20;
     article2.style.marginRight = 20;
     [article2 addTo:body];
-    
+//
     [[self createInlineBox1:0.1] addTo:article2];
     [[self createInlineBox1:0.2] addTo:article2];
     [[self createInlineBox1:0.3] addTo:article2];

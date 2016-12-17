@@ -355,17 +355,20 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (void) reflowSizeWhenAutoSizeWithSize: (CGSize) size
+- (BOOL) reflowSizeWhenAutoSizeWithSize: (CGSize) size
 {
+    // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
+    BOOL hasChangeWidth = NO;
     if ( self.isALEngine ) {
         if ( self.style.isAutoHeight ) {
             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height);
             [self.style setHeightWithoutAutoHeight:size.height];
         }
         
-        if ( self.style.isAutoWidth && (self.style.display != ALDisplayBlock || self.style.position == ALPositionAbsolute) ) {
+        if ( self.style.isAutoWidth && ((self.style.display == ALDisplayBlock && self.style.width < size.width) || self.style.display == ALDisplayInline || self.style.position == ALPositionAbsolute) ) {
             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth:size.width];
+            hasChangeWidth = YES;
         }
         // 如果是ownerView是relative类型，需额外做以下逻辑：
         // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
@@ -381,6 +384,7 @@
             }
         }
     }
+    return hasChangeWidth;
 }
 
 /*
@@ -410,7 +414,7 @@
     CGFloat maxWidth = 0;
     if ( ownerView.isALEngine && ownerView.style.isAutoWidth ) {
         if ( ownerView.belongRow ) {
-            maxWidth = ownerView.belongRow.maxWidth;
+            maxWidth = ownerView.belongRow.maxWidth - ownerView.style.marginRight - ownerView.style.marginLeft;
         } else if ( ownerView.superview ) {
             return [self getRowMaxWidthOf: ownerView.superview];
         }

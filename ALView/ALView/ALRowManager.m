@@ -199,18 +199,22 @@
  *    - 重排ownerView的size(调用reflowSelfSizeWhenAutoSize)
  *    - 如果ownerView.style.isAutoWidth=YES，触发重排ownerView所在的当前行（调用reflowRow:stopRecur）
  */
-- (void) reflowOwnerViewSizeWithReflowInner: (BOOL) need2ReflowInnerView
+- (BOOL) reflowOwnerViewSizeWithReflowInner: (BOOL) need2ReflowInnerView
 {
+    BOOL hasUpdateWidth = NO;
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
+        hasUpdateWidth = [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
         
         if ( self.ownerView.style.position == ALPositionRelative ) {
-            if ( self.ownerView.style.isAutoWidth ) {
+            if ( self.ownerView.style.isAutoWidth && hasUpdateWidth ) {
                 // 存在所属行，重排所属行
                 if ( self.ownerView.belongRow ) {
                     [self.ownerView.superview.rowManager reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
                 }
+            // 单独更新top值即可
+            } else if ( self.ownerView.style.isAutoHeight ) {
+                [self recurReflowParentHeight: self.ownerView];
             }
         // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
         } else {
@@ -220,10 +224,11 @@
         }
         
         // 如果ownerView不是左对齐，那还是需要重刷一遍所有行
-        if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth ) {
+        if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth && hasUpdateWidth ) {
             [self reflowAllRow];
         }
     }
+    return hasUpdateWidth;
 }
 
 /*
@@ -321,7 +326,7 @@
             // 递归触发subview重排
             if ( row.firstView.rowManager ) {
                 [row.firstView.rowManager reflowSubView];
-                [row.firstView.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+//                [row.firstView.rowManager reflowOwnerViewSizeWithReflowInner: NO];
             }
         }
         
@@ -339,18 +344,34 @@
         [self.ownerView reflowHeightWhenAutoHeightWithHeight: [self getOnwerViewInnerHeight]];
         // 递归兄弟view以及superView
         if ( self.ownerView.style.isAutoHeight ) {
-            ALRow * belongRow = self.ownerView.belongRow;
-            
-            [belongRow refreshSize];
-            // 重排同级view
-            while (belongRow.nextRow) {
-                [belongRow.nextRow reflowTop];
-                belongRow = belongRow.nextRow;
-            }
-            if ( self.ownerView.superview ) {
-                [self.ownerView.superview.rowManager reflowOwnerViewHeight];
-            }
+            [self recurReflowParentHeight: self.ownerView];
+//            ALRow * belongRow = self.ownerView.belongRow;
+//            
+//            [belongRow refreshSize];
+//            // 重排同级view
+//            while (belongRow.nextRow) {
+//                [belongRow.nextRow reflowTop];
+//                belongRow = belongRow.nextRow;
+//            }
+//            if ( self.ownerView.superview ) {
+//                [self.ownerView.superview.rowManager reflowOwnerViewHeight];
+//            }
         }
+    }
+}
+
+- (void) recurReflowParentHeight: (UIView *) parent
+{
+    ALRow * belongRow = parent.belongRow;
+    
+    [belongRow refreshSize];
+    // 重排同级view
+    while (belongRow.nextRow) {
+        [belongRow.nextRow reflowTop];
+        belongRow = belongRow.nextRow;
+    }
+    if ( parent.superview ) {
+        [parent.superview.rowManager reflowOwnerViewHeight];
     }
 }
 
@@ -386,9 +407,9 @@
         }
     }
     // 触发ownerView reflow
-    [self reflowOwnerViewSizeWithReflowInner: NO];
+    BOOL hasUpdateWidth = [self reflowOwnerViewSizeWithReflowInner: NO];
     // 如果ownerView左对齐或者isAutoWidth=NO，才需要重刷当前行，否则reflowOwnerViewSizeWithReflowInner会执行了重排
-    if ( self.ownerView.style.contentAlign == ALContentAlignLeft || !self.ownerView.style.isAutoWidth ) {
+    if ( self.ownerView.style.contentAlign == ALContentAlignLeft || !self.ownerView.style.isAutoWidth || !hasUpdateWidth ) {
         [row layout];
     }
 }

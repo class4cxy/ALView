@@ -53,7 +53,7 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (void) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
+- (BOOL) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
