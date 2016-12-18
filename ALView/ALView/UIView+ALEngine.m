@@ -365,7 +365,7 @@
             [self.style setHeightWithoutAutoHeight:size.height];
         }
         
-        if ( self.style.isAutoWidth && ((self.style.display == ALDisplayBlock && self.style.width < size.width) || self.style.display == ALDisplayInline || self.style.position == ALPositionAbsolute) ) {
+        if ( self.style.isAutoWidth && ((self.style.display == ALDisplayBlock && self.style.width < size.width && size.width <= self.rowManager.maxWidth) || self.style.display == ALDisplayInline || self.style.position == ALPositionAbsolute) ) {
             self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth:size.width];
             hasChangeWidth = YES;

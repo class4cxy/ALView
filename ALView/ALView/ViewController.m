@@ -26,7 +26,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self initLayoutWithMargin];
+//    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
 //    [self initLayoutWithAbsolutePriority];
@@ -48,7 +48,7 @@
 //    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
-//    [self initDynamicALLabel];
+    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
 //    [self initALLabelAndAutoBlockLayout];
     
@@ -742,9 +742,9 @@
     [[self createALLabel: @"jdochen4" numberOfLine:0] addTo:blockwrap];
     [[self createALLabel: @"jdochen6789" numberOfLine:0] addTo:blockwrap];
     [[self createALLabel: @"jdochen0" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"jdochen765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:0] addTo:blockwrap];
     [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:1] addTo:blockwrap];
-    [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:0] addTo:blockwrap];
-    [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
+//    [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
 }
 
 - (ALLabel *) createALLabel: (NSString *) text numberOfLine: (NSInteger) num

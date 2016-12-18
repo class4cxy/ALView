@@ -36,8 +36,11 @@
         CGSize fontSize = [self.text sizeWithAttributes:@{NSFontAttributeName: self.font}];
         // label的宽度不能超过parent的宽度
         CGFloat maxWidth = [self getRowMaxWidthOf: parent];
+        NSLog(@"%f", self.style.paddingLeft);
+        NSLog(@"%f", self.style.paddingRight);
+        NSLog(@"%f", self.belongRow.maxWidth);
         if ( fontSize.width + self.style.paddingRight + self.style.paddingLeft > maxWidth ) {
-            fontSize.width = self.belongRow.maxWidth - self.style.paddingLeft - self.style.paddingRight;
+            fontSize.width = maxWidth - self.style.paddingLeft - self.style.paddingRight;
         }
         // 自动高度 & 自动宽度
         // 宽度自动，但不能大于父view宽度
