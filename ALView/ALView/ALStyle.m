@@ -32,6 +32,7 @@
     if (self) {
         _hidden = NO;
         
+        _isEndOFLine = NO;
         _isAutoHeight = YES;
         _isAutoWidth = YES;
         _tmpIsAutoWidth = YES;
@@ -56,12 +57,12 @@
     _tmpIsAutoWidth = NO;
     _isAutoWidth = NO;
     if ( width < 0 ) { width = 0; }
-    _tmpWidth = width;
+    _tmpWidth = width + _paddingLeft + _paddingRight;
     
     if ( _hidden ) {
         _width = 0;
     } else {
-        _width = width;
+        _width = width + _paddingLeft + _paddingRight;
     }
 }
 - (void) setWidthWithoutAutoWidth:(CGFloat)width
@@ -76,12 +77,12 @@
     _tmpIsAutoHeight = NO;
     _isAutoHeight = NO;
     if ( height < 0 ) { height = 0; }
-    _tmpHeight = height;
+    _tmpHeight = height + _paddingTop + _paddingBottom;
     
     if ( _hidden ) {
         _height = 0;
     } else {
-        _height = height;
+        _height = height + _paddingTop + _paddingBottom;
     }
 }
 - (void) setHeightWithoutAutoHeight:(CGFloat)height
@@ -179,13 +180,45 @@
     return (ALRect) {_marginTop, _marginLeft, _marginBottom, _marginRight};
 }
 
+- (void) setPaddingTop:(CGFloat)paddingTop
+{
+    if ( !_isAutoHeight ) {
+        self.height += paddingTop;
+    }
+    _paddingTop = paddingTop;
+}
+
+- (void) setPaddingBottom:(CGFloat)paddingBottom
+{
+    if ( !_isAutoHeight ) {
+        self.height += paddingBottom;
+    }
+    _paddingBottom = paddingBottom;
+}
+
+- (void) setPaddingLeft:(CGFloat)paddingLeft
+{
+    if ( !_isAutoWidth ) {
+        self.width += paddingLeft;
+    }
+    _paddingLeft = paddingLeft;
+}
+
+- (void) setPaddingRight:(CGFloat)paddingRight
+{
+    if ( !_isAutoWidth ) {
+        self.width += paddingRight;
+    }
+    _paddingRight = paddingRight;
+}
+
 - (void)setPadding: (ALRect) padding
 {
     _padding = padding;
-    _paddingTop = padding.top;
-    _paddingLeft = padding.left;
-    _paddingRight = padding.right;
-    _paddingBottom = padding.bottom;
+    self.paddingTop = padding.top;
+    self.paddingLeft = padding.left;
+    self.paddingRight = padding.right;
+    self.paddingBottom = padding.bottom;
 }
 
 - (ALRect) padding

@@ -150,6 +150,9 @@ typedef struct ALRect ALRect;
 
 @property (nonatomic, assign) ALContentAlign contentAlign;
 
+// 指定断行，用于inline类型的view，希望在某个节点主动断行
+@property (nonatomic, assign) BOOL isEndOFLine;
+
 /*
  * 其他属性
  */

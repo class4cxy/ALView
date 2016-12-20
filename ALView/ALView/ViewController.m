@@ -18,6 +18,8 @@
     
     ALLabel * _nicklabel;
     ALLabel * _timelabel;
+    
+    UIView * _testInlineView;
 }
 @end
 
@@ -48,11 +50,142 @@
 //    [self initDynamicAbsolute];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
-    [self initDynamicALLabel];
+//    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-//    [self initALLabelAndAutoBlockLayout];
+    [self initALLabelAndAutoBlockLayout];
+    
+//    [self initWithoutALEngineLayout];
+//    [self initWithALLayout];
+//    [self initWithALEngineLayout];
+    
+//    [self initWithPaddingLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithPaddingLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+    ALView * wrap = [[ALView alloc] init];
+    wrap.style.padding = (ALRect) {10, 10, 10, 10};
+    [wrap addTo: body];
+    
+    ALView * sub1 = [[ALView alloc] initInlineView];
+    sub1.style.padding = (ALRect) {10, 10, 10, 10};
+    sub1.style.size = (CGSize) {30, 40};
+    sub1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [sub1 addTo:wrap];
+    
+    ALView * sub2 = [[ALView alloc] initInlineView];
+    sub2.style.padding = (ALRect) {10, 10, 10, 10};
+    sub2.style.size = (CGSize) {30, 40};
+    sub2.style.marginLeft = 5;
+    sub2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    [sub2 addTo:wrap];
+}
+
+- (void) initWithoutALEngineLayout
+{
+    _testInlineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    _testInlineView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [self.view addSubview: _testInlineView];
+    
+    UIView * bluebox = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_testInlineView.frame), 0, 90, 40)];
+    bluebox.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+    [self.view addSubview: bluebox];
+    
+    UIView * greenbox = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(bluebox.frame), 0, 120, 40)];
+    greenbox.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    [self.view addSubview: greenbox];
+    
+    [[self createSizeCtrlView] addTo:self.view];
+}
+
+- (void) initWithALLayout
+{
+    _testInlineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 40)];
+    _testInlineView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [self.view addSubview: _testInlineView];
+    
+    UIView * bluebox = [[UIView alloc] init];
+    bluebox.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+    bluebox.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview: bluebox];
+    
+    [self.view addConstraints:@[[NSLayoutConstraint constraintWithItem:bluebox
+                                                             attribute:NSLayoutAttributeLeft
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:_testInlineView
+                                                             attribute:NSLayoutAttributeRight
+                                                            multiplier:1.0
+                                                              constant:0],
+                                [NSLayoutConstraint constraintWithItem:bluebox
+                                                             attribute:NSLayoutAttributeWidth
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1.0
+                                                              constant:90],
+                                [NSLayoutConstraint constraintWithItem:bluebox
+                                                             attribute:NSLayoutAttributeHeight
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1.0
+                                                              constant:40]]];
+    
+    UIView * greenbox = [[UIView alloc] init];
+    greenbox.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    greenbox.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview: greenbox];
+
+    [self.view addConstraints:@[[NSLayoutConstraint constraintWithItem:greenbox
+                                                             attribute:NSLayoutAttributeLeft
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:bluebox
+                                                             attribute:NSLayoutAttributeRight
+                                                            multiplier:1.0
+                                                              constant:0],
+                                [NSLayoutConstraint constraintWithItem:greenbox
+                                                             attribute:NSLayoutAttributeWidth
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1.0
+                                                              constant:120],
+                                [NSLayoutConstraint constraintWithItem:greenbox
+                                                             attribute:NSLayoutAttributeHeight
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:nil
+                                                             attribute:NSLayoutAttributeNotAnAttribute
+                                                            multiplier:1.0
+                                                              constant:40]]];
+    
+    [[self createSizeCtrlView] addTo:self.view];
+}
+
+- (void) initWithALEngineLayout
+{
+    _testInlineView = [[ALView alloc] initInlineView];
+    _testInlineView.style.size = (CGSize){80, 40};
+    _testInlineView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [_testInlineView addTo: self.view];
+    
+    ALView * blueView = [[ALView alloc] initInlineView];
+    blueView.style.size = (CGSize){90, 40};
+    blueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+    [blueView addTo: self.view];
+    
+    ALView * greenView = [[ALView alloc] initInlineView];
+    greenView.style.size = (CGSize){120, 40};
+    greenView.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    [greenView addTo: self.view];
+    
+    [[self createSizeCtrlView] addTo:self.view];
 }
 
 - (void) initALLabelAndAutoBlockLayout
@@ -63,7 +196,7 @@
     [body addTo: self.view];
     
     ALView * wrap = [[ALView alloc] initAbsoluteView];
-    [wrap addTo: body];
+    wrap.style.paddingRight = 50;
     
     ALView * avatar = [[ALView alloc] initInlineView];
     avatar.style.size = (CGSize) {35, 35};
@@ -74,29 +207,33 @@
     infoWrap.style.marginLeft = 10;
     [infoWrap addTo:wrap];
     
-    ALView * nickWrap = [[ALView alloc] init];
-    [nickWrap addTo:infoWrap];
-    
-    ALView * timeWrap = [[ALView alloc] init];
-    timeWrap.style.marginTop = 4;
-    [timeWrap addTo:infoWrap];
-    
     _nicklabel = [[ALLabel alloc] init];
     _nicklabel.text = @"";
     _nicklabel.font = [UIFont systemFontOfSize:12];
-    [_nicklabel addTo: nickWrap];
+    [_nicklabel addTo: infoWrap];
+    
+    ALLabel * v = [[ALLabel alloc] init];
+    v.style.isEndOFLine = YES;
+    v.style.marginLeft = 4;
+    v.font = [UIFont systemFontOfSize:12];
+    v.text = @"V";
+    [v addTo: infoWrap];
     
     _timelabel = [[ALLabel alloc] init];
+    _timelabel.style.marginTop = 4;
     _timelabel.text = @"";
     _timelabel.font = [UIFont systemFontOfSize:12];
-    [_timelabel addTo: timeWrap];
+    [_timelabel addTo: infoWrap];
     
-    ALLabel * focus = [[ALLabel alloc] init];
+    ALLabel * focus = [[ALLabel alloc] initWithAbsolute];
     focus.text = @"关注";
     focus.font = [UIFont systemFontOfSize:13];
-    focus.style.margin = (ALRect){5, 0, 0, 5};
     focus.style.padding = (ALRect){5, 10, 5, 10};
+    focus.style.top = 5;
+    focus.style.right = 0;
     [focus addTo:wrap];
+    
+    [wrap addTo: body];
     
     [[self createHiddenCtrlView] addTo:body];
 }
@@ -296,11 +433,11 @@
     
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
-    _section1.style.display = ALDisplayInline;
-//    _section1.style.position = ALPositionAbsolute;
+//    _section1.style.display = ALDisplayInline;
+    _section1.style.position = ALPositionAbsolute;
 //    _section1.style.centerX = 0;
 //    _section1.style.centerY = 0;
-//    _section1.style.center = (CGPoint){0, 0};
+    _section1.style.center = (CGPoint){0, 0};
 //    _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo: b];
@@ -309,15 +446,15 @@
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
 //
-//    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
-////    _block.style.hidden = YES;
-//    _block.style.contentAlign = ALContentAlignRight;
-//    [_block addTo: _section1];
-//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
-//    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+    _block.style.hidden = YES;
+    _block.style.contentAlign = ALContentAlignRight;
+    [_block addTo: _section1];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
 //
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _section1];
@@ -347,7 +484,7 @@
     panelWrap.style.left = 10;
     
     ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"height: ";
+    widthTx.text = @"width: ";
     widthTx.font = [UIFont systemFontOfSize:12];
     widthTx.style.height = 30;
     [widthTx addTo: panelWrap];
@@ -425,19 +562,24 @@
 
 - (void) subTheSize
 {
-    _section1.style.width -= 5;
+//    _testInlineView.style.width -= 5;
+//    [_testInlineView reflow];
+//    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
+//    _section1.style.width -= 5;
 //    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
-    [_section1 reflow];
+//    [_section1 reflow];
 }
 - (void) addTheSize
 {
-    NSLog(@"%f", _section1.style.width);
-    _section1.style.width += 5;
-    NSLog(@"%f", _section1.style.width);
+//    _testInlineView.style.width += 5;
+//    [_testInlineView reflow];
+//    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
+//    NSLog(@"%f", _section1.style.width);
+//    _section1.style.width += 5;
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
-    [_section1 reflow];
+//    [_section1 reflow];
 //    NSLog(@"%@", _body.);
 }
 
@@ -458,7 +600,7 @@
 //    _allabel.text = @"jdochen";
 //    [_allabel reflow];
 //    _block.style.hidden = NO;
-    //    [_block reflow];
+//    [_block reflow];
     _nicklabel.text = @"jdochen";
     [_nicklabel reflow];
     _timelabel.text = @"10:00";

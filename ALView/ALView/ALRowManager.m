@@ -227,6 +227,9 @@
         if ( self.ownerView.style.contentAlign != ALContentAlignLeft && self.ownerView.style.isAutoWidth && hasUpdateWidth ) {
             [self reflowAllRow];
         }
+        
+        // 重排子view中使用absolute排版的
+        [self.ownerView reflowSubviewWhichISAbsolute];
     }
     return hasUpdateWidth;
 }
@@ -345,17 +348,10 @@
         // 递归兄弟view以及superView
         if ( self.ownerView.style.isAutoHeight ) {
             [self recurReflowParentHeight: self.ownerView];
-//            ALRow * belongRow = self.ownerView.belongRow;
-//            
-//            [belongRow refreshSize];
-//            // 重排同级view
-//            while (belongRow.nextRow) {
-//                [belongRow.nextRow reflowTop];
-//                belongRow = belongRow.nextRow;
-//            }
-//            if ( self.ownerView.superview ) {
-//                [self.ownerView.superview.rowManager reflowOwnerViewHeight];
-//            }
+            // 如果是absolute类型，还需要触发重排高度
+            if ( self.ownerView.style.position == ALPositionAbsolute ) {
+                [self.ownerView reflowOriginWhenAbsolute];
+            }
         }
     }
 }

@@ -115,12 +115,12 @@
         }
         [parent.rowManager appendView: self];
     } else {
-        if ( self.rowManager && self.style.isAutoWidth ) {
-            // 重排子view
-            [self.rowManager reflowSubView];
-            // 更新自己
-            [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
-        }
+//        if ( self.rowManager && self.style.isAutoWidth ) {
+//            // 重排子view
+//            [self.rowManager reflowSubView];
+//            // 更新自己
+//            [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
+//        }
         [self reflowOriginWhenAbsolute];
     }
 }
@@ -238,18 +238,35 @@
             [self reflowOriginWhenAbsolute];
         }
         
+        [self reflowSubviewWhichISAbsolute];
         // 重排子view中使用absolute排版的
-        for (UIView * subView in self.subviews) {
-            if (
-                subView.isALEngine &&
-                subView.style.position == ALPositionAbsolute &&
-                (subView.style.hasSettedRight ||
-                 subView.style.hasSettedBottom ||
-                 subView.style.hasSettedCenterX ||
-                 subView.style.hasSettedCenterY)
+//        for (UIView * subView in self.subviews) {
+//            if (
+//                subView.isALEngine &&
+//                subView.style.position == ALPositionAbsolute &&
+//                (subView.style.hasSettedRight ||
+//                 subView.style.hasSettedBottom ||
+//                 subView.style.hasSettedCenterX ||
+//                 subView.style.hasSettedCenterY)
+//            ) {
+//                [subView reflowOriginWhenAbsolute];
+//            }
+//        }
+    }
+}
+// 重排子view中使用absolute排版的
+- (void) reflowSubviewWhichISAbsolute
+{
+    for (UIView * subView in self.subviews) {
+        if (
+            subView.isALEngine &&
+            subView.style.position == ALPositionAbsolute &&
+            (subView.style.hasSettedRight ||
+             subView.style.hasSettedBottom ||
+             subView.style.hasSettedCenterX ||
+             subView.style.hasSettedCenterY)
             ) {
-                [subView reflowOriginWhenAbsolute];
-            }
+            [subView reflowOriginWhenAbsolute];
         }
     }
 }
@@ -361,12 +378,20 @@
     BOOL hasChangeWidth = NO;
     if ( self.isALEngine ) {
         if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height + self.style.paddingTop + self.style.paddingBottom);
             [self.style setHeightWithoutAutoHeight:size.height];
         }
         
-        if ( self.style.isAutoWidth && ((self.style.display == ALDisplayBlock && self.style.width < size.width && size.width <= self.rowManager.maxWidth) || self.style.display == ALDisplayInline || self.style.position == ALPositionAbsolute) ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
+        if (
+            self.style.isAutoWidth &&
+            ((self.style.display == ALDisplayBlock &&
+              // TODO，这里对ALLabel有兼容问题
+              self.style.width < size.width && 
+              size.width <= self.rowManager.maxWidth) ||
+             self.style.display == ALDisplayInline ||
+             self.style.position == ALPositionAbsolute)
+        ) {
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width + self.style.paddingLeft + self.style.paddingRight, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth:size.width];
             hasChangeWidth = YES;
         }
@@ -399,7 +424,7 @@
         }
 
         if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height + self.style.paddingTop + self.style.paddingBottom);
             [self.style setHeightWithoutAutoHeight: height];
         }
     }
@@ -414,13 +439,30 @@
     CGFloat maxWidth = 0;
     if ( ownerView.isALEngine && ownerView.style.isAutoWidth ) {
         if ( ownerView.belongRow ) {
-            maxWidth = ownerView.belongRow.maxWidth - ownerView.style.marginRight - ownerView.style.marginLeft;
+            maxWidth = ownerView.belongRow.maxWidth;
         } else if ( ownerView.superview ) {
             return [self getRowMaxWidthOf: ownerView.superview];
+        } else {
+            // 否则直接返回屏幕宽度
+            maxWidth = [[UIScreen mainScreen] bounds].size.width;
         }
     } else {
         maxWidth = ownerView.frame.size.width;
     }
+    // ALLabel以外的view都需要考虑内边距
+    if ( ![self isKindOfClass: [ALLabel class]] ) {
+        // 减去父view的内边距
+        if ( ownerView.superview ) {
+            maxWidth -= ownerView.superview.style.paddingLeft + ownerView.superview.style.paddingRight;
+        }
+    }
+
+    // relative方式布局的view
+    if ( ownerView.style.position == ALPositionRelative ) {
+        // 减去自身的外边距
+        maxWidth -= ownerView.style.marginRight + ownerView.style.marginLeft;
+    }
+    
     return maxWidth;
 }
 

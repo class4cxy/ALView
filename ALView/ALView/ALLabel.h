@@ -20,6 +20,7 @@
 //@property (nonatomic, assign) CGFloat alPaddingBottom;
 
 - (instancetype) init;
+- (instancetype) initWithAbsolute;
 // ALLabel私有的重排自身内部高度
 - (void) reflowWithInnerText:(UIView *) parent;
 

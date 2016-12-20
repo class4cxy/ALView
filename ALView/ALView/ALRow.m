@@ -116,7 +116,12 @@
     // 特殊逻辑：
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO
-    if ( self.display == ALDisplayBlock || view.style.display == ALDisplayBlock ) {
+    // 3、如果上一个节点存在且isEndOFLine=YES，那直接返回NO
+    if (
+        self.display == ALDisplayBlock ||
+        view.style.display == ALDisplayBlock ||
+        (view.previousSibling && view.previousSibling.style.isEndOFLine)
+    ) {
         return NO;
     }
     // 3、如果当前行已经没有子view，那直接返回YES

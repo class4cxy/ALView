@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[ALRowManager reflowOwnerViewSizeWithReflowInner:]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager setMaxWidth:]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager appendNewRowWithView:previousRow:]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager reflowRow:reflowInnerView:]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager createRowWithView:]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager getOnwerViewInnerHeight]:ALRowManager.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ALRowManager getOnwerViewInnerWidth]:ALRowManager.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

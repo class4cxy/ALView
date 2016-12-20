@@ -19,6 +19,15 @@
     return self;
 }
 
+- (instancetype) initWithAbsolute
+{
+    if ( self = [super initWithALEngine] ) {
+        self.style.display = ALDisplayInline;
+        self.style.position = ALPositionAbsolute;
+    }
+    return self;
+}
+
 #pragma mark - 重载父类方法
 /*
  * 增加默认行为：setText时如果isAutoWidth & isAutoHeight 为YES时，需自动调整宽高
@@ -72,6 +81,10 @@
         // 更新内部值
         [self.style setWidthWithoutAutoWidth: fontSize.width];
         [self.style setHeightWithoutAutoHeight: fontSize.height];
+        // 更新行信息
+        if ( self.belongRow ) {
+            [self.belongRow refreshSize];
+        }
     }
 }
 

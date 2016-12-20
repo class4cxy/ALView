@@ -50,6 +50,8 @@
 - (void) reflowSize;
 // 提供给子类重新排版absolute方式布局的view
 - (void) reflowOriginWhenAbsolute;
+
+- (void) reflowSubviewWhichISAbsolute;
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
