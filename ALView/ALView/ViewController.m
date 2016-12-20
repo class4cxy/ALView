@@ -20,6 +20,8 @@
     ALLabel * _timelabel;
     
     UIView * _testInlineView;
+    
+    ALView * _wrap;
 }
 @end
 
@@ -47,7 +49,9 @@
 //    [self initPaddingLayout];
     
 //    [self initDynamicLayout];
+    
 //    [self initDynamicAbsolute];
+    [self initDynamicLayout2];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
@@ -61,6 +65,45 @@
 //    [self initWithPaddingLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initDynamicLayout2
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+    _wrap = [[ALView alloc] initAbsoluteView];
+    _wrap.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [_wrap addTo: body];
+    
+    _section1 = [[ALView alloc] initInlineView];
+    _section1.style.size = (CGSize) {50, 50};
+    _section1.style.margin = (ALRect) {10, 10, 10, 10};
+    _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    [_section1 addTo: _wrap];
+    
+    [[self createInlineViewWidth:100 height:50 alpha:0.3] addTo: _wrap];
+    [[self createInlineViewWidth:10 height:50 alpha:0.5] addTo: _wrap];
+    
+    [[self createSizeCtrlView] addTo: body];
+    
+    ALLabel * reflow = [[ALLabel alloc] initWithAbsolute];
+    reflow.style.origin = (ALRect) {0, 10, 10, 0};
+    reflow.style.padding = (ALRect) {10, 10, 10, 10};
+    reflow.userInteractionEnabled = YES;
+    reflow.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    reflow.text = @"reflow";
+    reflow.font = [UIFont systemFontOfSize:12];
+    [reflow addTo: body];
+    UITapGestureRecognizer * reflowBtn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(reflowWrap)];
+    [reflow addGestureRecognizer: reflowBtn];
+}
+
+- (void) reflowWrap
+{
+    [_wrap reflow];
 }
 
 - (void) initWithPaddingLayout
@@ -565,10 +608,13 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-    _section1.style.width -= 5;
+//    _section1.style.width -= 5;
+    _section1.style.hidden = YES;
+    [_section1 reflow];
+//    [_section1.belongRow refreshSize];
 //    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
-    [_section1 reflow];
+//    [_section1 reflow];
 }
 - (void) addTheSize
 {
@@ -576,10 +622,13 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-    _section1.style.width += 5;
+//    _section1.style.width += 5;
+    _section1.style.hidden = NO;
+    [_section1 reflow];
+//    [_section1.belongRow refreshSize];
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
-    [_section1 reflow];
+//    [_section1 reflow];
 }
 
 - (void) hideView

@@ -128,6 +128,7 @@
     if ( [_viewsArr count] == 0 ) {
         return YES;
     }
+//    return _maxWidth >= _width + view.style.width + view.style.marginLeft + view.style.marginRight;
     return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
 }
 
@@ -172,6 +173,7 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             CGFloat w = view.style.marginLeft +
                         view.style.marginRight +
+//                        view.style.width;
                         view.frame.size.width;
             
             _width += w;
@@ -192,6 +194,7 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             CGFloat h = view.style.marginTop +
                         view.style.marginBottom +
+//                        view.style.height;
                         view.frame.size.height;
             
             if ( _height < h ) {
@@ -226,6 +229,7 @@
         left = view.style.marginLeft;
     }
     
+//    view.frame = CGRectMake(left, top, view.style.width, view.style.height);
     view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
     NSLog(@"reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
 }
@@ -253,11 +257,13 @@
             UIView * prevView = [_viewsArr objectAtIndex: i-1];
             left =  view.style.marginLeft +
                     prevView.frame.origin.x +
+//                    prevView.style.width +
                     prevView.frame.size.width +
                     prevView.style.marginRight;
         }
         
         view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+//        view.frame = CGRectMake(left, top, view.style.width, view.style.height);
         NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -272,6 +278,7 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
+//        view.frame = CGRectMake(view.frame.origin.x, top, view.style.width, view.style.height);
         NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
