@@ -68,7 +68,7 @@
 - (void) setWidthWithoutAutoWidth:(CGFloat)width
 {
     if ( width < 0 ) { width = 0; }
-    _tmpWidth = width;
+//    _tmpWidth = width;
     _width = width;
 }
 
@@ -88,7 +88,7 @@
 - (void) setHeightWithoutAutoHeight:(CGFloat)height
 {
     if ( height < 0 ) { height = 0; }
-    _tmpHeight = height;
+//    _tmpHeight = height;
     _height = height;
 }
 
@@ -229,6 +229,8 @@
 - (void) setHidden: (BOOL) hidden
 {
     if ( hidden ) {
+        _tmpWidth = _width;
+        _tmpHeight = _height;
         _height = 0;
         _width = 0;
         _isAutoWidth = NO;

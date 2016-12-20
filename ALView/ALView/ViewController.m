@@ -52,7 +52,7 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-    [self initALLabelAndAutoBlockLayout];
+//    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
@@ -565,10 +565,10 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-//    _section1.style.width -= 5;
+    _section1.style.width -= 5;
 //    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
-//    [_section1 reflow];
+    [_section1 reflow];
 }
 - (void) addTheSize
 {
@@ -576,35 +576,34 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-//    _section1.style.width += 5;
+    _section1.style.width += 5;
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
-//    [_section1 reflow];
-//    NSLog(@"%@", _body.);
+    [_section1 reflow];
 }
 
 - (void) hideView
 {
-//    _block.style.hidden = YES;
-//    [_block reflow];
+    _block.style.hidden = YES;
+    [_block reflow];
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
-    _nicklabel.text = @"";
-    [_nicklabel reflow];
-    _timelabel.text = @"";
-    [_timelabel reflow];
+//    _nicklabel.text = @"";
+//    [_nicklabel reflow];
+//    _timelabel.text = @"";
+//    [_timelabel reflow];
 }
 
 - (void) showView
 {
 //    _allabel.text = @"jdochen";
 //    [_allabel reflow];
-//    _block.style.hidden = NO;
-//    [_block reflow];
-    _nicklabel.text = @"jdochen";
-    [_nicklabel reflow];
-    _timelabel.text = @"10:00";
-    [_timelabel reflow];
+    _block.style.hidden = NO;
+    [_block reflow];
+//    _nicklabel.text = @"jdochen";
+//    [_nicklabel reflow];
+//    _timelabel.text = @"10:00";
+//    [_timelabel reflow];
 }
 
 
@@ -634,7 +633,7 @@
 //    article.style.marginRight = 20;
 //    article.style.marginLeft = 20;
 //    article.style.marginTop = 50;
-    article.style.height = 100;
+//    article.style.height = 100;
     article.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
     [article addTo: body];
     
@@ -643,6 +642,7 @@
 //    tx.style.marginLeft = 20;
     tx.style.margin = (ALRect){20, 0, 0, 20};
     tx.style.padding = (ALRect){20, 30, 20, 30};
+    tx.style.height = 50;
     tx.text = @"我是一个ALLabel";
     tx.font = [UIFont systemFontOfSize:12];
     tx.backgroundColor = [UIColor yellowColor];

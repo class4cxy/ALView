@@ -310,9 +310,15 @@
             [self.style setHeightWithoutAutoHeight: height];
             
             // 更新自己的行管理器maxWidth值
-//            if ( !self.style.isAutoWidth && self.rowManager ) {
             if ( self.rowManager ) {
-                self.rowManager.maxWidth = self.style.width;
+                // isAutoWidth=NO时，需重设maxWidth
+                // isAutoWidth=YES时且display=ALDisplayBlock，需重设maxWidth
+                if (
+                    !self.style.isAutoWidth ||
+                    (self.style.isAutoWidth && self.style.display == ALDisplayBlock)
+                ) {
+                    self.rowManager.maxWidth = self.style.width;
+                }
             }
         }
     }
