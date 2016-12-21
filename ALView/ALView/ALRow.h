@@ -48,6 +48,10 @@
 - (UIView *) popView;
 // 移除当前行的第一个view，并返回该view
 - (UIView *) shiftView;
+// 移除指定view
+- (void) removeView: (UIView *) view;
+// 在指定view之前插入新的view
+- (void) insertView: (UIView *) view beforeView: (UIView *) beforeView;
 //
 - (UIView *) firstView;
 //

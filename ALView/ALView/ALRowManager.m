@@ -45,44 +45,102 @@
     // 找到该view所属的行，由行去决定如何reflow该view
     ALRow * belongRow = subView.belongRow;
     
-    // 检查是否需要断行：
-    // 1、如果需要断行，那移除尾部的一个view，将它插到下一行的头部，需触发相应重排
-    // 2、如果不需要断行，那直接重排当前行，不需要触发ownerView重排
+    BOOL need2reflowNextViewTop = NO;
+    // 当前在行管理器中
+    // hidden=YES
     if ( belongRow != nil ) { //当前view如果是absolute布局，那就不存在belongRow
         // 如果是block行可以简单点处理
         if ( belongRow.display == ALDisplayBlock ) {
-            [belongRow refreshSize];
-            [belongRow layout];
-            // 检查下一行重排top值
-            while ( belongRow.nextRow ) {
-                [belongRow.nextRow reflowTop];
-                belongRow = belongRow.nextRow;
-            }
-        } else {
-            if ( [belongRow need2break] ) {
-                [self crush2NextRow: belongRow];
+            // 如果subView已经隐藏，需要从管理器中移除该view
+            if ( subView.style.hidden ) {
+                [belongRow popView];
+                [self removeRow:belongRow];
             } else {
-                ALRow * startRow = nil;
-                if ( subView == belongRow.firstView && belongRow.previousRow ) {
-                    startRow = belongRow.previousRow;
+                [belongRow refreshSize];
+                [belongRow layout];
+            }
+            // 需要更新下行top值
+            need2reflowNextViewTop = YES;
+        } else {
+            // 移除view
+            if ( subView.style.hidden ) {
+                [belongRow removeView: subView];
+            }
+            // 如果该行为空，则移除
+            if ( [belongRow count] == 0 ) {
+                [self removeRow:belongRow];
+                // 需要更新下行top值
+                need2reflowNextViewTop = YES;
+            } else {
+                if ( [belongRow need2break] ) {
+                    [self crush2NextRow: belongRow];
                 } else {
-                    startRow = belongRow;
+                    ALRow * startRow = nil;
+                    if ( subView == belongRow.firstView && belongRow.previousRow ) {
+                        startRow = belongRow.previousRow;
+                    } else {
+                        startRow = belongRow;
+                    }
+                    
+                    [self crush2PreviousRow: startRow];
                 }
-                
-                [self crush2PreviousRow: startRow];
             }
         }
-        
-        // 递归重排父view的size
-        if ( subView.superview && subView.superview.rowManager ) {
-            [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+    // 不在行管理器中：
+    // 1、hidden=YES
+    } else {
+        if ( !subView.style.hidden ) {
+            // 如果是block行可以简单点处理
+            if ( subView.style.display == ALDisplayBlock ) {
+                // 存在下一行的情况
+                if ( subView.nextSibling && subView.nextSibling.belongRow ) {
+                    belongRow = [self insertNewRowWithView:subView beforeRow:subView.nextSibling.belongRow];
+                    // 需要更新下行top值
+                    need2reflowNextViewTop = YES;
+                } else {
+                    belongRow = [self appendNewRowWithView: subView previousRow:subView.previousSibling.belongRow];
+                }
+            } else {
+                UIView * nextView = subView.nextSibling;
+                if ( nextView && nextView.belongRow ) {
+                    belongRow = nextView.belongRow;
+                    // 插入到nextSibling之前
+                    [belongRow insertView: subView beforeView: nextView];
+                    // 更新当前行
+                    if ( [belongRow need2break] ) {
+                        [self crush2NextRow: belongRow];
+                    } else {
+                        ALRow * startRow = nil;
+                        if ( subView == belongRow.firstView && belongRow.previousRow ) {
+                            startRow = belongRow.previousRow;
+                        } else {
+                            startRow = belongRow;
+                        }
+                        
+                        [self crush2PreviousRow: startRow];
+                    }
+                } else {
+                    belongRow = [self appendNewRowWithView: subView previousRow:subView.previousSibling.belongRow];
+                }
+            }
         }
-        
-        if ( isReflow && subView.rowManager ) {
-            // 重排自己内部子view
-            [subView.rowManager reflowSubView];
-            [subView.rowManager reflowOwnerViewHeight];
+    }
+    // 重排nextSibline top
+    if ( need2reflowNextViewTop ) {
+        while ( belongRow.nextRow ) {
+            [belongRow.nextRow reflowTop];
+            belongRow = belongRow.nextRow;
         }
+    }
+    
+    // 递归重排父view的size
+    if ( subView.superview && subView.superview.rowManager ) {
+        [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+    }
+    // 重排自己内部子view
+    if ( isReflow && subView.rowManager ) {
+        [subView.rowManager reflowSubView];
+        [subView.rowManager reflowOwnerViewHeight];
     }
 }
 

@@ -226,23 +226,23 @@
     return (ALRect) {_paddingTop, _paddingLeft, _paddingBottom, _paddingRight};
 }
 
-- (void) setHidden: (BOOL) hidden
-{
-    if ( hidden ) {
-        _tmpWidth = _width;
-        _tmpHeight = _height;
-        _height = 0;
-        _width = 0;
-        _isAutoWidth = NO;
-        _isAutoHeight = NO;
-    } else {
-        _width = _tmpWidth;
-        _height = _tmpHeight;
-        _isAutoWidth = _tmpIsAutoWidth;
-        _isAutoHeight = _tmpIsAutoHeight;
-    }
-    
-    _hidden = hidden;
-}
+//- (void) setHidden: (BOOL) hidden
+//{
+//    if ( hidden ) {
+//        _tmpWidth = _width;
+//        _tmpHeight = _height;
+//        _height = 0;
+//        _width = 0;
+//        _isAutoWidth = NO;
+//        _isAutoHeight = NO;
+//    } else {
+//        _width = _tmpWidth;
+//        _height = _tmpHeight;
+//        _isAutoWidth = _tmpIsAutoWidth;
+//        _isAutoHeight = _tmpIsAutoHeight;
+//    }
+//    
+//    _hidden = hidden;
+//}
 
 @end

@@ -69,6 +69,7 @@
     if ( [_viewsArr count] > 0 ) {
         UIView * lastView = [_viewsArr lastObject];
         [_viewsArr removeLastObject];
+        lastView.belongRow = nil;
         [self refreshSize];
         return lastView;
     }
@@ -88,6 +89,34 @@
         return firstView;
     }
     return nil;
+}
+
+/*
+ * 移除指定view
+ */
+- (void) removeView: (UIView *) view
+{
+    if ( [_viewsArr count] > 0 ) {
+        [_viewsArr removeObject: view];
+        view.belongRow = nil;
+        [self refreshSize];
+    }
+}
+
+/*
+ * 在指定位置插入新的view
+ */
+- (void) insertView: (UIView *) view beforeView: (UIView *) beforeView
+{
+    if ( [_viewsArr count] > 0 && view ) {
+        NSUInteger beforeIndex = [_viewsArr indexOfObject: beforeView];
+        // 存在beforeView才操作
+        if ( beforeIndex != NSNotFound ) {
+            [_viewsArr insertObject: view atIndex: beforeIndex];
+            view.belongRow = self;
+            [self refreshSize];
+        }
+    }
 }
 
 - (UIView *) firstView
