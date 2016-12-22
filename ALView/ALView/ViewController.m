@@ -51,7 +51,7 @@
 //    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
-    [self initDynamicLayout2];
+//    [self initDynamicLayout2];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
@@ -63,8 +63,81 @@
 //    [self initWithALEngineLayout];
     
 //    [self initWithPaddingLayout];
+//    [self initWithDynamicHiddenLayout];
+    [self initWithMaxWidthLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithMaxWidthLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.contentAlign = ALContentAlignCenter;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+//    ALLabel * tx = [[ALLabel alloc] init];
+//    tx.style.maxWidth = 100;
+//    tx.style.padding = (ALRect) {10, 10, 10, 10};
+//    tx.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.1];
+//    tx.text = @"jdochenjdochenjdochenjdochenjdochen";
+//    tx.numberOfLines = 1;
+//    [tx addTo: body];
+    
+    _section1 = [[ALView alloc] initInlineView];
+    _section1.style.maxWidth = 200;
+    _section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
+    [_section1 addTo: body];
+    
+    [[self createInlineViewWidth:100 height:40 alpha:0.2] addTo: _section1];
+    [[self createInlineViewWidth:20 height:40 alpha:0.2] addTo: _section1];
+    [[self createInlineViewWidth:60 height:40 alpha:0.2] addTo: _section1];
+    [[self createInlineViewWidth:50 height:40 alpha:0.2] addTo: _section1];
+    [[self createInlineViewWidth:80 height:40 alpha:0.2] addTo: _section1];
+}
+
+- (void) initWithDynamicHiddenLayout
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.contentAlign = ALContentAlignCenter;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+    ALView * section = [[ALView alloc] initInlineView];
+    section.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [section addTo: body];
+    
+    [[self createInlineViewWidth:50 height:30 alpha:0.2] addTo: section];
+    [[self createInlineViewWidth:70 height:30 alpha:0.3] addTo: section];
+    [[self createInlineViewWidth:90 height:30 alpha:0.4] addTo: section];
+    [[self createInlineViewWidth:120 height:30 alpha:0.5] addTo: section];
+    
+    
+    [[self createInlineViewWidth:80 height:30 alpha:0.2] addTo: section];
+    [[self createInlineViewWidth:70 height:30 alpha:0.3] addTo: section];
+    [[self createInlineViewWidth:90 height:30 alpha:0.4] addTo: section];
+    [[self createInlineViewWidth:120 height:30 alpha:0.5] addTo: section];
+    
+    _section1 = [[ALView alloc] initInlineView];
+    _section1.style.size = (CGSize) {300, 30};
+    _section1.style.margin = (ALRect) {0, 5, 5, 0};
+    _section1.style.hidden = YES;
+    _section1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.4];
+    [_section1 addTo: section];
+    
+//    _block = [[ALView alloc] init];
+//    _block.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.1];
+//    [_block addTo: section];
+//    [[self createInlineViewWidth:50 height:30 alpha:0.2] addTo: _block];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.3] addTo: _block];
+//    [[self createInlineViewWidth:120 height:30 alpha:0.4] addTo: _block];
+//    [[self createInlineViewWidth:20 height:30 alpha:0.5] addTo: _block];
+//    [[self createInlineViewWidth:200 height:30 alpha:0.6] addTo: _block];
+    
+    
+    [[self createHiddenCtrlView] addTo:body];
 }
 
 - (void) initDynamicLayout2
@@ -623,8 +696,8 @@
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
 //    _section1.style.width += 5;
-    _section1.style.hidden = NO;
-    [_section1 reflow];
+//    _section1.style.hidden = NO;
+//    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
@@ -633,8 +706,10 @@
 
 - (void) hideView
 {
-    _block.style.hidden = YES;
-    [_block reflow];
+//    _block.style.hidden = YES;
+//    [_block reflow];
+    _section1.style.hidden = YES;
+    [_section1 reflow];
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
 //    _nicklabel.text = @"";
@@ -645,10 +720,12 @@
 
 - (void) showView
 {
+    _section1.style.hidden = NO;
+    [_section1 reflow];
 //    _allabel.text = @"jdochen";
 //    [_allabel reflow];
-    _block.style.hidden = NO;
-    [_block reflow];
+//    _block.style.hidden = NO;
+//    [_block reflow];
 //    _nicklabel.text = @"jdochen";
 //    [_nicklabel reflow];
 //    _timelabel.text = @"10:00";

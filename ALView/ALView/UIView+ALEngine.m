@@ -452,6 +452,10 @@
             // 否则直接返回屏幕宽度
             maxWidth = [[UIScreen mainScreen] bounds].size.width;
         }
+        // 不能超过指定的最大值
+        if ( ownerView.style.maxWidth && ownerView.style.maxWidth < maxWidth ) {
+            maxWidth = ownerView.style.maxWidth;
+        }
     } else {
         maxWidth = ownerView.frame.size.width;
     }

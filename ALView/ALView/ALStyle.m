@@ -8,18 +8,6 @@
 
 #import "ALStyle.h"
 
-@interface ALStyle ()
-{
-    // layout 值是记录临时排版的值，例如visitable=ALVisitableHidden的时候，会临时把真实值保存到这里
-    CGFloat _tmpWidth;
-    CGFloat _tmpHeight;
-    BOOL _tmpIsAutoWidth;
-    BOOL _tmpIsAutoHeight;
-}
-
-@end
-
-
 @implementation ALStyle
 
 @synthesize center = _center;
@@ -35,8 +23,6 @@
         _isEndOFLine = NO;
         _isAutoHeight = YES;
         _isAutoWidth = YES;
-        _tmpIsAutoWidth = YES;
-        _tmpIsAutoHeight = YES;
         
         _hasSettedTop = NO;
         _hasSettedLeft = NO;
@@ -44,52 +30,59 @@
         _hasSettedBottom = NO;
         _hasSettedCenterX = NO;
         _hasSettedCenterY = NO;
-        
-        _tmpWidth = 0;
-        _tmpHeight = 0;
     }
     return self;
 }
 
 #pragma mark - 重装属性赋值
-- (void)setWidth: (CGFloat) width
+- (void) setWidth: (CGFloat) width
 {
-    _tmpIsAutoWidth = NO;
     _isAutoWidth = NO;
     if ( width < 0 ) { width = 0; }
-    _tmpWidth = width + _paddingLeft + _paddingRight;
-    
-    if ( _hidden ) {
-        _width = 0;
-    } else {
-        _width = width + _paddingLeft + _paddingRight;
-    }
+    if ( _display != ALDisplayBlock && _maxWidth && width > _maxWidth ) { width = _maxWidth; }
+
+    _width = width + _paddingLeft + _paddingRight;
 }
 - (void) setWidthWithoutAutoWidth:(CGFloat)width
 {
     if ( width < 0 ) { width = 0; }
-//    _tmpWidth = width;
+    if ( _display != ALDisplayBlock && _maxWidth && width > _maxWidth ) { width = _maxWidth; }
+    
     _width = width;
 }
 
-- (void)setHeight: (CGFloat) height
+- (void) setHeight: (CGFloat) height
 {
-    _tmpIsAutoHeight = NO;
     _isAutoHeight = NO;
     if ( height < 0 ) { height = 0; }
-    _tmpHeight = height + _paddingTop + _paddingBottom;
-    
-    if ( _hidden ) {
-        _height = 0;
-    } else {
-        _height = height + _paddingTop + _paddingBottom;
-    }
+    if ( _maxHeight && height > _maxHeight ) { height = _maxHeight; }
+
+    _height = height + _paddingTop + _paddingBottom;
 }
 - (void) setHeightWithoutAutoHeight:(CGFloat)height
 {
     if ( height < 0 ) { height = 0; }
-//    _tmpHeight = height;
+    if ( _maxHeight && height > _maxHeight ) { height = _maxHeight; }
+    
     _height = height;
+}
+
+- (void) setMaxWidth:(CGFloat) maxWidth
+{
+    if ( _display != ALDisplayBlock ) {
+        if ( _width > maxWidth ) {
+            _width = maxWidth;
+        }
+        _maxWidth = maxWidth;
+    }
+}
+
+- (void) setMaxHeight:(CGFloat) maxHeight
+{
+    if ( _height > maxHeight ) {
+        _height = maxHeight;
+    }
+    _maxHeight = maxHeight;
 }
 
 - (void) setSize: (CGSize) size
@@ -225,24 +218,5 @@
 {
     return (ALRect) {_paddingTop, _paddingLeft, _paddingBottom, _paddingRight};
 }
-
-//- (void) setHidden: (BOOL) hidden
-//{
-//    if ( hidden ) {
-//        _tmpWidth = _width;
-//        _tmpHeight = _height;
-//        _height = 0;
-//        _width = 0;
-//        _isAutoWidth = NO;
-//        _isAutoHeight = NO;
-//    } else {
-//        _width = _tmpWidth;
-//        _height = _tmpHeight;
-//        _isAutoWidth = _tmpIsAutoWidth;
-//        _isAutoHeight = _tmpIsAutoHeight;
-//    }
-//    
-//    _hidden = hidden;
-//}
 
 @end

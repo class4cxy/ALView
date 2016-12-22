@@ -119,6 +119,11 @@ typedef struct ALRect ALRect;
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) CGFloat height;
 
+/** maxWidth 只能应用于inline类型的view上，因为block类型的view如果是自动宽度时，宽度也是由父view决定 **/
+@property (nonatomic, assign) CGFloat maxWidth;
+/** maxHeight 目前在iOS中只应用于scrollView，iOS不像web一样，任何view都可以是scrollView，后续补齐该能力 **/
+@property (nonatomic, assign) CGFloat maxHeight;
+
 @property (nonatomic, assign) ALRect origin;
 @property (nonatomic, assign) CGFloat top;
 @property (nonatomic, assign) CGFloat bottom;
