@@ -38,7 +38,7 @@
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
-//    [self initBlockContentInlineLayout];
+    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
@@ -64,7 +64,7 @@
     
 //    [self initWithPaddingLayout];
 //    [self initWithDynamicHiddenLayout];
-    [self initWithMaxWidthLayout];
+//    [self initWithMaxWidthLayout];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -495,7 +495,7 @@
 
     
     _body = [[ALView alloc] init];
-    _body.style.contentAlign = ALContentAlignRight;
+//    _body.style.contentAlign = ALContentAlignRight;
     _body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
     _body.style.marginBottom = 10;
     [_body addTo: b2];
@@ -504,7 +504,7 @@
     body2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
     body2.style.height = 100;
     body2.style.marginBottom = 10;
-    [body2 addTo: b];
+    [body2 addTo: b2];
     
     [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
@@ -523,6 +523,7 @@
     [_section1 addTo: _body];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
     ALView * block1 = [[ALView alloc] init];
@@ -547,6 +548,10 @@
     b.style.contentAlign = ALContentAlignCenter;
     [b addTo: self.view];
     
+    [[self createInlineViewWidth:100 height:40 alpha:0.6] addTo: b];
+    [[self createInlineViewWidth:80 height:40 alpha:0.5] addTo: b];
+    [[self createInlineViewWidth:60 height:40 alpha:0.4] addTo: b];
+    
     _section1 = [[ALView alloc] init];
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
 //    _section1.style.display = ALDisplayInline;
@@ -557,6 +562,9 @@
 //    _section1.style.width = 200;
     _section1.style.contentAlign = ALContentAlignCenter;
     [_section1 addTo: b];
+    [[self createInlineViewWidth:100 height:40 alpha:0.6] addTo: b];
+    [[self createInlineViewWidth:80 height:40 alpha:0.5] addTo: b];
+    [[self createInlineViewWidth:60 height:40 alpha:0.4] addTo: b];
 //
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
@@ -681,8 +689,8 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-//    _section1.style.width -= 5;
-    _section1.style.hidden = YES;
+    _section1.style.width -= 5;
+//    _section1.style.hidden = YES;
     [_section1 reflow];
 //    [_section1.belongRow refreshSize];
 //    _section1.style.height -= 5;
@@ -695,9 +703,9 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-//    _section1.style.width += 5;
+    _section1.style.width += 5;
 //    _section1.style.hidden = NO;
-//    [_section1 reflow];
+    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
@@ -879,12 +887,13 @@
     ALView * block2 = [[ALView alloc] init];
     block2.style.marginTop = 20;
     block2.style.height = 60;
-    block2.style.width = 300;
+    block2.style.width = 200;
     block2.backgroundColor = [UIColor blueColor];
     [block2 addTo:body];
     
     ALLabel * tx2 = [[ALLabel alloc] init];
-    tx2.text = @"我也是block view，我设置了width=300";
+    tx2.text = @"我也是block view，我设置了width=200";
+    tx2.numberOfLines = 0;
     tx2.font = [UIFont systemFontOfSize:12];
     tx2.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
     [tx2 addTo:block2];
@@ -893,7 +902,7 @@
     ALView * block3 = [[ALView alloc] init];
     block3.style.marginTop = 20;
     block3.style.height = 100;
-    block3.style.width = 200;
+    block3.style.width = 100;
     block3.backgroundColor = [UIColor redColor];
     [block3 addTo:body];
     
