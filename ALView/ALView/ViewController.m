@@ -17,6 +17,7 @@
     ALLabel * _allabel;
     
     ALLabel * _nicklabel;
+    ALLabel * _vlabel;
     ALLabel * _timelabel;
     
     UIView * _testInlineView;
@@ -38,7 +39,7 @@
 //    [self initMixScrollLayout];
 //    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
-    [self initBlockContentInlineLayout];
+//    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
@@ -56,7 +57,7 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-//    [self initALLabelAndAutoBlockLayout];
+    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
@@ -328,15 +329,17 @@
     _nicklabel.font = [UIFont systemFontOfSize:12];
     [_nicklabel addTo: infoWrap];
     
-    ALLabel * v = [[ALLabel alloc] init];
-    v.style.isEndOFLine = YES;
-    v.style.marginLeft = 4;
-    v.font = [UIFont systemFontOfSize:12];
-    v.text = @"V";
-    [v addTo: infoWrap];
+    _vlabel = [[ALLabel alloc] init];
+    _vlabel.style.marginLeft = 4;
+    _vlabel.style.hidden = YES;
+    _vlabel.font = [UIFont systemFontOfSize:12];
+    _vlabel.text = @"V";
+    [_vlabel addTo: infoWrap];
     
     _timelabel = [[ALLabel alloc] init];
     _timelabel.style.marginTop = 4;
+    _timelabel.style.hidden = YES;
+    _timelabel.style.isFirstOFLine = YES;
     _timelabel.text = @"";
     _timelabel.font = [UIFont systemFontOfSize:12];
     [_timelabel addTo: infoWrap];
@@ -716,28 +719,34 @@
 {
 //    _block.style.hidden = YES;
 //    [_block reflow];
-    _section1.style.hidden = YES;
-    [_section1 reflow];
+//    _section1.style.hidden = YES;
+//    [_section1 reflow];
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
-//    _nicklabel.text = @"";
-//    [_nicklabel reflow];
-//    _timelabel.text = @"";
-//    [_timelabel reflow];
+    _nicklabel.text = @"";
+    [_nicklabel reflow];
+    _timelabel.text = @"";
+    _timelabel.style.hidden = YES;
+    [_timelabel reflow];
+    _vlabel.style.hidden = YES;
+    [_vlabel reflow];
 }
 
 - (void) showView
 {
-    _section1.style.hidden = NO;
-    [_section1 reflow];
+//    _section1.style.hidden = NO;
+//    [_section1 reflow];
 //    _allabel.text = @"jdochen";
 //    [_allabel reflow];
 //    _block.style.hidden = NO;
 //    [_block reflow];
-//    _nicklabel.text = @"jdochen";
-//    [_nicklabel reflow];
-//    _timelabel.text = @"10:00";
-//    [_timelabel reflow];
+    _nicklabel.text = @"jdochen";
+    [_nicklabel reflow];
+    _timelabel.text = @"10:00";
+    _timelabel.style.hidden = NO;
+    [_timelabel reflow];
+    _vlabel.style.hidden = NO;
+    [_vlabel reflow];
 }
 
 

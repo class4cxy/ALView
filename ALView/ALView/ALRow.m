@@ -146,15 +146,18 @@
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO
     // 3、如果上一个节点存在且isEndOFLine=YES，那直接返回NO
+    // 4、如果当前节点isFirstOFLine=YES，那直接返回NO
     if (
         self.display == ALDisplayBlock ||
         view.style.display == ALDisplayBlock ||
-        (view.previousSibling && view.previousSibling.style.isEndOFLine)
+        (view.previousSibling && view.previousSibling.style.isEndOFLine) ||
+        view.style.isFirstOFLine
     ) {
         return NO;
     }
-    // 3、如果当前行已经没有子view，那直接返回YES
-    if ( [_viewsArr count] == 0 ) {
+    // 1、如果当前行已经没有子view，那直接返回YES
+    // 2、view是隐藏的，那直接返回YES
+    if ( [_viewsArr count] == 0 || view.style.hidden ) {
         return YES;
     }
 //    return _maxWidth >= _width + view.style.width + view.style.marginLeft + view.style.marginRight;
@@ -200,12 +203,13 @@
         
         for (; i < len; i++) {
             UIView * view = [_viewsArr objectAtIndex:i];
-            CGFloat w = view.style.marginLeft +
-                        view.style.marginRight +
-//                        view.style.width;
-                        view.frame.size.width;
-            
-            _width += w;
+            if ( !view.style.hidden ) {
+                CGFloat w = view.style.marginLeft +
+                            view.style.marginRight +
+                            view.frame.size.width;
+                
+                _width += w;
+            }
         }
     }
 }
@@ -221,13 +225,14 @@
         
         for (; i < len; i++) {
             UIView * view = [_viewsArr objectAtIndex:i];
-            CGFloat h = view.style.marginTop +
-                        view.style.marginBottom +
-//                        view.style.height;
-                        view.frame.size.height;
-            
-            if ( _height < h ) {
-                _height = h;
+            if ( !view.style.hidden ) {
+                CGFloat h = view.style.marginTop +
+                            view.style.marginBottom +
+                            view.frame.size.height;
+                
+                if ( _height < h ) {
+                    _height = h;
+                }
             }
         }
     }
@@ -246,21 +251,22 @@
 - (void) reflowWhenBlock
 {
     UIView * view = [_viewsArr objectAtIndex: 0];
-    CGFloat top = [self getCurrTop] + view.style.marginTop;
-    CGFloat left = 0;
-    CGFloat parentWidth = _parent.frame.size.width;
-    
-    if ( _contentAlign == ALContentAlignCenter ) {
-        left = (parentWidth - _width)/2 + view.style.marginLeft;
-    } else if ( _contentAlign == ALContentAlignRight ) {
-        left = parentWidth - _width + view.style.marginLeft;
-    } else {
-        left = view.style.marginLeft;
+    if ( !view.style.hidden ) {
+        CGFloat top = [self getCurrTop] + view.style.marginTop;
+        CGFloat left = 0;
+        CGFloat parentWidth = _parent.frame.size.width;
+        
+        if ( _contentAlign == ALContentAlignCenter ) {
+            left = (parentWidth - _width)/2 + view.style.marginLeft;
+        } else if ( _contentAlign == ALContentAlignRight ) {
+            left = parentWidth - _width + view.style.marginLeft;
+        } else {
+            left = view.style.marginLeft;
+        }
+        
+        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+        NSLog(@"reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
     }
-    
-//    view.frame = CGRectMake(left, top, view.style.width, view.style.height);
-    view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
-    NSLog(@"reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
 }
 // 触发row内部的view进行layout，仅重排left值
 - (void) reflowWhenInline
@@ -270,30 +276,30 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
-        CGFloat left = 0;
-        CGFloat top = [self getCurrTop] + view.style.marginTop;
-        CGFloat parentWidth = _parent.frame.size.width;
-        
-        if ( i == 0 ) {
-            if ( _contentAlign == ALContentAlignCenter ) {
-                left = (parentWidth - _width)/2 + view.style.marginLeft;
-            } else if ( _contentAlign == ALContentAlignRight ) {
-                left = parentWidth - _width + view.style.marginLeft;
+        if ( !view.style.hidden ) {
+            CGFloat left = 0;
+            CGFloat top = [self getCurrTop] + view.style.marginTop;
+            CGFloat parentWidth = _parent.frame.size.width;
+            
+            if ( i == 0 ) {
+                if ( _contentAlign == ALContentAlignCenter ) {
+                    left = (parentWidth - _width)/2 + view.style.marginLeft;
+                } else if ( _contentAlign == ALContentAlignRight ) {
+                    left = parentWidth - _width + view.style.marginLeft;
+                } else {
+                    left = view.style.marginLeft;
+                }
             } else {
-                left = view.style.marginLeft;
+                UIView * prevView = [_viewsArr objectAtIndex: i-1];
+                left =  view.style.marginLeft +
+                        prevView.frame.origin.x +
+                        prevView.frame.size.width +
+                        prevView.style.marginRight;
             }
-        } else {
-            UIView * prevView = [_viewsArr objectAtIndex: i-1];
-            left =  view.style.marginLeft +
-                    prevView.frame.origin.x +
-//                    prevView.style.width +
-                    prevView.frame.size.width +
-                    prevView.style.marginRight;
+            
+            view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+            NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
         }
-        
-        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
-//        view.frame = CGRectMake(left, top, view.style.width, view.style.height);
-        NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
 
@@ -305,10 +311,11 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
-        CGFloat top = [self getCurrTop] + view.style.marginTop;
-        view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
-//        view.frame = CGRectMake(view.frame.origin.x, top, view.style.width, view.style.height);
-        NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+        if ( !view.style.hidden ) {
+            CGFloat top = [self getCurrTop] + view.style.marginTop;
+            view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
+            NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+        }
     }
 }
 
