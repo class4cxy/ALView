@@ -160,7 +160,7 @@
     if ( [_viewsArr count] == 0 || view.style.hidden ) {
         return YES;
     }
-//    return _maxWidth >= _width + view.style.width + view.style.marginLeft + view.style.marginRight;
+    
     return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
 }
 

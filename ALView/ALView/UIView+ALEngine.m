@@ -115,12 +115,6 @@
         }
         [parent.rowManager appendView: self];
     } else {
-//        if ( self.rowManager && self.style.isAutoWidth ) {
-//            // 重排子view
-//            [self.rowManager reflowSubView];
-//            // 更新自己
-//            [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
-//        }
         [self reflowOriginWhenAbsolute];
     }
 }
@@ -239,19 +233,6 @@
         }
         
         [self reflowSubviewWhichISAbsolute];
-        // 重排子view中使用absolute排版的
-//        for (UIView * subView in self.subviews) {
-//            if (
-//                subView.isALEngine &&
-//                subView.style.position == ALPositionAbsolute &&
-//                (subView.style.hasSettedRight ||
-//                 subView.style.hasSettedBottom ||
-//                 subView.style.hasSettedCenterX ||
-//                 subView.style.hasSettedCenterY)
-//            ) {
-//                [subView reflowOriginWhenAbsolute];
-//            }
-//        }
     }
 }
 // 重排子view中使用absolute排版的
