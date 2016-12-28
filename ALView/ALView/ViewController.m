@@ -49,7 +49,7 @@
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
     
-//    [self initDynamicLayout];
+    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -57,7 +57,7 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-    [self initALLabelAndAutoBlockLayout];
+//    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
@@ -69,6 +69,7 @@
     
     // Do any additional setup after loading the view, typically from a nib.
 }
+
 
 - (void) initWithMaxWidthLayout
 {
@@ -177,7 +178,7 @@
 
 - (void) reflowWrap
 {
-    [_wrap reflow];
+//    [_wrap reflow];
 }
 
 - (void) initWithPaddingLayout
@@ -694,7 +695,7 @@
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
     _section1.style.width -= 5;
 //    _section1.style.hidden = YES;
-    [_section1 reflow];
+//    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
 //    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
@@ -708,7 +709,7 @@
 //    NSLog(@"%f", _section1.style.width);
     _section1.style.width += 5;
 //    _section1.style.hidden = NO;
-    [_section1 reflow];
+//    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
 //    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
@@ -724,12 +725,12 @@
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
     _nicklabel.text = @"";
-    [_nicklabel reflow];
+//    [_nicklabel reflow];
     _timelabel.text = @"";
     _timelabel.style.hidden = YES;
-    [_timelabel reflow];
+//    [_timelabel reflow];
     _vlabel.style.hidden = YES;
-    [_vlabel reflow];
+//    [_vlabel reflow];
 }
 
 - (void) showView
@@ -741,12 +742,12 @@
 //    _block.style.hidden = NO;
 //    [_block reflow];
     _nicklabel.text = @"jdochen";
-    [_nicklabel reflow];
+//    [_nicklabel reflow];
     _timelabel.text = @"10:00";
     _timelabel.style.hidden = NO;
-    [_timelabel reflow];
+//    [_timelabel reflow];
     _vlabel.style.hidden = NO;
-    [_vlabel reflow];
+//    [_vlabel reflow];
 }
 
 
@@ -1028,7 +1029,7 @@
     [[self createALLabel: @"jdochen4" numberOfLine:0] addTo:blockwrap];
     [[self createALLabel: @"jdochen6789" numberOfLine:0] addTo:blockwrap];
     [[self createALLabel: @"jdochen0" numberOfLine:0] addTo:blockwrap];
-    [[self createALLabel: @"jdochen765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:0] addTo:blockwrap];
+    [[self createALLabel: @"22" numberOfLine:2] addTo:blockwrap];
     [[self createALLabel: @"jdochen8765dbsabdsadsadjksakjdsajdskjadsjkawwwwwwwww" numberOfLine:1] addTo:blockwrap];
 //    [[self createALLabel: @"jdochen" numberOfLine:0] addTo:blockwrap];
 }

@@ -7,6 +7,7 @@
 //
 
 #import "ALStyle.h"
+#import "UIView+ALEngine.h"
 
 @implementation ALStyle
 
@@ -42,6 +43,10 @@
     if ( _display != ALDisplayBlock && _maxWidth && width > _maxWidth ) { width = _maxWidth; }
 
     _width = width + _paddingLeft + _paddingRight;
+    
+    if ( _view ) {
+        [_view reflowWhenWidthChange];
+    }
 }
 - (void) setWidthWithoutAutoWidth:(CGFloat)width
 {
@@ -58,6 +63,10 @@
     if ( _maxHeight && height > _maxHeight ) { height = _maxHeight; }
 
     _height = height + _paddingTop + _paddingBottom;
+    
+    if ( _view ) {
+        [_view reflowWhenHeightChange];
+    }
 }
 - (void) setHeightWithoutAutoHeight:(CGFloat)height
 {

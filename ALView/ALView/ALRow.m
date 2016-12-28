@@ -311,11 +311,9 @@
     
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
-        if ( !view.style.hidden ) {
-            CGFloat top = [self getCurrTop] + view.style.marginTop;
-            view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
-            NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
-        }
+        CGFloat top = [self getCurrTop] + view.style.marginTop;
+        view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
+        NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
 

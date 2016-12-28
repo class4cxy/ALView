@@ -100,6 +100,11 @@ typedef struct ALRect ALRect;
 @interface ALStyle : NSObject
 
 /*
+ * 增加对所属view的引用，用于驱动view reflow
+ */
+@property (nonatomic, strong) UIView * view;
+
+/*
  * 样式属性
  */
 @property (nonatomic, assign) ALPosition position;

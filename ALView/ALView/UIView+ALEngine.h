@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ALView.h"
 #import "ALStyle.h"
 #import "ALRow.h"
 #import "ALRowManager.h"
-#import "ALView.h"
 #import "ALScrollView.h"
 #import "ALLabel.h"
 
@@ -36,7 +36,7 @@
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
 // 提供给子类重新布局当前view用的，实例不要调用该方法
-- (void) reflow;
+//- (void) reflow;
 /*
  * 提供给一个普通UIView转为ALView布局
  * 1、初始化size
@@ -60,7 +60,17 @@
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
 - (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
+- (BOOL) reflowWidthWhenAutoWidthWithWidth: (CGFloat) width;
 
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
+
+/*
+ * 单向刷新逻辑
+ */
+
+// 只刷新height
+- (void) reflowWhenHeightChange;
+// 只刷新width
+- (void) reflowWhenWidthChange;
 
 @end

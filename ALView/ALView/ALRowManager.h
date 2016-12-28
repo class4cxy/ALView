@@ -15,12 +15,18 @@
 @property (nonatomic, strong) UIView * ownerView;
 // 行管理的最大宽度，给到行布局时候用
 @property (nonatomic, assign) CGFloat maxWidth;
+// 当前行的最大高度，用于过滤没必要的重排
+@property (nonatomic, assign) CGFloat maxHeight;
 
 - (instancetype)initWithView: (UIView *) view;
 // 在最后一行的最后个位置插入一个view
 - (void) appendView: (UIView *) view;
 // 重排指定view所属的行
-- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow;
+//- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow;
+// 重排指定view所属行的height
+- (void) rowReflowHeightWithSubView: (UIView *) subView;
+// 重排指定view所属行的width
+- (void) rowReflowWidthWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView;
 // 重排当前行管理器的subview
 - (void) reflowSubView;
 // 获取当前onwerView的宽度
