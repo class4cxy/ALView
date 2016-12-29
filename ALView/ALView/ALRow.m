@@ -137,6 +137,23 @@
     return [_viewsArr count];
 }
 
+// 过滤hidden类型的view
+- (NSMutableArray *) filterHiddenView
+{
+    NSMutableArray * result = [NSMutableArray array];
+    NSInteger i = 0;
+    NSInteger len = [_viewsArr count];
+    
+    for (; i < len; i++) {
+        UIView * view = [_viewsArr objectAtIndex: i];
+        if ( !view.style.hidden ) {
+            [result addObject: view];
+        }
+    }
+    
+    return  result;
+}
+
 #pragma mark - Util method
 
 - (BOOL) canAddView: (UIView *) view
@@ -271,35 +288,34 @@
 // 触发row内部的view进行layout，仅重排left值
 - (void) reflowWhenInline
 {
+    NSMutableArray * views = [self filterHiddenView];
     NSInteger i = 0;
-    NSInteger len = [_viewsArr count];
+    NSInteger len = [views count];
     
     for ( ; i < len; i++ ) {
-        UIView * view = [_viewsArr objectAtIndex: i];
-        if ( !view.style.hidden ) {
-            CGFloat left = 0;
-            CGFloat top = [self getCurrTop] + view.style.marginTop;
-            CGFloat parentWidth = _parent.frame.size.width;
-            
-            if ( i == 0 ) {
-                if ( _contentAlign == ALContentAlignCenter ) {
-                    left = (parentWidth - _width)/2 + view.style.marginLeft;
-                } else if ( _contentAlign == ALContentAlignRight ) {
-                    left = parentWidth - _width + view.style.marginLeft;
-                } else {
-                    left = view.style.marginLeft;
-                }
+        UIView * view = [views objectAtIndex: i];
+        CGFloat left = 0;
+        CGFloat top = [self getCurrTop] + view.style.marginTop;
+        CGFloat parentWidth = _parent.frame.size.width;
+        
+        if ( i == 0 ) {
+            if ( _contentAlign == ALContentAlignCenter ) {
+                left = (parentWidth - _width)/2 + view.style.marginLeft;
+            } else if ( _contentAlign == ALContentAlignRight ) {
+                left = parentWidth - _width + view.style.marginLeft;
             } else {
-                UIView * prevView = [_viewsArr objectAtIndex: i-1];
-                left =  view.style.marginLeft +
-                        prevView.frame.origin.x +
-                        prevView.frame.size.width +
-                        prevView.style.marginRight;
+                left = view.style.marginLeft;
             }
-            
-            view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
-            NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
+        } else {
+            UIView * prevView = [views objectAtIndex: i-1];
+            left =  view.style.marginLeft +
+                    prevView.frame.origin.x +
+                    prevView.frame.size.width +
+                    prevView.style.marginRight;
         }
+        
+        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
+        NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
 

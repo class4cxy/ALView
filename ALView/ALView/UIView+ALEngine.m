@@ -213,6 +213,20 @@
 
 
 #pragma mark - 排版逻辑
+// hidden改变，重排
+- (void) reflowWhenHiddenChange
+{
+    if ( self.superview && self.isALEngine ) {
+        if ( self.style.position == ALPositionRelative ) {
+            // 防止未知错误
+            if ( self.superview && self.superview.rowManager ) {
+                [self.superview.rowManager rowReflowHeightWithSubView: self];
+                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
+            }
+        }
+    }
+}
+// marginLeft/marginRight改变，重排
 - (void) reflowWhenMarginXChange
 {
     if ( self.superview && self.isALEngine ) {
@@ -224,7 +238,7 @@
         }
     }
 }
-
+// marginTop/marginBottom改变，重排
 - (void) reflowWhenMarginYChange
 {
     if ( self.superview && self.isALEngine ) {
@@ -237,12 +251,12 @@
         }
     }
 }
-
+// width改变，重排
 - (void) reflowWhenWidthChange
 {
     // SuperView不存在情况表明该view还没渲染出来
     if ( self.superview && self.isALEngine ) {
-        [self reflowWidth: self.style.width];
+        [self reflowWidth];
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
             if ( self.superview && self.superview.rowManager ) {
@@ -251,7 +265,7 @@
         } else {
             if ( self.rowManager ) {
                 [self.rowManager reflowSubView];
-                [self reflowWidthWhenAutoWidthWithWidth: [self.rowManager getOnwerViewInnerWidth]];
+                [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
             }
             [self reflowOriginWhenAbsolute];
         }
@@ -260,13 +274,13 @@
     }
 }
 
-
+// height改变，重排
 - (void) reflowWhenHeightChange
 {
     // SuperView不存在情况表明该view还没渲染出来
     if ( self.superview && self.isALEngine ) {
         // 重排height
-        [self reflowHeight: self.style.height];
+        [self reflowHeight];
         // 重排row
         if ( self.style.position == ALPositionRelative ) { // relative
             // 防止未知错误
@@ -282,28 +296,6 @@
     }
 }
 
-// 重排自己
-//- (void) reflow
-//{
-//    // SuperView不存在情况表明该view还没渲染出来
-//    if ( self.superview && self.isALEngine ) {
-//        [self reflowSize];
-//        if ( self.style.position == ALPositionRelative ) {
-//            // 防止未知错误
-//            if ( self.superview && self.superview.rowManager ) {
-//                [self.superview.rowManager reflowRow: self reflowInnerView: YES];
-//            }
-//        } else {
-//            if ( self.rowManager ) {
-//                [self.rowManager reflowSubView];
-//                [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
-//            }
-//            [self reflowOriginWhenAbsolute];
-//        }
-//        
-//        [self reflowSubviewWhichISAbsolute];
-//    }
-//}
 // 重排子view中使用absolute排版的
 - (void) reflowSubviewWhichISAbsolute
 {
@@ -325,74 +317,29 @@
 /*
  * 重排当前view的width
  */
-- (void) reflowWidth: (CGFloat) width
+- (void) reflowWidth
 {
     if ( self.superview && self.isALEngine ) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
-        [self.style setWidthWithoutAutoWidth: width];
-        
-        // 更新自己的行管理器maxWidth值
-        if ( self.rowManager ) {
-            // isAutoWidth=NO时，需重设maxWidth
-            // isAutoWidth=YES时且display=ALDisplayBlock，需重设maxWidth
-            if (
-                !self.style.isAutoWidth ||
-                (self.style.isAutoWidth && self.style.display == ALDisplayBlock)
-                ) {
-                self.rowManager.maxWidth = self.style.width;
-            }
-        }
-    }
-}
-
-/*
- * 重排当前view的height
- */
-- (void) reflowHeight: (CGFloat) height
-{
-    if ( self.superview && self.isALEngine ) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
-        [self.style setHeightWithoutAutoHeight: height];
-    }
-}
-
-/*
- * 自动排版当前view尺寸
- */
-- (void) reflowSize
-{
-    if ( self.superview && self.isALEngine ) {
-        UIView * parent = self.superview;
-        // ALLabel的计算内部size方法比较特殊，由ALLabel自己实现
+        CGFloat width = self.style.width;
         if ( [self isKindOfClass:[ALLabel class]] ) {
-            [((ALLabel *) self) reflowWithInnerText: parent];
-            self.hidden = self.style.hidden;
+            [((ALLabel *) self) reflowWithInnerText: self.superview];
         } else {
-            CGFloat width = self.style.width;
-            CGFloat height = self.style.height;
             // 相对定位时
             if ( self.style.position == ALPositionRelative ) {
                 // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
                 if ( self.style.display == ALDisplayBlock && self.style.isAutoWidth ) {
                     width = self.superview.frame.size.width - self.style.marginLeft - self.style.marginRight;
                 }
-            // 绝对定位时
+                // 绝对定位时
             } else {
                 // 如果使用了isAutoWidth或者isAutoHeight，直接使用现有的宽高，因为子view被插入时，会更新内部的size
                 if ( self.style.isAutoWidth ) {
                     width = self.frame.size.width;
                 }
-                if ( self.style.isAutoHeight ) {
-                    height = self.frame.size.height;
-                }
             }
             
-            // reflow
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, height);
-            self.hidden = self.style.hidden;
-            // 更新内部值
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth: width];
-            [self.style setHeightWithoutAutoHeight: height];
             
             // 更新自己的行管理器maxWidth值
             if ( self.rowManager ) {
@@ -401,12 +348,42 @@
                 if (
                     !self.style.isAutoWidth ||
                     (self.style.isAutoWidth && self.style.display == ALDisplayBlock)
-                ) {
+                    ) {
                     self.rowManager.maxWidth = self.style.width;
                 }
             }
         }
     }
+}
+
+/*
+ * 重排当前view的height
+ */
+- (void) reflowHeight
+{
+    if ( self.superview && self.isALEngine ) {
+        CGFloat height = self.style.height;
+        if ( [self isKindOfClass:[ALLabel class]] ) {
+            [((ALLabel *) self) reflowWithInnerText: self.superview];
+        } else {
+            
+            if ( self.style.position == ALPositionAbsolute && self.style.isAutoHeight ) {
+                height = self.frame.size.height;
+            }
+            
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+            [self.style setHeightWithoutAutoHeight: height];
+        }
+    }
+}
+
+/*
+ * 自动排版当前view尺寸
+ */
+- (void) reflowSize
+{
+    [self reflowHeight];
+    [self reflowWidth];
 }
 
 /*
@@ -457,6 +434,7 @@
         }
         
         self.frame = CGRectMake(left, top, width, height);
+        NSLog(@"reflowOriginWhenAbsolute --- %@", NSStringFromCGRect(self.frame));
     }
 }
 
@@ -469,7 +447,7 @@
     BOOL hasChangeWidth = NO;
     if ( self.isALEngine ) {
         if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height + self.style.paddingTop + self.style.paddingBottom);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height);
             [self.style setHeightWithoutAutoHeight:size.height];
         }
         
@@ -482,7 +460,7 @@
              self.style.display == ALDisplayInline ||
              self.style.position == ALPositionAbsolute)
         ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width + self.style.paddingLeft + self.style.paddingRight, self.frame.size.height);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth:size.width];
             hasChangeWidth = YES;
         }
@@ -519,7 +497,7 @@
              self.style.display == ALDisplayInline ||
              self.style.position == ALPositionAbsolute)
             ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width + self.style.paddingLeft + self.style.paddingRight, self.frame.size.height);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
             [self.style setWidthWithoutAutoWidth: width];
             hasChangeWidth = YES;
         }
@@ -539,7 +517,7 @@
         }
 
         if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height + self.style.paddingTop + self.style.paddingBottom);
+            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
             [self.style setHeightWithoutAutoHeight: height];
         }
     }
@@ -567,13 +545,6 @@
         }
     } else {
         maxWidth = ownerView.frame.size.width;
-    }
-    // ALLabel以外的view都需要考虑内边距
-    if ( ![self isKindOfClass: [ALLabel class]] ) {
-        // 减去父view的内边距
-        if ( ownerView.superview ) {
-            maxWidth -= ownerView.superview.style.paddingLeft + ownerView.superview.style.paddingRight;
-        }
     }
 
     // relative方式布局的view

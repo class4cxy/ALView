@@ -30,26 +30,27 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // 测试单元
 //    [self initLayoutWithMargin];
 //    [self initLayout];
 //    [self initLayoutWithAbsolute];
 //    [self initLayoutWithAbsolutePriority];
 //    [self initLayoutWithScrollView];
 //    [self initMixScrollLayout];
-//    [self initInlineLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initBlockContentInlineLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
+    // demo
+//    [self initInlineLayout];
 //    [self initBlockLayout];
 //    [self initInlineLayout];
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
     
-    [self initDynamicLayout];
+//    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -57,7 +58,7 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-//    [self initALLabelAndAutoBlockLayout];
+    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
@@ -314,7 +315,6 @@
     [body addTo: self.view];
     
     ALView * wrap = [[ALView alloc] initAbsoluteView];
-    wrap.style.paddingRight = 50;
     
     ALView * avatar = [[ALView alloc] initInlineView];
     avatar.style.size = (CGSize) {35, 35};
@@ -322,7 +322,7 @@
     [avatar addTo: wrap];
     
     ALView * infoWrap = [[ALView alloc] initInlineView];
-    infoWrap.style.marginLeft = 10;
+    infoWrap.style.margin = (ALRect) {0, 50, 0, 10};
     [infoWrap addTo:wrap];
     
     _nicklabel = [[ALLabel alloc] init];
@@ -332,14 +332,12 @@
     
     _vlabel = [[ALLabel alloc] init];
     _vlabel.style.marginLeft = 4;
-    _vlabel.style.hidden = YES;
     _vlabel.font = [UIFont systemFontOfSize:12];
     _vlabel.text = @"V";
     [_vlabel addTo: infoWrap];
     
     _timelabel = [[ALLabel alloc] init];
     _timelabel.style.marginTop = 4;
-    _timelabel.style.hidden = YES;
     _timelabel.style.isFirstOFLine = YES;
     _timelabel.text = @"";
     _timelabel.font = [UIFont systemFontOfSize:12];
@@ -530,9 +528,11 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [[ALView alloc] init];
+    _block = [[ALView alloc] initInlineView];
+//    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
-    _block.style.marginBottom = 10;
+//    _block.style.hidden = YES;
+    _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
     [_block addTo: _body];
     
@@ -547,6 +547,7 @@
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _body];
 
     [[self createSizeCtrlView] addTo:b];
+    [[self createHiddenCtrlView] addTo:b];
 }
 
 - (void) initDynamicAbsolute
@@ -731,12 +732,7 @@
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
     _nicklabel.text = @"";
-//    [_nicklabel reflow];
     _timelabel.text = @"";
-    _timelabel.style.hidden = YES;
-//    [_timelabel reflow];
-    _vlabel.style.hidden = YES;
-//    [_vlabel reflow];
 }
 
 - (void) showView
@@ -748,12 +744,7 @@
 //    _block.style.hidden = NO;
 //    [_block reflow];
     _nicklabel.text = @"jdochen";
-//    [_nicklabel reflow];
     _timelabel.text = @"10:00";
-    _timelabel.style.hidden = NO;
-//    [_timelabel reflow];
-    _vlabel.style.hidden = NO;
-//    [_vlabel reflow];
 }
 
 
@@ -1453,25 +1444,27 @@
 
 - (void) initLayoutWithAbsolute
 {
-    ALView * body = [[ALView alloc] init];
-    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
-    body.style.height = 200;
-    body.style.margin = (ALRect) {100, 50, 0, 50};
+    _body = [[ALView alloc] init];
+    _body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.1];
+    _body.style.height = 200;
+    _body.style.margin = (ALRect) {100, 50, 0, 50};
 //    body.style.marginTop = 100;
 //    body.style.marginLeft = 50;
 //    body.style.marginRight = 50;
-    [body addTo:self.view];
+    [_body addTo:self.view];
     
-    [[self createAbsoluteBox:20 left:20 right:0 bottom:0 alpha:0.1] addTo: body];
-    [[self createAbsoluteBox:10 left:0 right:10 bottom:0 alpha:0.2] addTo: body];
-    [[self createAbsoluteBox:0 left:10 right:0 bottom:10 alpha:0.3] addTo: body];
-    [[self createAbsoluteBox:0 left:0 right:20 bottom:20 alpha:0.1] addTo: body];
+    [[self createAbsoluteBox:10 left:10 right:0 bottom:0 alpha:0.1] addTo: _body];
+    [[self createAbsoluteBox:10 left:0 right:10 bottom:0 alpha:0.2] addTo: _body];
+    [[self createAbsoluteBox:0 left:10 right:0 bottom:10 alpha:0.3] addTo: _body];
+    [[self createAbsoluteBox:0 left:0 right:10 bottom:10 alpha:0.1] addTo: _body];
     
     
-    [[self createAbsoluteBox:-50 left:-50 right:0 bottom:0 alpha:0.1] addTo: body];
-    [[self createAbsoluteBox:-50 left:0 right:-50 bottom:0 alpha:0.2] addTo: body];
-    [[self createAbsoluteBox:0 left:-50 right:0 bottom:-50 alpha:0.3] addTo: body];
-    [[self createAbsoluteBox:0 left:0 right:-50 bottom:-50 alpha:0.4] addTo: body];
+    [[self createAbsoluteBox:-50 left:-50 right:0 bottom:0 alpha:0.1] addTo: _body];
+    [[self createAbsoluteBox:-50 left:0 right:-50 bottom:0 alpha:0.2] addTo: _body];
+    [[self createAbsoluteBox:0 left:-50 right:0 bottom:-50 alpha:0.3] addTo: _body];
+    [[self createAbsoluteBox:0 left:0 right:-50 bottom:-50 alpha:0.4] addTo: _body];
+    
+    [[self createSizeCtrlView] addTo: self.view];
 }
 - (ALView *) createAbsoluteBox: (CGFloat) top left: (CGFloat) left right: (CGFloat) right bottom: (CGFloat) bottom alpha: (CGFloat) alpha
 {

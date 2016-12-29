@@ -42,7 +42,7 @@
     if ( width < 0 ) { width = 0; }
     if ( _display != ALDisplayBlock && _maxWidth && width > _maxWidth ) { width = _maxWidth; }
 
-    _width = width + _paddingLeft + _paddingRight;
+    _width = width;
     
     if ( _view ) {
         [_view reflowWhenWidthChange];
@@ -62,7 +62,7 @@
     if ( height < 0 ) { height = 0; }
     if ( _maxHeight && height > _maxHeight ) { height = _maxHeight; }
 
-    _height = height + _paddingTop + _paddingBottom;
+    _height = height;
     
     if ( _view ) {
         [_view reflowWhenHeightChange];
@@ -214,50 +214,27 @@
     return (ALRect) {_marginTop, _marginLeft, _marginBottom, _marginRight};
 }
 
-- (void) setPaddingTop:(CGFloat)paddingTop
-{
-    if ( !_isAutoHeight ) {
-        self.height += paddingTop;
-    }
-    _paddingTop = paddingTop;
-}
-
-- (void) setPaddingBottom:(CGFloat)paddingBottom
-{
-    if ( !_isAutoHeight ) {
-        self.height += paddingBottom;
-    }
-    _paddingBottom = paddingBottom;
-}
-
-- (void) setPaddingLeft:(CGFloat)paddingLeft
-{
-    if ( !_isAutoWidth ) {
-        self.width += paddingLeft;
-    }
-    _paddingLeft = paddingLeft;
-}
-
-- (void) setPaddingRight:(CGFloat)paddingRight
-{
-    if ( !_isAutoWidth ) {
-        self.width += paddingRight;
-    }
-    _paddingRight = paddingRight;
-}
-
 - (void)setPadding: (ALRect) padding
 {
     _padding = padding;
-    self.paddingTop = padding.top;
-    self.paddingLeft = padding.left;
-    self.paddingRight = padding.right;
-    self.paddingBottom = padding.bottom;
+    _paddingTop = padding.top;
+    _paddingLeft = padding.left;
+    _paddingRight = padding.right;
+    _paddingBottom = padding.bottom;
 }
 
 - (ALRect) padding
 {
     return (ALRect) {_paddingTop, _paddingLeft, _paddingBottom, _paddingRight};
+}
+
+- (void) setHidden:(BOOL)hidden
+{
+    _hidden = hidden;
+    if ( _view ) {
+        _view.hidden = hidden;
+        [_view reflowWhenHiddenChange];
+    }
 }
 
 @end

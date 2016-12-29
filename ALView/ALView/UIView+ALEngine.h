@@ -76,5 +76,7 @@
 - (void) reflowWhenMarginXChange;
 // 只刷新marginTop或marginBottom
 - (void) reflowWhenMarginYChange;
+// 刷新hidden
+- (void) reflowWhenHiddenChange;
 
 @end

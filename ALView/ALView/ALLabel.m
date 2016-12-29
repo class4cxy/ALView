@@ -36,6 +36,7 @@
 {
     [super setText: text];
     [self reflowWithInnerText: self.superview];
+    [self reflowWhenWidthChange];
 }
 
 - (void) reflowWithInnerText:(UIView *) parent

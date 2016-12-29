@@ -76,9 +76,12 @@
                 
                 [self crush2PreviousRow: startRow];
             }
-            // 递归重排父view的size
-            // 注：因为重排宽度有可能导致断行，会改变父view的高度
-            if ( subView.superview && subView.superview.rowManager ) {
+        }
+        // 递归重排父view的size
+        // 注：因为重排宽度有可能导致断行，会改变父view的高度
+        // 注：如果是block类型的view，而且父view是autowidth，那也需要触发父view reflow
+        if ( subView.superview && subView.superview.rowManager ) {
+            if ( subView.superview.style.isAutoWidth || subView.superview.style.isAutoHeight ) {
                 [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner: NO];
             }
         }
@@ -89,6 +92,11 @@
             [subView.rowManager reflowOwnerViewHeight];
         }
     }
+}
+
+- (void) rowReflowSizeWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView
+{
+    
 }
 /*
  * 重排当前行管理器中的某一view
@@ -301,45 +309,6 @@
     return hasUpdateWidth;
 }
 
-/*
- * 重排ownerview的subview
- * 遍历rowManager中的rowArr；
- * 1、如果当前行是block行：
- *    - 重排当前block view的size，因为有可能block view使用了isAutoWidth或者isAutoHeight
- *    - 触发当前行位置重排
- *    - 检查是否有子view，如果有则递归执行该方法
- * 2、如果当前行是inline行：
- *    - 重当前行的第一个view开始重排后面的view（调用reflowRow即可），直到遇到下一个block行为止，不在执行该行为
- */
-//- (void) reflowOwnerViewInnerView
-//{
-//    ALRow * row = [self firstRow];
-//    
-//    // TODO这里重排inline类型的子view有待优化：递归重排逐个子view
-//    BOOL isBlockRow = YES;
-//    while ( row ) {
-//        if ( [row count] > 0 ) {
-//            if ( row.display == ALDisplayBlock ) {
-//                UIView * view = [row firstView];
-//                // 重排当前block的size，因为父view有可能改变了宽度
-//                [view reflowSize];
-//                // 重排行
-//                [row layout];
-//                // 递归触发subview重排
-//                if ( view.rowManager ) {
-//                    [view.rowManager reflowOwnerViewInnerView];
-//                }
-//                isBlockRow = YES;
-//            } else if ( row.display == ALDisplayInline && isBlockRow ) {
-//                UIView * view = [row firstView];
-//                [self reflowRow: view reflowInnerView: NO];
-//                isBlockRow = NO;
-//            }
-//        }
-//        row = row.nextRow;
-//    }
-//    
-//}
 /*
  * 重排当前行管理器中所有view
  * 1 取出第一行；
