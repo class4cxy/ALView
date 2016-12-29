@@ -152,6 +152,7 @@
         self.nextSibling = nil;
         self.previousSibling = nil;
         self.style = [[ALStyle alloc] init];
+        self.style.view = self;
         
         CGSize size = self.frame.size;
         

@@ -108,12 +108,28 @@
 
 - (void) setOrigin: (ALRect) origin
 {
-    if ( origin.top ) { self.top = origin.top; }
-    if ( origin.left ) { self.left = origin.left; }
-    if ( origin.right ) { self.right = origin.right; }
-    if ( origin.bottom ) { self.bottom = origin.bottom; }
+    if ( origin.top ) {
+        _hasSettedTop = YES;
+        _top = origin.top;
+    }
+    if ( origin.left ) {
+        _hasSettedLeft = YES;
+        _left = origin.left;
+    }
+    if ( origin.right ) {
+        _hasSettedRight = YES;
+        _right = origin.right;
+    }
+    if ( origin.bottom ) {
+        _hasSettedBottom = YES;
+        _bottom = origin.bottom;
+    }
 
     _origin = origin;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 - (ALRect) getOrigin
 {
@@ -124,24 +140,40 @@
 {
     _hasSettedTop = YES;
     _top = top;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (void)setLeft: (CGFloat) left
 {
     _hasSettedLeft = YES;
     _left = left;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (void)setRight: (CGFloat) right
 {
     _hasSettedRight = YES;
     _right = right;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (void)setBottom: (CGFloat) bottom
 {
     _hasSettedBottom = YES;
     _bottom = bottom;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (CGPoint)center
@@ -160,12 +192,20 @@
 {
     _hasSettedCenterX = YES;
     _centerX = centerX;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (void)setCenterY: (CGFloat) centerY
 {
     _hasSettedCenterY = YES;
     _centerY = centerY;
+    
+    if ( _view ) {
+        [_view reflowOriginWhenAbsolute];
+    }
 }
 
 - (void) setMarginTop:(CGFloat)marginTop
@@ -207,6 +247,11 @@
     _marginLeft = margin.left;
     _marginRight = margin.right;
     _marginBottom = margin.bottom;
+    
+    if ( _view ) {
+        [_view reflowWhenMarginYChange];
+        [_view reflowWhenMarginXChange];
+    }
 }
 
 - (ALRect) margin
