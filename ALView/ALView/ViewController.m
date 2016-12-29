@@ -530,14 +530,18 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    ALView * block1 = [[ALView alloc] init];
-    block1.style.height = 100;
-    block1.style.width = 200;
-    block1.style.marginBottom = 10;
-    block1.backgroundColor = [UIColor redColor];
-    [block1 addTo: _body];
+    _block = [[ALView alloc] init];
+    _block.style.width = 200;
+    _block.style.marginBottom = 10;
+    _block.backgroundColor = [UIColor redColor];
+    [_block addTo: _body];
+    
+    [[self createInlineViewWidth:50 height:40 alpha:0.1] addTo: _block];
+    [[self createInlineViewWidth:20 height:40 alpha:0.2] addTo: _block];
+    [[self createInlineViewWidth:70 height:40 alpha:0.3] addTo: _block];
+    [[self createInlineViewWidth:120 height:40 alpha:0.4] addTo: _block];
 
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:90 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _body];
@@ -693,7 +697,8 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-    _section1.style.width -= 5;
+    _block.style.width -= 5;
+//    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
@@ -707,7 +712,8 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-    _section1.style.width += 5;
+    _block.style.width += 5;
+//    [_block reflow];
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];

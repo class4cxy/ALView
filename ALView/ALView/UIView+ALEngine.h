@@ -72,5 +72,9 @@
 - (void) reflowWhenHeightChange;
 // 只刷新width
 - (void) reflowWhenWidthChange;
+// 只刷新marginLeft或marginRight
+- (void) reflowWhenMarginXChange;
+// 只刷新marginTop或marginBottom
+- (void) reflowWhenMarginYChange;
 
 @end

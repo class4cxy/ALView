@@ -38,6 +38,8 @@
     if ( belongRow != nil ) {
         // 更新行数据
         [belongRow refreshSize];
+        // 重排当前行，因为如果marginTop值有更改，是需要重排当前行的位置
+        [belongRow layout];
         ALRow * nextRow = belongRow.nextRow;
         // 重排下一行top值
         while ( nextRow ) {
@@ -84,6 +86,7 @@
         // 重排自己内部子view
         if ( isReflowInnerView && subView.rowManager ) {
             [subView.rowManager reflowSubView];
+            [subView.rowManager reflowOwnerViewHeight];
         }
     }
 }

@@ -216,7 +216,12 @@
 - (void) reflowWhenMarginXChange
 {
     if ( self.superview && self.isALEngine ) {
-        
+        if ( self.style.position == ALPositionRelative ) {
+            // 防止未知错误
+            if ( self.superview && self.superview.rowManager ) {
+                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
+            }
+        }
     }
 }
 

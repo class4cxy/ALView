@@ -168,6 +168,38 @@
     _centerY = centerY;
 }
 
+- (void) setMarginTop:(CGFloat)marginTop
+{
+    _marginTop = marginTop;
+    if ( _view ) {
+        [_view reflowWhenMarginYChange];
+    }
+}
+
+- (void) setMarginBottom:(CGFloat)marginBottom
+{
+    _marginBottom = marginBottom;
+    if ( _view ) {
+        [_view reflowWhenMarginYChange];
+    }
+}
+
+- (void) setMarginLeft:(CGFloat)marginLeft
+{
+    _marginLeft = marginLeft;
+    if ( _view ) {
+        [_view reflowWhenMarginXChange];
+    }
+}
+
+- (void) setMarginRight:(CGFloat)marginRight
+{
+    _marginRight = marginRight;
+    if ( _view ) {
+        [_view reflowWhenMarginXChange];
+    }
+}
+
 - (void)setMargin: (ALRect) margin
 {
     _margin = margin;
