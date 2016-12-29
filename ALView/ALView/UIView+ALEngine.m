@@ -222,7 +222,12 @@
             // 防止未知错误
             if ( self.superview && self.superview.rowManager ) {
                 [self.superview.rowManager rowReflowHeightWithSubView: self];
-                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
+                // 如果isAutoWidth=YES，有可能maxWidth已经发生变化，需重排内部子view
+                if ( self.style.isAutoWidth && self.style.hidden == NO ) {
+                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: YES];
+                } else {
+                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
+                }
             }
         }
     }

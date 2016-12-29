@@ -52,13 +52,13 @@
     
 //    [self initDynamicLayout];
     
-//    [self initDynamicAbsolute];
+    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-    [self initALLabelAndAutoBlockLayout];
+//    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
@@ -725,14 +725,14 @@
 
 - (void) hideView
 {
-//    _block.style.hidden = YES;
+    _block.style.hidden = YES;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
-    _nicklabel.text = @"";
-    _timelabel.text = @"";
+//    _nicklabel.text = @"";
+//    _timelabel.text = @"";
 }
 
 - (void) showView
@@ -741,10 +741,10 @@
 //    [_section1 reflow];
 //    _allabel.text = @"jdochen";
 //    [_allabel reflow];
-//    _block.style.hidden = NO;
+    _block.style.hidden = NO;
 //    [_block reflow];
-    _nicklabel.text = @"jdochen";
-    _timelabel.text = @"10:00";
+//    _nicklabel.text = @"jdochen";
+//    _timelabel.text = @"10:00";
 }
 
 
