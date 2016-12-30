@@ -36,6 +36,7 @@
 {
     [super setText: text];
     [self reflowWithInnerText: self.superview];
+    [self reflowWhenHeightChange];
     [self reflowWhenWidthChange];
 }
 

@@ -45,6 +45,7 @@
     _width = width;
     
     if ( _view ) {
+        [_view reflowWidth];
         [_view reflowWhenWidthChange];
     }
 }
@@ -65,6 +66,7 @@
     _height = height;
     
     if ( _view ) {
+        [_view reflowHeight];
         [_view reflowWhenHeightChange];
     }
 }

@@ -52,7 +52,7 @@
     
 //    [self initDynamicLayout];
     
-    [self initDynamicAbsolute];
+//    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
 //    [self initPositionAutoSizeWhenBottomAndRight];
 //    [self initMixAutoWidthLayout];
@@ -67,10 +67,38 @@
 //    [self initWithPaddingLayout];
 //    [self initWithDynamicHiddenLayout];
 //    [self initWithMaxWidthLayout];
+    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (void) initMiniCard
+{
+    ALView * body = [[ALView alloc] init];
+    body.style.marginTop = 20;
+    body.style.contentAlign = ALContentAlignCenter;
+    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
+    [body addTo: self.view];
+    
+    ALView * wrap = [[ALView alloc] initAbsoluteView];
+    wrap.style.center = (CGPoint) {0, 0};
+    wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    [wrap addTo: body];
+    
+    ALView * head = [[ALView alloc] initAbsoluteView];
+    head.style.size = (CGSize) {60, 60};
+//    head.style.center = (CGPoint) {0, -30};
+    head.style.centerX = 0;
+    head.style.top = -30;
+    head.backgroundColor = [UIColor redColor];
+    [head addTo: wrap];
+    
+    ALView * main = [[ALView alloc] init];
+    main.style.size = (CGSize) {200, 150};
+    main.style.margin = (ALRect) {50, 10, 10, 10};
+    main.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+    [main addTo: wrap];
+}
 
 - (void) initWithMaxWidthLayout
 {

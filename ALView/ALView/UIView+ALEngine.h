@@ -64,19 +64,25 @@
 
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
 
+
+
 /*
  * 单向刷新逻辑
  */
+// 重排height
+- (void) reflowHeight;
+// 重排width
+- (void) reflowWidth;
 
-// 只刷新height
+// 当height改变时，触发相关重排
 - (void) reflowWhenHeightChange;
-// 只刷新width
+// 当width改变时，触发相关重排
 - (void) reflowWhenWidthChange;
-// 只刷新marginLeft或marginRight
+// 当marginLeft或marginRight改变时，触发相关重排
 - (void) reflowWhenMarginXChange;
-// 只刷新marginTop或marginBottom
+// 当marginTop或marginBottom改变时，触发相关重排
 - (void) reflowWhenMarginYChange;
-// 刷新hidden
+// 当hidden改变时，触发相关重排
 - (void) reflowWhenHiddenChange;
 
 @end

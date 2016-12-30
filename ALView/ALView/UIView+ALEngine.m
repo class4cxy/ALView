@@ -262,7 +262,6 @@
 {
     // SuperView不存在情况表明该view还没渲染出来
     if ( self.superview && self.isALEngine ) {
-        [self reflowWidth];
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
             if ( self.superview && self.superview.rowManager ) {
@@ -285,8 +284,6 @@
 {
     // SuperView不存在情况表明该view还没渲染出来
     if ( self.superview && self.isALEngine ) {
-        // 重排height
-        [self reflowHeight];
         // 重排row
         if ( self.style.position == ALPositionRelative ) { // relative
             // 防止未知错误

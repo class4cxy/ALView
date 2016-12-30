@@ -21,8 +21,6 @@
 - (instancetype)initWithView: (UIView *) view;
 // 在最后一行的最后个位置插入一个view
 - (void) appendView: (UIView *) view;
-// 重排指定view所属的行
-//- (void) reflowRow: (UIView *) subView reflowInnerView: (BOOL) isReflow;
 // 重排指定view所属行的height
 - (void) rowReflowHeightWithSubView: (UIView *) subView;
 // 重排指定view所属行的width
