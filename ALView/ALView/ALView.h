@@ -14,4 +14,10 @@
 - (instancetype) initInlineView;
 - (instancetype) initAbsoluteView;
 
+/*
+ * 类方法
+ */
++ (instancetype) newInlineView;
++ (instancetype) newAbsoluteView;
+
 @end

@@ -28,6 +28,11 @@
     return self;
 }
 
++ (instancetype) newWithAbsolute
+{
+    return [[self alloc] initAbsoluteView];
+}
+
 #pragma mark - 重载父类方法
 /*
  * 增加默认行为：setText时如果isAutoWidth & isAutoHeight 为YES时，需自动调整宽高

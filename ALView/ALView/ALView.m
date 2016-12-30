@@ -36,4 +36,14 @@
     return self;
 }
 
++ (instancetype) newInlineView
+{
+    return [[self alloc] initInlineView];
+}
+
++ (instancetype) newAbsoluteView
+{
+    return [[self alloc] initAbsoluteView];
+}
+
 @end
