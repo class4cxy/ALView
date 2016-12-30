@@ -49,8 +49,10 @@
 //    [self initInlineLayout];
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
+//    [self initWithALEngineLayout];
+//    [self initALLabelAndAutoBlockLayout];
     
-//    [self initDynamicLayout];
+    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -58,16 +60,14 @@
 //    [self initMixAutoWidthLayout];
 //    [self initDynamicALLabel];
 //    [self initDynamicSizeWhenAutoWidth];
-//    [self initALLabelAndAutoBlockLayout];
     
 //    [self initWithoutALEngineLayout];
 //    [self initWithALLayout];
-//    [self initWithALEngineLayout];
     
 //    [self initWithPaddingLayout];
 //    [self initWithDynamicHiddenLayout];
 //    [self initWithMaxWidthLayout];
-    [self initMiniCard];
+//    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -317,20 +317,27 @@
 
 - (void) initWithALEngineLayout
 {
+    ALView * wrap = [[ALView alloc] init];
+    wrap.style.marginTop = 20;
+    wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    [wrap addTo: self.view];
+    
     _testInlineView = [[ALView alloc] initInlineView];
     _testInlineView.style.size = (CGSize){80, 40};
     _testInlineView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
-    [_testInlineView addTo: self.view];
+    [_testInlineView addTo: wrap];
     
     ALView * blueView = [[ALView alloc] initInlineView];
     blueView.style.size = (CGSize){90, 40};
+    blueView.style.marginLeft = 5;
     blueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
-    [blueView addTo: self.view];
+    [blueView addTo: wrap];
     
     ALView * greenView = [[ALView alloc] initInlineView];
     greenView.style.size = (CGSize){120, 40};
+    greenView.style.marginLeft = 5;
     greenView.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
-    [greenView addTo: self.view];
+    [greenView addTo: wrap];
     
     [[self createSizeCtrlView] addTo:self.view];
 }
@@ -351,10 +358,12 @@
     
     ALView * infoWrap = [[ALView alloc] initInlineView];
     infoWrap.style.margin = (ALRect) {0, 50, 0, 10};
+    infoWrap.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
     [infoWrap addTo:wrap];
     
     _nicklabel = [[ALLabel alloc] init];
-    _nicklabel.text = @"";
+    _nicklabel.text = @"jdochenchenchenchenchenchen";
+    _nicklabel.style.maxWidth = 100;
     _nicklabel.font = [UIFont systemFontOfSize:12];
     [_nicklabel addTo: infoWrap];
     
@@ -367,15 +376,16 @@
     _timelabel = [[ALLabel alloc] init];
     _timelabel.style.marginTop = 4;
     _timelabel.style.isFirstOFLine = YES;
-    _timelabel.text = @"";
+    _timelabel.text = @"20:20";
     _timelabel.font = [UIFont systemFontOfSize:12];
     [_timelabel addTo: infoWrap];
     
     ALLabel * focus = [[ALLabel alloc] initWithAbsolute];
     focus.text = @"关注";
     focus.font = [UIFont systemFontOfSize:13];
+    focus.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
     focus.style.padding = (ALRect){5, 10, 5, 10};
-    focus.style.top = 5;
+    focus.style.top = 3;
     focus.style.right = 0;
     [focus addTo:wrap];
     
@@ -556,11 +566,11 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [[ALView alloc] initInlineView];
-//    _block.style.center = (CGPoint) {0, 0};
+    _block = [[ALView alloc] initAbsoluteView];
+    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
 //    _block.style.hidden = YES;
-    _block.style.margin = (ALRect) {0, 5, 10, 0};
+//    _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
     [_block addTo: _body];
     
@@ -726,7 +736,7 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-    _block.style.width -= 5;
+//    _block.style.width -= 5;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
@@ -741,7 +751,7 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-    _block.style.width += 5;
+//    _block.style.width += 5;
 //    [_block reflow];
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
@@ -759,7 +769,7 @@
 //    [_section1 reflow];
 //    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
-//    _nicklabel.text = @"";
+//    _nicklabel.text = @"jdochen";
 //    _timelabel.text = @"";
 }
 
@@ -771,7 +781,7 @@
 //    [_allabel reflow];
     _block.style.hidden = NO;
 //    [_block reflow];
-//    _nicklabel.text = @"jdochen";
+//    _nicklabel.text = @"jdochenchen";
 //    _timelabel.text = @"10:00";
 }
 
