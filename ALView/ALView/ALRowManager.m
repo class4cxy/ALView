@@ -27,10 +27,13 @@
 
 #pragma mark - 行排版逻辑
 /*
- * 指定view height发生变更，重排所属行
- * 注：该方法主要用于刷新自己，并触发兄弟view、父view重排，通常由父view的行管理器调用；
+ * 指定view的Y轴值（marginTop/marginBottom/height）发生变更时需触发重排
+ * 涉及到的重排：
+ * 1、重排当前view的top(只有marginTop变更是需要重排当前行的，因为会影响当前view的排版)
+ * 2、递归重排下一行的top
+ * 3、递归重排父view的height
  */
-- (void) rowReflowHeightWithSubView: (UIView *) subView
+- (void) reflowWhenYChange: (UIView *) subView need2reflowSelfTop: (BOOL) need2reflowSelfTop
 {
     // 找到该view所属的行，由行去决定如何reflow该view
     ALRow * belongRow = subView.belongRow;
@@ -38,8 +41,10 @@
     if ( belongRow != nil ) {
         // 更新行数据
         [belongRow refreshSize];
-        // 重排当前行，因为如果marginTop值有更改，是需要重排当前行的位置
-        [belongRow layout];
+        
+        if ( need2reflowSelfTop ) {
+            [belongRow reflowTopWithView: subView];
+        }
         ALRow * nextRow = belongRow.nextRow;
         // 重排下一行top值
         while ( nextRow ) {
@@ -54,7 +59,19 @@
     }
 }
 
-- (void) rowReflowWidthWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView
+/*
+ * 指定view的X轴值（marginLeft/marginRight/width）发生变更时需触发重排
+ * 涉及到的重排：
+ * 1、如果是block类型
+ *    (1) 更新行数据
+ *    (2) 重排所属行
+ * 2、如果是inline类型
+ *    (1) 检查是否需要断行，如果需要，执行crush2NextRow
+ *    (2) 如果不需要，执行crush2PreviousRow
+ * 3、递归重排父view的size
+ * 4、如果need2ReflowSubView=YES（只有width变更时），重排自己内部子view
+ */
+- (void) reflowWhenXChange:(UIView *)subView need2ReflowSubView:(BOOL)need2ReflowSubView
 {
     // 找到该view所属的行，由行去决定如何reflow该view
     ALRow * belongRow = subView.belongRow;
@@ -87,7 +104,7 @@
         }
         
         // 重排自己内部子view
-        if ( isReflowInnerView && subView.rowManager ) {
+        if ( need2ReflowSubView && subView.rowManager ) {
             [subView.rowManager reflowSubView];
             [subView.rowManager reflowOwnerViewHeight];
         }
@@ -218,7 +235,8 @@
             if ( hasUpdateWidth ) {
                 // 存在所属行，重排所属行
                 if ( self.ownerView.belongRow ) {
-                    [self.ownerView.superview.rowManager rowReflowWidthWithSubView: self.ownerView reflowInnerView:need2ReflowInnerView];
+                    [self.ownerView.superview.rowManager reflowWhenXChange: self.ownerView need2ReflowSubView: NO];
+//                    [self.ownerView.superview.rowManager rowReflowWidthWithSubView: self.ownerView reflowInnerView:need2ReflowInnerView];
 //                    [self.ownerView.superview.rowManager reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
                 }
             // 单独更新top值即可

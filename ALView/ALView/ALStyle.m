@@ -214,7 +214,7 @@
 {
     _marginTop = marginTop;
     if ( _view ) {
-        [_view reflowWhenMarginYChange];
+        [_view reflowWhenMarginYChange: ALMarginTop];
     }
 }
 
@@ -222,7 +222,7 @@
 {
     _marginBottom = marginBottom;
     if ( _view ) {
-        [_view reflowWhenMarginYChange];
+        [_view reflowWhenMarginYChange: ALMarginBottom];
     }
 }
 
@@ -230,7 +230,7 @@
 {
     _marginLeft = marginLeft;
     if ( _view ) {
-        [_view reflowWhenMarginXChange];
+        [_view reflowWhenMarginXChange: ALMarginLeft];
     }
 }
 
@@ -238,7 +238,7 @@
 {
     _marginRight = marginRight;
     if ( _view ) {
-        [_view reflowWhenMarginXChange];
+        [_view reflowWhenMarginXChange: ALMarginRight];
     }
 }
 
@@ -251,8 +251,8 @@
     _marginBottom = margin.bottom;
     
     if ( _view ) {
-        [_view reflowWhenMarginYChange];
-        [_view reflowWhenMarginXChange];
+        [_view reflowWhenMarginYChange: ALMarginTop];
+        [_view reflowWhenMarginXChange: ALMarginLeft];
     }
 }
 

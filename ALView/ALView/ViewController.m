@@ -535,7 +535,7 @@
 
     
     _body = [[ALView alloc] init];
-//    _body.style.contentAlign = ALContentAlignRight;
+    _body.style.contentAlign = ALContentAlignRight;
     _body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
     _body.style.marginBottom = 10;
     [_body addTo: b2];
@@ -566,11 +566,11 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [[ALView alloc] initAbsoluteView];
-    _block.style.center = (CGPoint) {0, 0};
+    _block = [ALView new];
+//    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
 //    _block.style.hidden = YES;
-//    _block.style.margin = (ALRect) {0, 5, 10, 0};
+    _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
     [_block addTo: _body];
     
@@ -736,7 +736,7 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-//    _block.style.width -= 5;
+    _block.style.width -= 5;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
@@ -751,7 +751,7 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-//    _block.style.width += 5;
+    _block.style.width += 5;
 //    [_block reflow];
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];

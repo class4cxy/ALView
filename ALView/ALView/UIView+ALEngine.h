@@ -79,9 +79,9 @@
 // 当width改变时，触发相关重排
 - (void) reflowWhenWidthChange;
 // 当marginLeft或marginRight改变时，触发相关重排
-- (void) reflowWhenMarginXChange;
+- (void) reflowWhenMarginXChange: (ALMarginType) marginType;
 // 当marginTop或marginBottom改变时，触发相关重排
-- (void) reflowWhenMarginYChange;
+- (void) reflowWhenMarginYChange: (ALMarginType) marginType;
 // 当hidden改变时，触发相关重排
 - (void) reflowWhenHiddenChange;
 

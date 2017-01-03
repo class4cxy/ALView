@@ -220,39 +220,44 @@
     if ( self.superview && self.isALEngine ) {
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
-            if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager rowReflowHeightWithSubView: self];
+            if ( self.superview.rowManager ) {
+                // [self.superview.rowManager rowReflowHeightWithSubView: self];
+                [self.superview.rowManager reflowWhenYChange: self need2reflowSelfTop: NO];
                 // 如果isAutoWidth=YES，有可能maxWidth已经发生变化，需重排内部子view
                 if ( self.style.isAutoWidth && self.style.hidden == NO ) {
-                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: YES];
+//                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: YES];
+                    [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: YES];
                 } else {
-                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
+                    [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: NO];
+//                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
                 }
             }
         }
     }
 }
 // marginLeft/marginRight改变，重排
-- (void) reflowWhenMarginXChange
+- (void) reflowWhenMarginXChange: (ALMarginType) marginType
 {
     if ( self.superview && self.isALEngine ) {
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
-            if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
+            if ( self.superview.rowManager ) {
+                [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: NO];
+//                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
             }
         }
     }
 }
 // marginTop/marginBottom改变，重排
-- (void) reflowWhenMarginYChange
+- (void) reflowWhenMarginYChange: (ALMarginType) marginType
 {
     if ( self.superview && self.isALEngine ) {
         // 重排row
         if ( self.style.position == ALPositionRelative ) { // relative
             // 防止未知错误
-            if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager rowReflowHeightWithSubView: self];
+            if ( self.superview.rowManager ) {
+                [self.superview.rowManager reflowWhenYChange:self need2reflowSelfTop: (marginType == ALMarginTop)];
+//                [self.superview.rowManager rowReflowHeightWithSubView: self];
             }
         }
     }
@@ -264,8 +269,9 @@
     if ( self.superview && self.isALEngine ) {
         if ( self.style.position == ALPositionRelative ) {
             // 防止未知错误
-            if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
+            if ( self.superview.rowManager ) {
+                [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: YES];
+//                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
             }
         } else {
             if ( self.rowManager ) {
@@ -287,8 +293,9 @@
         // 重排row
         if ( self.style.position == ALPositionRelative ) { // relative
             // 防止未知错误
-            if ( self.superview && self.superview.rowManager ) {
-                [self.superview.rowManager rowReflowHeightWithSubView: self];
+            if ( self.superview.rowManager ) {
+                [self.superview.rowManager reflowWhenYChange: self need2reflowSelfTop: NO];
+//                [self.superview.rowManager rowReflowHeightWithSubView: self];
             }
         } else { // absolute
             [self reflowHeightWhenAutoHeightWithHeight: self.style.height];

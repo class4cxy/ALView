@@ -59,10 +59,12 @@
 //
 - (NSUInteger) count;
 
-// 重排全部
+// 重排当前行的top/left
 - (void) layout;
-// 仅重排origin.top值
+// 重排当前行所有view的top
 - (void) reflowTop;
+// 重排指定view的top
+- (void) reflowTopWithView: (UIView *) view;
 // 更新row的size
 - (void) refreshSize;
 @end

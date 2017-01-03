@@ -87,6 +87,14 @@ typedef NS_ENUM(NSInteger, ALDisplay)
     ALDisplayInline,
 };
 
+typedef NS_ENUM(NSInteger, ALMarginType)
+{
+    ALMarginTop,
+    ALMarginLeft,
+    ALMarginRight,
+    ALMarginBottom,
+};
+
 
 /* ALRect. */
 struct ALRect {

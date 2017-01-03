@@ -319,7 +319,7 @@
     }
 }
 
-// 仅刷新top排版
+// 重排当前行所有view的top
 - (void) reflowTop
 {
     NSInteger i = 0;
@@ -330,6 +330,19 @@
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
         NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+    }
+}
+// 重排指定view的top
+- (void) reflowTopWithView: (UIView *) view
+{
+    if ( [_viewsArr count] > 0 && view ) {
+        NSUInteger beforeIndex = [_viewsArr indexOfObject: view];
+        // 存在beforeView才操作
+        if ( beforeIndex != NSNotFound ) {
+            CGFloat top = [self getCurrTop] + view.style.marginTop;
+            view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
+            NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+        }
     }
 }
 

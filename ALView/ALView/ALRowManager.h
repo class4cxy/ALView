@@ -21,10 +21,14 @@
 - (instancetype)initWithView: (UIView *) view;
 // 在最后一行的最后个位置插入一个view
 - (void) appendView: (UIView *) view;
+// 指定view的Y轴值（marginTop/marginBottom/height）发生变更时需触发重排
+- (void) reflowWhenYChange: (UIView *) subView need2reflowSelfTop: (BOOL) need2reflowSelfTop;
+// 指定view的X轴值（marginLeft/marginRight/width）发生变更时需触发重排
+- (void) reflowWhenXChange:(UIView *)subView need2ReflowSubView:(BOOL)need2ReflowSubView;
 // 重排指定view所属行的height
-- (void) rowReflowHeightWithSubView: (UIView *) subView;
+//- (void) rowReflowHeightWithSubView: (UIView *) subView;
 // 重排指定view所属行的width
-- (void) rowReflowWidthWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView;
+//- (void) rowReflowWidthWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView;
 // 重排当前行管理器的subview
 - (void) reflowSubView;
 // 获取当前onwerView的宽度
