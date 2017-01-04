@@ -87,6 +87,9 @@ typedef NS_ENUM(NSInteger, ALDisplay)
     ALDisplayInline,
 };
 
+/*
+ * margin的枚举类型
+ */
 typedef NS_ENUM(NSInteger, ALMarginType)
 {
     ALMarginTop,
@@ -95,6 +98,12 @@ typedef NS_ENUM(NSInteger, ALMarginType)
     ALMarginBottom,
 };
 
+/* ALRect. */
+struct ALSizeIsChange {
+    BOOL width;
+    BOOL height;
+};
+typedef struct ALSizeIsChange ALSizeIsChange;
 
 /* ALRect. */
 struct ALRect {

@@ -451,33 +451,18 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (BOOL) reflowSizeWhenAutoSizeWithSize: (CGSize) size
+- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize: (CGSize) size
 {
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
-    BOOL hasChangeWidth = NO;
+    ALSizeIsChange hasChange;
     if ( self.isALEngine ) {
-        if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, size.height);
-            [self.style setHeightWithoutAutoHeight:size.height];
-        }
+        hasChange.height = [self reflowHeightWhenAutoHeightWithHeight: size.height];
+        hasChange.width = [self reflowWidthWhenAutoWidthWithWidth: size.width];
         
-        if (
-            self.style.isAutoWidth &&
-            ((self.style.display == ALDisplayBlock &&
-              // TODO，这里对ALLabel有兼容问题
-              self.style.width < size.width && 
-              size.width <= self.rowManager.maxWidth) ||
-             self.style.display == ALDisplayInline ||
-             self.style.position == ALPositionAbsolute)
-        ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, size.width, self.frame.size.height);
-            [self.style setWidthWithoutAutoWidth:size.width];
-            hasChangeWidth = YES;
-        }
         // 如果是ownerView是relative类型，需额外做以下逻辑：
         // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
         // 2、更新ownerView所属行的size
-        if ( self.style.isAutoHeight || self.style.isAutoWidth ) {
+        if ( hasChange.height || hasChange.width ) {
             
             // 当父view是ALScrollView，需更新scrollView的contentSize
             if ( [self isKindOfClass: [ALScrollView class]] ) {
@@ -488,7 +473,7 @@
             }
         }
     }
-    return hasChangeWidth;
+    return hasChange;
 }
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
@@ -496,41 +481,58 @@
 - (BOOL) reflowWidthWhenAutoWidthWithWidth: (CGFloat) width
 {
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
-    BOOL hasChangeWidth = NO;
-    if ( self.isALEngine ) {
-        if (
-            self.style.isAutoWidth &&
-            ((self.style.display == ALDisplayBlock &&
-              // TODO，这里对ALLabel有兼容问题
-              self.style.width < width &&
-              width <= self.rowManager.maxWidth) ||
-             self.style.display == ALDisplayInline ||
-             self.style.position == ALPositionAbsolute)
-            ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
-            [self.style setWidthWithoutAutoWidth: width];
-            hasChangeWidth = YES;
-        }
+    BOOL hasChange = NO;
+    if (
+        self.isALEngine &&
+        self.style.isAutoWidth &&
+        self.style.width != width &&
+        ((self.style.display == ALDisplayBlock &&
+          // TODO，这里对ALLabel有兼容问题
+          self.style.width < width &&
+          width <= self.rowManager.maxWidth) ||
+         self.style.display == ALDisplayInline ||
+         self.style.position == ALPositionAbsolute)
+    ) {
+//        if (
+//            self.style.isAutoWidth &&
+//            ((self.style.display == ALDisplayBlock &&
+//              // TODO，这里对ALLabel有兼容问题
+//              self.style.width < width &&
+//              width <= self.rowManager.maxWidth) ||
+//             self.style.display == ALDisplayInline ||
+//             self.style.position == ALPositionAbsolute)
+//            ) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
+        [self.style setWidthWithoutAutoWidth: width];
+        hasChange = YES;
+//        }
     }
-    return hasChangeWidth;
+    return hasChange;
 }
 
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
-- (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height
+- (BOOL) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height
 {
-    if ( self.isALEngine ) {
+    BOOL hasChange = NO;
+    if (
+        self.isALEngine &&
+        self.style.isAutoHeight &&
+        height != self.style.height
+    ) {
         // 当父view是ALScrollView，需更新scrollView的contentSize
-        if ( [self isKindOfClass: [ALScrollView class]] ) {
-            [((ALScrollView *) self) reflowInnerFrame];
-        }
+//        if ( [self isKindOfClass: [ALScrollView class]] ) {
+//            [((ALScrollView *) self) reflowInnerFrame];
+//        }
 
-        if ( self.style.isAutoHeight ) {
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
-            [self.style setHeightWithoutAutoHeight: height];
-        }
+//        if ( self.style.isAutoHeight ) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+        [self.style setHeightWithoutAutoHeight: height];
+        hasChange = YES;
+//        }
     }
+    return hasChange;
 }
 
 /*

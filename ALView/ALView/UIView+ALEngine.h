@@ -55,11 +55,11 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (BOOL) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
+- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
-- (void) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
+- (BOOL) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
 - (BOOL) reflowWidthWhenAutoWidthWithWidth: (CGFloat) width;
 
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;

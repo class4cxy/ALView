@@ -27,7 +27,7 @@
 
 #pragma mark - 行排版逻辑
 /*
- * 指定view的Y轴值（marginTop/marginBottom/height）发生变更时需触发重排
+ * 指定view在Y轴方向的属性（marginTop/marginBottom/height都属于Y轴方向的属性）发生变更时需触发重排
  * 涉及到的重排：
  * 1、重排当前view的top(只有marginTop变更是需要重排当前行的，因为会影响当前view的排版)
  * 2、递归重排下一行的top
@@ -60,7 +60,7 @@
 }
 
 /*
- * 指定view的X轴值（marginLeft/marginRight/width）发生变更时需触发重排
+ * 指定view在X轴方向的属性（marginLeft/marginRight/width都属于X轴方向的属性）发生变更时需触发重排
  * 涉及到的重排：
  * 1、如果是block类型
  *    (1) 更新行数据
@@ -68,7 +68,7 @@
  * 2、如果是inline类型
  *    (1) 检查是否需要断行，如果需要，执行crush2NextRow
  *    (2) 如果不需要，执行crush2PreviousRow
- * 3、递归重排父view的size
+ * 3、重排父view的size(执行reflowOwnerViewSizeWithReflowInner)
  * 4、如果need2ReflowSubView=YES（只有width变更时），重排自己内部子view
  */
 - (void) reflowWhenXChange:(UIView *)subView need2ReflowSubView:(BOOL)need2ReflowSubView
@@ -218,47 +218,54 @@
 }
 
 /*
- * 操作（修改、插入、删除）子view而触发的重排父view，也就是行管理器的ownerView
+ * 操作（修改、插入、删除）行管理器中的子view而有可能导致了父view的size发生变化，从而触发重排父view
  * 1、如果ownerView.isALEngine=NO，不需操作，因为原生view都有给固定的height与width
  * 2、如果ownerView.isALEngine=YES：
- *    - 重排ownerView的size(调用reflowSelfSizeWhenAutoSize)
- *    - 如果ownerView.style.isAutoWidth=YES，触发重排ownerView所在的当前行（调用reflowRow:stopRecur）
+ *    (1) 重排ownerView的size(调用reflowSizeWhenAutoSizeWithSize)
+ *    (2) 如果是relative布局
+ *        - 如果hasChange.width=YES，重排X轴（执行reflowWhenXChange）
+ *          - 如果contentAlign != ALContentAlignLeft，重排所有行
+ *        - 如果hasChange.height=YES，排版父view的高度（执行recurReflowParentHeight）
+ *    (3) 如果是absolute布局
+ *        - 如果hasChange.width=YES或者hasChange.height=YES，重排origin（执行reflowOriginWhenAbsolute）
+ *    (4) 重排子view中使用absolute排版的
  */
-- (BOOL) reflowOwnerViewSizeWithReflowInner: (BOOL) need2ReflowInnerView
+- (ALSizeIsChange) reflowOwnerViewSizeWithReflowInner: (BOOL) need2ReflowInnerView
 {
-    BOOL hasUpdateWidth = NO;
+    ALSizeIsChange hasChange;
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        hasUpdateWidth = [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
+        hasChange = [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
         
         if ( self.ownerView.style.position == ALPositionRelative ) {
-            if ( hasUpdateWidth ) {
+            if ( hasChange.width ) {
                 // 存在所属行，重排所属行
                 if ( self.ownerView.belongRow ) {
                     [self.ownerView.superview.rowManager reflowWhenXChange: self.ownerView need2ReflowSubView: NO];
-//                    [self.ownerView.superview.rowManager rowReflowWidthWithSubView: self.ownerView reflowInnerView:need2ReflowInnerView];
-//                    [self.ownerView.superview.rowManager reflowRow: self.ownerView reflowInnerView:need2ReflowInnerView];
                 }
-            // 单独更新top值即可
-            } else if ( self.ownerView.style.isAutoHeight ) {
+            }
+            // 更新top值即可
+            if ( hasChange.height ) {
                 [self recurReflowParentHeight: self.ownerView];
             }
         // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
         } else {
-            if ( self.ownerView.style.isAutoHeight || self.ownerView.style.isAutoWidth ) {
+            if ( hasChange.height || hasChange.width ) {
                 [self.ownerView reflowOriginWhenAbsolute];
             }
         }
         
         // 如果ownerView不是左对齐，那还是需要重刷一遍所有行
-        if ( self.ownerView.style.contentAlign != ALContentAlignLeft && hasUpdateWidth ) {
+        if ( self.ownerView.style.contentAlign != ALContentAlignLeft && hasChange.width ) {
             [self reflowAllRow];
         }
         
         // 重排子view中使用absolute排版的
-        [self.ownerView reflowSubviewWhichISAbsolute];
+        if ( hasChange.height || hasChange.width ) {
+            [self.ownerView reflowSubviewWhichISAbsolute];
+        }
     }
-    return hasUpdateWidth;
+    return hasChange;
 }
 
 /*
@@ -396,9 +403,9 @@
     }
     if ( !view.style.hidden ) {
         // 触发ownerView reflow
-        BOOL hasUpdateWidth = [self reflowOwnerViewSizeWithReflowInner: NO];
+        ALSizeIsChange hasChange = [self reflowOwnerViewSizeWithReflowInner: NO];
         // 如果ownerView左对齐或者isAutoWidth=NO，才需要重刷当前行，否则reflowOwnerViewSizeWithReflowInner会执行了重排
-        if ( self.ownerView.style.contentAlign == ALContentAlignLeft || !self.ownerView.style.isAutoWidth || !hasUpdateWidth ) {
+        if ( self.ownerView.style.contentAlign == ALContentAlignLeft || !hasChange.width ) {
             [row layout];
         }
     }

@@ -566,7 +566,7 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [ALView new];
+    _block = [ALView newInlineView];
 //    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
 //    _block.style.hidden = YES;
