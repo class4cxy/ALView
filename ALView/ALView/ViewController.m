@@ -42,7 +42,7 @@
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
-    [self initBlockAndInlineLayout2];
+//    [self initBlockAndInlineLayout2];
     // demo
 //    [self initInlineLayout];
 //    [self initBlockLayout];
@@ -52,7 +52,7 @@
 //    [self initWithALEngineLayout];
 //    [self initALLabelAndAutoBlockLayout];
     
-//    [self initDynamicLayout];
+    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -566,11 +566,11 @@
     [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [ALView newInlineView];
-    _block.style.contentAlign = ALContentAlignCenter;
+    _block = [ALView new];
+    _block.style.contentAlign = ALContentAlignRight;
 //    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
-    _block.style.hidden = YES;
+//    _block.style.hidden = YES;
     _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
     [[self createInlineViewWidth:50 height:40 alpha:0.1] addTo: _block];

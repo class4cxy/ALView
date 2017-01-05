@@ -235,7 +235,7 @@
     ALSizeIsChange hasChange;
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        hasChange = [self.ownerView reflowSizeWhenAutoSizeWithSize: (CGSize){[self getOnwerViewInnerWidth], [self getOnwerViewInnerHeight]}];
+        hasChange = [self.ownerView reflowSizeWhenAutoSizeWithSize];
         
         if ( self.ownerView.style.position == ALPositionRelative ) {
             if ( hasChange.width ) {
@@ -348,7 +348,7 @@
 {
     if ( self.ownerView.isALEngine ) {
         // 重排ownerView的高度
-        BOOL hasChange = [self.ownerView reflowHeightWhenAutoHeightWithHeight: [self getOnwerViewInnerHeight]];
+        BOOL hasChange = [self.ownerView reflowHeightWhenAutoHeight];
         // 递归兄弟view以及superView
         if ( hasChange ) {
             // 如果是absolute类型，需要重排origin
@@ -396,7 +396,7 @@
 {
     // 如果存在子view，检查是否需要重排子view
     if ( !view.style.hidden && view.rowManager && view.style.contentAlign != ALContentAlignLeft ) {
-        [view.rowManager reflowSubView];
+        [view.rowManager reflowAllRow];
     }
     // 当前inline view在该容器作为第一行展示
     ALRow * row = nil;

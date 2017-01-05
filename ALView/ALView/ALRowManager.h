@@ -25,12 +25,10 @@
 - (void) reflowWhenYChange: (UIView *) subView need2reflowSelfTop: (BOOL) need2reflowSelfTop;
 // 指定view的X轴值（marginLeft/marginRight/width）发生变更时需触发重排
 - (void) reflowWhenXChange:(UIView *)subView need2ReflowSubView:(BOOL)need2ReflowSubView;
-// 重排指定view所属行的height
-//- (void) rowReflowHeightWithSubView: (UIView *) subView;
-// 重排指定view所属行的width
-//- (void) rowReflowWidthWithSubView: (UIView *) subView reflowInnerView: (BOOL) isReflowInnerView;
 // 重排当前行管理器的subview
 - (void) reflowSubView;
+// 重排当前行管理器中所有行，只是重排，并不会检查断行逻辑
+- (void) reflowAllRow;
 // 获取当前onwerView的宽度
 - (CGFloat) getOnwerViewInnerWidth;
 // 获取当前onwerView的高度

@@ -35,8 +35,6 @@
 - (instancetype) initWithALEngine;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
-// 提供给子类重新布局当前view用的，实例不要调用该方法
-//- (void) reflow;
 /*
  * 提供给一个普通UIView转为ALView布局
  * 1、初始化size
@@ -55,12 +53,12 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize: (CGSize) size;
+- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize;
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
-- (BOOL) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height;
-- (BOOL) reflowWidthWhenAutoWidthWithWidth: (CGFloat) width;
+- (BOOL) reflowHeightWhenAutoHeight;
+- (BOOL) reflowWidthWhenAutoWidth;
 
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
 

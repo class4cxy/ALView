@@ -119,7 +119,7 @@
         [self reflowOriginWhenAbsolute];
         // 如果存在子view，检查是否需要重排子view
         if ( !self.style.hidden && self.rowManager && !self.style.isAutoWidth && self.style.contentAlign != ALContentAlignLeft ) {
-            [self.rowManager reflowSubView];
+            [self.rowManager reflowAllRow];
         }
     }
 }
@@ -282,7 +282,7 @@
         } else {
             if ( self.rowManager ) {
                 [self.rowManager reflowSubView];
-                [self reflowSizeWhenAutoSizeWithSize: (CGSize){[self.rowManager getOnwerViewInnerWidth], [self.rowManager getOnwerViewInnerHeight]}];
+                [self reflowSizeWhenAutoSizeWithSize];
             }
             [self reflowOriginWhenAbsolute];
         }
@@ -304,7 +304,7 @@
 //                [self.superview.rowManager rowReflowHeightWithSubView: self];
             }
         } else { // absolute
-            [self reflowHeightWhenAutoHeightWithHeight: self.style.height];
+//            [self reflowHeightWhenAutoHeightWithHeight];
             [self reflowOriginWhenAbsolute];
         }
         
@@ -457,13 +457,14 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize: (CGSize) size
+- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize
 {
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
     ALSizeIsChange hasChange;
     if ( self.isALEngine ) {
-        hasChange.height = [self reflowHeightWhenAutoHeightWithHeight: size.height];
-        hasChange.width = [self reflowWidthWhenAutoWidthWithWidth: size.width];
+        
+        hasChange.width = [self reflowWidthWhenAutoWidth];
+        hasChange.height = [self reflowHeightWhenAutoHeight];
         
         // 如果是ownerView是relative类型，需额外做以下逻辑：
         // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
@@ -481,11 +482,19 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (BOOL) reflowWidthWhenAutoWidthWithWidth: (CGFloat) width
+- (BOOL) reflowWidthWhenAutoWidth
 {
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
     BOOL hasChange = NO;
+    // 取最新的宽度
+    CGFloat width = -1;
+    if ( self.rowManager ) {
+        width = [self.rowManager getOnwerViewInnerWidth];
+    } else if ( [self isKindOfClass:[ALLabel class]] ) {
+        width = self.style.width;
+    }
     if (
+        width > -1 &&
         self.isALEngine &&
         self.style.isAutoWidth &&
         self.style.width != width &&
@@ -495,7 +504,7 @@
           width <= self.rowManager.maxWidth) ||
          self.style.display == ALDisplayInline ||
          self.style.position == ALPositionAbsolute)
-    ) {
+        ) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
         [self.style setWidthWithoutAutoWidth: width];
         // 更新行信息
@@ -504,26 +513,34 @@
         }
         hasChange = YES;
     }
+    
     return hasChange;
 }
 
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */
-- (BOOL) reflowHeightWhenAutoHeightWithHeight: (CGFloat) height
+- (BOOL) reflowHeightWhenAutoHeight
 {
     BOOL hasChange = NO;
+    // 取最新的高度
+    CGFloat height = -1;
+    if ( self.rowManager ) {
+        height = [self.rowManager getOnwerViewInnerHeight];
+    } else if ( [self isKindOfClass:[ALLabel class]] ) {
+        height = self.style.height;
+    }
     if (
+        height > -1 &&
         self.isALEngine &&
         self.style.isAutoHeight &&
         height != self.style.height
     ) {
         // 当父view是ALScrollView，需更新scrollView的contentSize
-//        if ( [self isKindOfClass: [ALScrollView class]] ) {
-//            [((ALScrollView *) self) reflowInnerFrame];
-//        }
-
-//        if ( self.style.isAutoHeight ) {
+        //        if ( [self isKindOfClass: [ALScrollView class]] ) {
+        //            [((ALScrollView *) self) reflowInnerFrame];
+        //        }
+        
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
         [self.style setHeightWithoutAutoHeight: height];
         // 更新行信息
@@ -531,8 +548,8 @@
             [self.belongRow refreshHeight];
         }
         hasChange = YES;
-//        }
     }
+    
     return hasChange;
 }
 
