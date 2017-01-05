@@ -246,7 +246,7 @@
             }
             // 更新top值即可
             if ( hasChange.height ) {
-                [self recurReflowParentHeight: self.ownerView];
+                [self recurReflowNextSiblingTopAndParentHeight: self.ownerView];
             }
         // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
         } else {
@@ -269,7 +269,7 @@
 }
 
 /*
- * 重排当前行管理器中所有view
+ * 重排当前行管理器中所有子view
  * 1 取出第一行；
  * 2 检查当前行中有没有使用autoWidth布局的view
  */
@@ -334,42 +334,52 @@
     }
 }
 
-// 重排ownerView的height，并重排兄弟view的top，以及递归父view的height
+/*
+ * 重排行管理器ownerView的height
+ * 场景：由子view发生变更而触发autoHeight的父view高度发生变化，从而触发相关联的重排
+ * 1、通过getOnwerViewInnerHeight获取子view最新高度，并交给reflowHeightWhenAutoHeightWithHeight决定是否要重排height
+ *    (1) 如果更新了height且ownerView的排版类型是absolute，重排ownerView的origin（执行reflowOriginWhenAbsolute）
+ *    (2) 如果更新了height且ownerView的排版类型是relative，递归触发重排高度（执行recurReflowParentHeight）
+ */
 - (void) reflowOwnerViewHeight
 {
     if ( self.ownerView.isALEngine ) {
         // 重排ownerView的高度
-        [self.ownerView reflowHeightWhenAutoHeightWithHeight: [self getOnwerViewInnerHeight]];
+        BOOL hasChange = [self.ownerView reflowHeightWhenAutoHeightWithHeight: [self getOnwerViewInnerHeight]];
         // 递归兄弟view以及superView
-        if ( self.ownerView.style.isAutoHeight ) {
-            [self recurReflowParentHeight: self.ownerView];
-            // 如果是absolute类型，还需要触发重排高度
+        if ( hasChange ) {
+            // 如果是absolute类型，需要重排origin
             if ( self.ownerView.style.position == ALPositionAbsolute ) {
                 [self.ownerView reflowOriginWhenAbsolute];
+            // 如果是relative类型，需要递归触发重排高度
+            } else {
+                [self recurReflowNextSiblingTopAndParentHeight: self.ownerView];
             }
         }
     }
 }
 
-- (void) recurReflowParentHeight: (UIView *) parent
+/*
+ * 递归重排下一兄弟view的top直到最后一个兄弟节点，然后重排父view的高度
+ */
+- (void) recurReflowNextSiblingTopAndParentHeight: (UIView *) view
 {
-    ALRow * belongRow = parent.belongRow;
-    
-    [belongRow refreshSize];
+    ALRow * belongRow = view.belongRow;
+
     // 重排同级view
     while (belongRow.nextRow) {
         [belongRow.nextRow reflowTop];
         belongRow = belongRow.nextRow;
     }
-    if ( parent.superview ) {
-        [parent.superview.rowManager reflowOwnerViewHeight];
+    if ( view.superview ) {
+        [view.superview.rowManager reflowOwnerViewHeight];
     }
 }
 
 #pragma mark - 行操作逻辑
 /*
  * 在行管理器最后一行尾部插入指定view
- * 1 如果当前view存在rowManager(子view)，检查是否需要重排子view（主要的场景是：父view只被初始化，但没add到任何view中）
+ * 1 如果当前view存在rowManager(子view)，检查是否需要重排子view而且contentAlign != ALContentAlignLeft（主要的场景是：父view只被初始化，但没add到任何view中）
  * 2 如果当前管理器还没有row，那新建一个Row，top=0；
  * 3 如果最后的Row为block类型的，那新建一个Row，top=previousRow.top+previousRow.height
  * 4 如果最后的Row为inline类型的，调用canAddView检查是否能插入：
@@ -381,12 +391,9 @@
 
 - (void) appendView: (UIView *) view
 {
-    // 如果是hidden=YES，不需要把这类view加到行管理器中
-//    if ( view.style.hidden ) {
-//        return;
-//    }
     // 如果存在子view，检查是否需要重排子view
-    if ( !view.style.hidden && [self checkNeed2ReflowInnerView: view] ) {
+//    if ( !view.style.hidden && [self checkNeed2ReflowInnerView: view] && view.style.contentAlign != ALContentAlignLeft ) {
+    if ( !view.style.hidden && view.style.display == ALDisplayBlock && view.style.contentAlign != ALContentAlignLeft ) {
         [view.rowManager reflowSubView];
     }
     // 当前inline view在该容器作为第一行展示

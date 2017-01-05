@@ -546,38 +546,42 @@
     body2.style.marginBottom = 10;
     [body2 addTo: b2];
     
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
-
-    _section1 = [[ALView alloc] init];
-    _section1.style.display = ALDisplayInline;
-    _section1.style.height = 30;
-    _section1.style.width = 150;
-    _section1.style.marginBottom = 5;
-    _section1.style.marginRight = 5;
-    _section1.style.top = -20;
-    _section1.backgroundColor = [UIColor yellowColor];
-    [_section1 addTo: _body];
-    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
-    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
+//
+//    _section1 = [[ALView alloc] init];
+//    _section1.style.display = ALDisplayInline;
+//    _section1.style.height = 30;
+//    _section1.style.width = 150;
+//    _section1.style.marginBottom = 5;
+//    _section1.style.marginRight = 5;
+//    _section1.style.top = -20;
+//    _section1.backgroundColor = [UIColor yellowColor];
+//    [_section1 addTo: _body];
+//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
+//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [ALView newInlineView];
+    _block = [ALView new];
+    _block.style.contentAlign = ALContentAlignRight;
 //    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
 //    _block.style.hidden = YES;
     _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
-    [_block addTo: _body];
-    
     [[self createInlineViewWidth:50 height:40 alpha:0.1] addTo: _block];
     [[self createInlineViewWidth:20 height:40 alpha:0.2] addTo: _block];
     [[self createInlineViewWidth:70 height:40 alpha:0.3] addTo: _block];
     [[self createInlineViewWidth:120 height:40 alpha:0.4] addTo: _block];
+    [[self createInlineViewWidth:20 height:40 alpha:0.2] addTo: _block];
+    [[self createInlineViewWidth:70 height:40 alpha:0.3] addTo: _block];
+    [[self createInlineViewWidth:120 height:40 alpha:0.4] addTo: _block];
+
+    [_block addTo: _body];
 
     [[self createInlineViewWidth:90 height:30 alpha:0.5] addTo: _body];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
@@ -607,8 +611,7 @@
 //    _section1.style.centerY = 0;
     _section1.style.center = (CGPoint){0, 0};
 //    _section1.style.width = 200;
-    _section1.style.contentAlign = ALContentAlignCenter;
-    [_section1 addTo: b];
+    _section1.style.contentAlign = ALContentAlignRight;
     [[self createInlineViewWidth:100 height:40 alpha:0.6] addTo: b];
     [[self createInlineViewWidth:80 height:40 alpha:0.5] addTo: b];
     [[self createInlineViewWidth:60 height:40 alpha:0.4] addTo: b];
@@ -616,6 +619,7 @@
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _section1];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _section1];
+    [_section1 addTo: b];
 //
     _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
     _block.style.hidden = YES;
@@ -736,12 +740,12 @@
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
-    _block.style.width -= 5;
+//    _block.style.width -= 5;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-//    _section1.style.height -= 5;
+    _section1.style.width -= 5;
 //    _section1.style.marginBottom -= 3;
 //    [_section1 reflow];
 }
@@ -751,12 +755,12 @@
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
 //    NSLog(@"%f", _section1.style.width);
-    _block.style.width += 5;
+//    _block.style.width += 5;
 //    [_block reflow];
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-//    _section1.style.height += 5;
+    _section1.style.width += 5;
 //    _section1.style.marginBottom += 3;
 //    [_section1 reflow];
 }

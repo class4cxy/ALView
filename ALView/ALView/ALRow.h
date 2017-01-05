@@ -67,4 +67,8 @@
 - (void) reflowTopWithView: (UIView *) view;
 // 更新row的size
 - (void) refreshSize;
+// 更新row的width
+- (void) refreshWidth;
+// 更新row的height
+- (void) refreshHeight;
 @end

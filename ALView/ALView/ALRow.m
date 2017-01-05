@@ -158,7 +158,7 @@
 
 - (BOOL) canAddView: (UIView *) view
 {
-    [self reCountWidth];
+    [self refreshWidth];
     // 特殊逻辑：
     // 1、如果当前行是block行，那直接返回NO
     // 2、如果插入的view是block类型，那直接返回NO
@@ -183,7 +183,7 @@
 
 - (BOOL) need2break
 {
-    [self reCountWidth];
+    [self refreshWidth];
     // 3、如果当前行已经没有子view，那直接返回YES
     if ( [_viewsArr count] == 1 ) {
         return NO;
@@ -205,12 +205,12 @@
 
 - (void) refreshSize
 {
-    [self reCountWidth];
-    [self reCountHeight];
+    [self refreshWidth];
+    [self refreshHeight];
     [self getCurrTop];
 }
 
-- (void) reCountWidth
+- (void) refreshWidth
 {
     if ( [_viewsArr count] > 0 ) {
         _width = 0;
@@ -222,8 +222,8 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat w = view.style.marginLeft +
-                            view.style.marginRight +
-                            view.frame.size.width;
+                view.style.marginRight +
+                view.frame.size.width;
                 
                 _width += w;
             }
@@ -231,8 +231,7 @@
     }
 }
 
-
-- (void) reCountHeight
+- (void) refreshHeight
 {
     if ( [_viewsArr count] > 0 ) {
         _height = 0;
@@ -244,8 +243,8 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat h = view.style.marginTop +
-                            view.style.marginBottom +
-                            view.frame.size.height;
+                view.style.marginBottom +
+                view.frame.size.height;
                 
                 if ( _height < h ) {
                     _height = h;

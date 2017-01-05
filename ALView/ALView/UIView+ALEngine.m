@@ -468,9 +468,9 @@
             if ( [self isKindOfClass: [ALScrollView class]] ) {
                 [((ALScrollView *) self) reflowInnerFrame];
             }
-            if ( self.style.position == ALPositionRelative ) {
-                [self.belongRow refreshSize];
-            }
+//            if ( self.style.position == ALPositionRelative ) {
+//                [self.belongRow refreshSize];
+//            }
         }
     }
     return hasChange;
@@ -493,19 +493,13 @@
          self.style.display == ALDisplayInline ||
          self.style.position == ALPositionAbsolute)
     ) {
-//        if (
-//            self.style.isAutoWidth &&
-//            ((self.style.display == ALDisplayBlock &&
-//              // TODO，这里对ALLabel有兼容问题
-//              self.style.width < width &&
-//              width <= self.rowManager.maxWidth) ||
-//             self.style.display == ALDisplayInline ||
-//             self.style.position == ALPositionAbsolute)
-//            ) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
         [self.style setWidthWithoutAutoWidth: width];
+        // 更新行信息
+        if ( self.style.position == ALPositionRelative ) {
+            [self.belongRow refreshWidth];
+        }
         hasChange = YES;
-//        }
     }
     return hasChange;
 }
@@ -529,6 +523,10 @@
 //        if ( self.style.isAutoHeight ) {
         self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
         [self.style setHeightWithoutAutoHeight: height];
+        // 更新行信息
+        if ( self.style.position == ALPositionRelative ) {
+            [self.belongRow refreshHeight];
+        }
         hasChange = YES;
 //        }
     }
