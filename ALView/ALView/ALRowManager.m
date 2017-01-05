@@ -281,22 +281,25 @@
     while (row) {
         if ( row.display == ALDisplayBlock ) {
             UIView * view = [row firstView];
-            // 重排当前block的size，因为父view有可能改变了宽度
-            [view reflowSize];
-            [row refreshSize];
-            // 重排行
-            [row layout];
-            // 递归触发subview重排
-            if ( view.rowManager && view.style.isAutoWidth ) {
-                [view.rowManager reflowSubView];
-                [view.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+            if ( !view.style.hidden ) {
+                // 重排当前block的size，因为父view有可能改变了宽度
+                [view reflowSize];
+                [row refreshSize];
+                // 重排行
+                [row layout];
+                // 递归触发subview重排
+                if ( view.rowManager && view.style.isAutoWidth ) {
+                    [view.rowManager reflowSubView];
+                    [view.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+                }
+                isBlockRow = YES;
             }
-            isBlockRow = YES;
         } else if ( row.display == ALDisplayInline && isBlockRow ) {
             for (UIView * view in row.viewsArr) {
                 // 如果有需要重排子view，先重排
-                if ( [self checkNeed2ReflowInnerView: view] ) {
+                if ( view.rowManager && view.style.isAutoWidth ) {
                     [view.rowManager reflowSubView];
+                    [view.rowManager reflowOwnerViewSizeWithReflowInner: NO];
                 }
             }
             if ( [row need2break] ) {
@@ -392,8 +395,7 @@
 - (void) appendView: (UIView *) view
 {
     // 如果存在子view，检查是否需要重排子view
-//    if ( !view.style.hidden && [self checkNeed2ReflowInnerView: view] && view.style.contentAlign != ALContentAlignLeft ) {
-    if ( !view.style.hidden && view.style.display == ALDisplayBlock && view.style.contentAlign != ALContentAlignLeft ) {
+    if ( !view.style.hidden && view.rowManager && view.style.contentAlign != ALContentAlignLeft ) {
         [view.rowManager reflowSubView];
     }
     // 当前inline view在该容器作为第一行展示
@@ -550,9 +552,9 @@
  * 1 isAutoWidth=YES
  * 2 display == ALDisplayInline 或 position == ALPositionAbsolute
  */
-- (BOOL) checkNeed2ReflowInnerView: (UIView *) view
-{
-    return view.rowManager && view.style.isAutoWidth && (view.style.display == ALDisplayInline || view.style.position == ALPositionAbsolute);
-}
+//- (BOOL) checkNeed2ReflowInnerView: (UIView *) view
+//{
+//    return view.rowManager && view.style.isAutoWidth && (view.style.display == ALDisplayInline || view.style.position == ALPositionAbsolute);
+//}
 
 @end

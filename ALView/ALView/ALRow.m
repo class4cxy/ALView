@@ -154,8 +154,6 @@
     return  result;
 }
 
-#pragma mark - Util method
-
 - (BOOL) canAddView: (UIView *) view
 {
     [self refreshWidth];
@@ -169,7 +167,7 @@
         view.style.display == ALDisplayBlock ||
         (view.previousSibling && view.previousSibling.style.isEndOFLine) ||
         view.style.isFirstOFLine
-    ) {
+        ) {
         return NO;
     }
     // 1、如果当前行已经没有子view，那直接返回YES
@@ -189,16 +187,6 @@
         return NO;
     }
     return _width > _maxWidth;
-}
-
-- (CGFloat) getCurrTop
-{
-    CGFloat currTop = 0;
-    if ( self.previousRow ) {
-        currTop = self.previousRow.height + self.previousRow.top;
-    }
-    _top = currTop;
-    return currTop;
 }
 
 #pragma mark - reCount and reflow
@@ -252,6 +240,16 @@
             }
         }
     }
+}
+
+- (CGFloat) getCurrTop
+{
+    CGFloat currTop = 0;
+    if ( self.previousRow ) {
+        currTop = self.previousRow.height + self.previousRow.top;
+    }
+    _top = currTop;
+    return currTop;
 }
 
 - (void) layout
@@ -343,6 +341,17 @@
             NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
         }
     }
+}
+
+// 重写更新maxWidth逻辑，如果view存在行管理器（存在子view），需要更新行管理器的maxWidth
+- (void) setMaxWidth:(CGFloat)maxWidth
+{
+    for (UIView * view in _viewsArr) {
+        if ( view.rowManager && view.style.isAutoWidth ) {
+            view.rowManager.maxWidth = maxWidth - view.style.marginLeft - view.style.marginRight;
+        }
+    }
+    _maxWidth = maxWidth;
 }
 
 @end

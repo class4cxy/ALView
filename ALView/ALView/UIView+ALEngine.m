@@ -117,6 +117,10 @@
         [parent.rowManager appendView: self];
     } else {
         [self reflowOriginWhenAbsolute];
+        // 如果存在子view，检查是否需要重排子view
+        if ( !self.style.hidden && self.rowManager && !self.style.isAutoWidth && self.style.contentAlign != ALContentAlignLeft ) {
+            [self.rowManager reflowSubView];
+        }
     }
 }
 
@@ -219,17 +223,19 @@
 {
     if ( self.superview && self.isALEngine ) {
         if ( self.style.position == ALPositionRelative ) {
+            // 满足这两条件需重刷size
+            if ( self.style.hidden == NO && self.style.isAutoWidth ) {
+                // 排版size
+                [self reflowSize];
+            }
             // 防止未知错误
             if ( self.superview.rowManager ) {
-                // [self.superview.rowManager rowReflowHeightWithSubView: self];
                 [self.superview.rowManager reflowWhenYChange: self need2reflowSelfTop: NO];
-                // 如果isAutoWidth=YES，有可能maxWidth已经发生变化，需重排内部子view
-                if ( self.style.isAutoWidth && self.style.hidden == NO ) {
-//                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: YES];
+                // 如果isAutoWidth=YES或者contentAlign != ALContentAlignLeft，需重排内部子view
+                if ( (self.style.isAutoWidth || self.style.contentAlign != ALContentAlignLeft) && self.style.hidden == NO ) {
                     [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: YES];
                 } else {
                     [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: NO];
-//                    [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView: NO];
                 }
             }
         }
@@ -468,9 +474,6 @@
             if ( [self isKindOfClass: [ALScrollView class]] ) {
                 [((ALScrollView *) self) reflowInnerFrame];
             }
-//            if ( self.style.position == ALPositionRelative ) {
-//                [self.belongRow refreshSize];
-//            }
         }
     }
     return hasChange;
@@ -553,14 +556,17 @@
         if ( ownerView.style.maxWidth && ownerView.style.maxWidth < maxWidth ) {
             maxWidth = ownerView.style.maxWidth;
         }
+        // isAutoWidth=YES的情况，需减去左右外边距才是正真的最大宽度
+        if ( ownerView.style.position == ALPositionRelative ) {
+            // 减去自身的外边距
+            maxWidth -= (ownerView.style.marginRight + ownerView.style.marginLeft);
+        }
     } else {
-        maxWidth = ownerView.frame.size.width;
-    }
-
-    // relative方式布局的view
-    if ( ownerView.style.position == ALPositionRelative ) {
-        // 减去自身的外边距
-        maxWidth -= ownerView.style.marginRight + ownerView.style.marginLeft;
+        if ( ownerView.isALEngine ) {
+            maxWidth = ownerView.style.width;
+        } else {
+            maxWidth = ownerView.frame.size.width;
+        }
     }
     
     return maxWidth;

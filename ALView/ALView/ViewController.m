@@ -42,7 +42,7 @@
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
-//    [self initBlockAndInlineLayout2];
+    [self initBlockAndInlineLayout2];
     // demo
 //    [self initInlineLayout];
 //    [self initBlockLayout];
@@ -52,7 +52,7 @@
 //    [self initWithALEngineLayout];
 //    [self initALLabelAndAutoBlockLayout];
     
-    [self initDynamicLayout];
+//    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -546,31 +546,31 @@
     body2.style.marginBottom = 10;
     [body2 addTo: b2];
     
-//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
-//
-//    _section1 = [[ALView alloc] init];
-//    _section1.style.display = ALDisplayInline;
-//    _section1.style.height = 30;
-//    _section1.style.width = 150;
-//    _section1.style.marginBottom = 5;
-//    _section1.style.marginRight = 5;
-//    _section1.style.top = -20;
-//    _section1.backgroundColor = [UIColor yellowColor];
-//    [_section1 addTo: _body];
-//    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
-//    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:80 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:50 height:30 alpha:0.5] addTo: _body];
+
+    _section1 = [[ALView alloc] init];
+    _section1.style.display = ALDisplayInline;
+    _section1.style.height = 30;
+    _section1.style.width = 150;
+    _section1.style.marginBottom = 5;
+    _section1.style.marginRight = 5;
+    _section1.style.top = -20;
+    _section1.backgroundColor = [UIColor yellowColor];
+    [_section1 addTo: _body];
+    [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _body];
+    [[self createInlineViewWidth:70 height:30 alpha:0.5] addTo: _body];
 
     
-    _block = [ALView new];
-    _block.style.contentAlign = ALContentAlignRight;
+    _block = [ALView newInlineView];
+    _block.style.contentAlign = ALContentAlignCenter;
 //    _block.style.center = (CGPoint) {0, 0};
     _block.style.width = 200;
-//    _block.style.hidden = YES;
+    _block.style.hidden = YES;
     _block.style.margin = (ALRect) {0, 5, 10, 0};
     _block.backgroundColor = [UIColor redColor];
     [[self createInlineViewWidth:50 height:40 alpha:0.1] addTo: _block];
@@ -622,10 +622,11 @@
     [_section1 addTo: b];
 //
     _block = [self createBlockViewWidth: 0 height:0 alpha:0.5];
+//    _block = [self createInlineViewWidth:0 height:0 alpha:0.5];
     _block.style.hidden = YES;
-    _block.style.contentAlign = ALContentAlignRight;
+//    _block.style.contentAlign = ALContentAlignRight;
     [_block addTo: _section1];
-    [[self createInlineViewWidth:170 height:30 alpha:0.5] addTo: _block];
+    [[self createInlineViewWidth:120 height:30 alpha:0.5] addTo: _block];
     [[self createInlineViewWidth:40 height:30 alpha:0.5] addTo: _block];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo: _block];
     [[self createInlineViewWidth:60 height:30 alpha:0.5] addTo: _block];
@@ -1002,7 +1003,12 @@
     ALView * inlineView = [[ALView alloc] init];
     inlineView.style.display = ALDisplayInline;
     inlineView.style.margin = (ALRect){0, 5, 5, 0};
-    inlineView.style.size = (CGSize){width, height};
+    if ( height ) {
+        inlineView.style.height = height;
+    }
+    if ( width ) {
+        inlineView.style.width = width;
+    }
     inlineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
     return inlineView;
 }
