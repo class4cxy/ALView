@@ -9,7 +9,7 @@
 > 而流体布局就好比积木一样，先有基底才有塔峰；哪些素材排在同一层？哪些素材排在新的一层？这些完全由织梦者去选择不同的素材来决定，你可以选择长一点的木块放到新的一层也可以选择多个短一点的木块凑在同一层；流体布局也一样，从上往下，从左到右的排下来，开发者不需要再关心每一个素材的独立位置，开发者只需定义这个素材的类型（block或者inline），也不需要指定素材与素材直接的相对排版关系。
 <div>
 	<img width="45%" src="resource/tiehua.png" style="margin-right:10px"/>
-	<img width="45" src="resource/jimu.png"/>
+	<img width="45%" src="resource/jimu.png"/>
 </div>
 
 ## 属性
