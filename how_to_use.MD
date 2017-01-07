@@ -59,7 +59,7 @@ absView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
 [absView addTo: body];
 ```
 ##### 效果预览
-![demo-1-1](demo-1-1.png)
+![demo-1-1](resource/demo-1-1.png)
 
 > 大概解释一下代码：
 > 1、新建一个`relative`方式布局的body，并将它添加到self.view当中；
@@ -83,7 +83,7 @@ section2.style.height -= 5;
 ```
 
 ##### 效果预览
-![demo-1-2](demo-1-2.gif)
+![demo-1-2](resource/demo-1-2.gif)
 
 > 可以看到当section2的高度发生改变时，有以下相关联的view发生了重排：
 > 1、下一个兄弟view section3的位置发生了重排；
