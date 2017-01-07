@@ -358,6 +358,7 @@
             } else {
                 [self recurReflowNextSiblingTopAndParentHeight: self.ownerView];
             }
+            [self.ownerView reflowSubviewWhichISAbsolute];
         }
     }
 }

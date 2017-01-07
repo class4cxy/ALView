@@ -51,8 +51,9 @@
 //    [self initPaddingLayout];
 //    [self initWithALEngineLayout];
 //    [self initALLabelAndAutoBlockLayout];
+    [self initWithRelativeViewLayout];
     
-    [self initDynamicLayout];
+//    [self initDynamicLayout];
     
 //    [self initDynamicAbsolute];
 //    [self initDynamicLayout2];
@@ -70,6 +71,47 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithRelativeViewLayout
+{
+    // 定义一个relative方式布局的body
+    ALView * body = [ALView new];
+    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [body addTo: self.view];
+    
+    // 定义一个relative方式布局的section1，并将其添加到body中
+    ALView * section1 = [ALView new];
+    section1.style.height = 50;
+    // 设置view的外边距
+    section1.style.marginTop = 20;
+    section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    [section1 addTo: body];
+    
+    // 定义一个relative方式布局的section2，并将其添加到body中
+    _section1 = [ALView new];
+    _section1.style.height = 100;
+    _section1.style.marginTop = 20;
+    _section1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
+    [_section1 addTo: body];
+    
+    // 定义一个relative方式布局的section3，并将其添加到body中
+    ALView * section3 = [ALView new];
+    section3.style.height = 150;
+    section3.style.margin = (ALRect) {20, 0, 20, 0};
+    section3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
+    [section3 addTo: body];
+    
+    // 定义一个absolute方式布局的absView，并将其添加到body中
+    ALView * absView = [ALView newAbsoluteView];
+    // 设置view的大小
+    absView.style.size = (CGSize) {80, 80};
+    // 设置view相对父view垂直水平居中
+    absView.style.center = (CGPoint) {0, 0};
+    absView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
+    [absView addTo: body];
+    
+    [[self createSizeCtrlView] addTo: self.view];
 }
 
 - (void) initMiniCard
@@ -660,7 +702,7 @@
     panelWrap.style.left = 10;
     
     ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"width: ";
+    widthTx.text = @"height: ";
     widthTx.font = [UIFont systemFontOfSize:12];
     widthTx.style.height = 30;
     [widthTx addTo: panelWrap];
@@ -746,7 +788,7 @@
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.width -= 5;
+    _section1.style.height -= 5;
 //    _section1.style.marginBottom -= 3;
 //    [_section1 reflow];
 }
@@ -761,7 +803,7 @@
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.width += 5;
+    _section1.style.height += 5;
 //    _section1.style.marginBottom += 3;
 //    [_section1 reflow];
 }
