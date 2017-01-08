@@ -77,8 +77,7 @@
 - (void) initWithAbsuluteLayout
 {
     // 定义一个absolute方式布局的body
-    ALView * body = [[ALView alloc] initAbsoluteView];
-    body.style.position = ALPositionRelative
+    ALView * body = [ALView newAbsoluteView];
     // 设置body相对父view垂直水平居中
     body.style.center = (CGPoint) {0, 0};
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
