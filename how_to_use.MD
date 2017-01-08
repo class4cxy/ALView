@@ -170,14 +170,34 @@ section2.style.height -= 5;
 <img width="320" src="resource/demo-1-4.gif"/>
 
 
-### display - view的展示类型
+### display - 流体布局view的排版类型
 
-这是初始化一个relative排版方式的ALView必须要指定的第一个属性；它定义了view的展示类型，ALEngine提供了两种展示类型：`块级（block）`、`行内（inline）`，这两种类型最大的区别就是：block是固定断行排版，而inline则是自动断行排版。这里涉及到的固定与自动也是非常好理解，后面我会详细讲到。
+这是初始化一个relative排版方式的ALView必须要指定的第一个属性；它定义了view的排版类型，ALEngine提供了两种展示类型：`块级（block）`、`行内（inline）`，这两种类型最大的区别就是：block是固定断行排版，而inline则是自动断行排版。这里涉及到的固定与自动也是非常好理解，后面我会详细讲到。
 
 ** 注：该属性只针对relative方式布局的view生效。 **
 
 #### 取值：
 
-* **block - 块级布局 [默认]**：block定义了这个view是固定断行排版，固定断行包含两个层面：1、无论该view的上一个兄弟节点view（previous sibling view）是inline还是block，该view都以新的一行展示；2、如果上一个兄弟节点view是block，那它的下一个view不管是block还是inline也都以新的一行展示。
-* **inline - 行内布局**：绝对布局类似iOS原生的布局但不同于原生的布局，绝对布局最基本的特征就是这类view脱离它们原本所属的流体，不再与流体布局中的view相关联；所以绝对布局的view是需要设置`top` `left` `right` `bottom` `centerX` `centerY`来设置它们的位置，绝对布局自身虽然脱离了它所属的流（所在的父view的流），但它可以包含流体布局的view。
+* **ALDisplayBlock - 块级布局 [默认]**：block定义了这个view是固定断行排版，固定断行包含两个层面：1、无论该view的上一个兄弟节点view（previous sibling view）是inline还是block，该view都以新的一行展示；2、如果上一个兄弟节点view是block，那它的下一个view不管是block还是inline也都以新的一行展示。
+* **ALDisplayInline - 行内布局**：inline定义的view是自动换行，简单的理解就是：当父view宽度能够安放的下该view时，那就紧挨着上一个兄弟view的右侧排版，否者就以新的一行进行排版；当然还有一些小规则会影响断行，后面会通过demo演示。
 
+#### 用法
+##### 标准的用法
+```objective-c
+// 初始化一个ALView
+ALView * view = [[ALView alloc] init];
+// 通过style.display指定该view的流体的排版类型，如果你不指定则默认为ALDisplayBlock
+view.style.display = ALDisplayInline;
+```
+
+##### 快捷的用法
+```objective-c
+// 初始化一个inline方式布局的流体view
+ALView * view = [ALView newInlineView];
+// or
+ALView * view = [[ALView alloc] initInlineView];
+// 初始化一个block方式布局的流体view
+ALView * view = [ALView new];
+// or
+ALView * view = [[ALView alloc] init];
+```
