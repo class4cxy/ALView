@@ -51,7 +51,8 @@
 //    [self initPaddingLayout];
 //    [self initWithALEngineLayout];
 //    [self initALLabelAndAutoBlockLayout];
-    [self initWithRelativeViewLayout];
+//    [self initWithRelativeViewLayout];
+    [self initWithAbsuluteLayout];
     
 //    [self initDynamicLayout];
     
@@ -71,6 +72,40 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithAbsuluteLayout
+{
+    // 定义一个absolute方式布局的body
+    ALView * body = [[ALView alloc] initAbsoluteView];
+    body.style.position = ALPositionRelative
+    // 设置body相对父view垂直水平居中
+    body.style.center = (CGPoint) {0, 0};
+    body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    [body addTo: self.view];
+
+    // 定义一个relative方式布局的section1，并将其添加到body中
+    ALView * section1 = [ALView new];
+    // 设置view的尺寸
+    section1.style.size = (CGSize) {200, 50};
+    section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    [section1 addTo: body];
+    
+    // 定义一个relative方式布局的section2，并将其添加到body中
+    _section1 = [ALView new];
+    _section1.style.size = (CGSize) {200, 100};
+    // 设置view的上下外边距
+    _section1.style.margin = (ALRect) {20, 0, 20, 0};
+    _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+    [_section1 addTo: body];
+    
+    // 定义一个relative方式布局的section3，并将其添加到body中
+    ALView * section3 = [ALView new];
+    section3.style.size = (CGSize) {200, 150};
+    section3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
+    [section3 addTo: body];
+    
+    [[self createSizeCtrlView] addTo: self.view];
 }
 
 - (void) initWithRelativeViewLayout
