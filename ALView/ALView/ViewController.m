@@ -52,7 +52,8 @@
 //    [self initWithALEngineLayout];
 //    [self initALLabelAndAutoBlockLayout];
 //    [self initWithRelativeViewLayout];
-    [self initWithAbsuluteLayout];
+//    [self initWithAbsuluteLayout];
+    [self initWithBlockLayout];
     
 //    [self initDynamicLayout];
     
@@ -72,6 +73,37 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithBlockLayout
+{
+    ALView * block1 = [ALView new];
+    block1.style.height = 50;
+    block1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    block1.style.marginBottom = 10;
+    [block1 addTo: self.view];
+    
+    ALView * block2 = [ALView new];
+    block2.style.size = (CGSize) {60, 50};
+    block2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+    block2.style.marginBottom = 10;
+    [block2 addTo: self.view];
+    
+    ALView * block3 = [ALView new];
+    block3.style.size = (CGSize) {100, 100};
+    block3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
+    block3.style.marginBottom = 10;
+    [block3 addTo: self.view];
+    
+    [[self createInlineViewWidth:50 height:50 alpha:0.1] addTo: self.view];
+    [[self createInlineViewWidth:100 height:100 alpha:0.2] addTo: self.view];
+    [[self createInlineViewWidth:150 height:40 alpha:0.3] addTo: self.view];
+    [[self createInlineViewWidth:200 height:40 alpha:0.4] addTo: self.view];
+    
+    ALView * block4 = [ALView new];
+    block4.style.size = (CGSize) {10, 40};
+    block4.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
+    [block4 addTo: self.view];
 }
 
 - (void) initWithAbsuluteLayout
@@ -1076,8 +1108,7 @@
 
 - (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
-    ALView * inlineView = [[ALView alloc] init];
-    inlineView.style.display = ALDisplayInline;
+    ALView * inlineView = [ALView newInlineView];
     inlineView.style.margin = (ALRect){0, 5, 5, 0};
     if ( height ) {
         inlineView.style.height = height;
