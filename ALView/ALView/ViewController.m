@@ -39,6 +39,7 @@
 //    [self initMixScrollLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initBlockContentInlineLayout];
+    [self initBlockContentMixLayout];
 //    [self initInlineAutoWidthHeightLayout];
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
@@ -53,7 +54,7 @@
 //    [self initALLabelAndAutoBlockLayout];
 //    [self initWithRelativeViewLayout];
 //    [self initWithAbsuluteLayout];
-    [self initWithBlockLayout];
+//    [self initWithBlockLayout];
     
 //    [self initDynamicLayout];
     
@@ -75,35 +76,75 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (void) initBlockContentMixLayout
+{
+    ALView * article1 = [[ALView alloc] init];
+    article1.style.margin = (ALRect){20, 0, 20, 0};
+    article1.style.contentAlign = ALContentAlignLeft;
+    article1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article1 addTo: self.view];
+    
+    [[self createInlineViewWidth:100 height:50 alpha:0.2] addTo:article1];
+    [[self createBlockViewWidth:200 height:80 alpha:0.3] addTo: article1];
+    [[self createAbsoluteViewWidth: 40 height:40 alpha:0.5] addTo:article1];
+    
+    ALView * article2 = [[ALView alloc] init];
+    article2.style.marginBottom = 20;
+    article2.style.contentAlign = ALContentAlignCenter;
+    article2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article2 addTo: self.view];
+    
+    [[self createInlineViewWidth:100 height:50 alpha:0.2] addTo:article2];
+    [[self createBlockViewWidth:200 height:80 alpha:0.3] addTo: article2];
+    [[self createAbsoluteViewWidth: 40 height:40 alpha:0.5] addTo:article2];
+    
+    ALView * article3 = [[ALView alloc] init];
+    article3.style.contentAlign = ALContentAlignRight;
+    article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article3 addTo: self.view];
+    
+    [[self createInlineViewWidth:100 height:50 alpha:0.2] addTo:article3];
+    [[self createBlockViewWidth:200 height:80 alpha:0.3] addTo: article3];
+    [[self createAbsoluteViewWidth: 40 height:40 alpha:0.5] addTo:article3];
+}
+
 - (void) initWithBlockLayout
 {
     ALView * block1 = [ALView new];
     block1.style.height = 50;
     block1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
-    block1.style.marginBottom = 10;
+    block1.style.margin = (ALRect) {20, 0, 10, 0};
     [block1 addTo: self.view];
     
     ALView * block2 = [ALView new];
-    block2.style.size = (CGSize) {60, 50};
+    block2.style.size = (CGSize) {100, 50};
     block2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
     block2.style.marginBottom = 10;
     [block2 addTo: self.view];
     
+    _section1 = [ALView newInlineView];
+    _section1.style.size = (CGSize) {20, 50};
+    _section1.style.margin = (ALRect) {0, 5, 5, 0};
+    _section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
+    [_section1 addTo: self.view];
+    
+    [[self createInlineViewWidth:50 height:50 alpha:0.1] addTo: self.view];
+    [[self createInlineViewWidth:100 height:50 alpha:0.2] addTo: self.view];
+    [[self createInlineViewWidth:150 height:50 alpha:0.3] addTo: self.view];
+    [[self createInlineViewWidth:200 height:50 alpha:0.4] addTo: self.view];
+    
     ALView * block3 = [ALView new];
-    block3.style.size = (CGSize) {100, 100};
+    block3.style.size = (CGSize) {120, 100};
     block3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
     block3.style.marginBottom = 10;
     [block3 addTo: self.view];
     
-    [[self createInlineViewWidth:50 height:50 alpha:0.1] addTo: self.view];
-    [[self createInlineViewWidth:100 height:100 alpha:0.2] addTo: self.view];
-    [[self createInlineViewWidth:150 height:40 alpha:0.3] addTo: self.view];
-    [[self createInlineViewWidth:200 height:40 alpha:0.4] addTo: self.view];
-    
     ALView * block4 = [ALView new];
-    block4.style.size = (CGSize) {10, 40};
+    block4.style.size = (CGSize) {80, 40};
     block4.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
     [block4 addTo: self.view];
+    
+    [[self createSizeCtrlView] addTo: self.view];
 }
 
 - (void) initWithAbsuluteLayout
@@ -768,7 +809,7 @@
     panelWrap.style.left = 10;
     
     ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"height: ";
+    widthTx.text = @"width: ";
     widthTx.font = [UIFont systemFontOfSize:12];
     widthTx.style.height = 30;
     [widthTx addTo: panelWrap];
@@ -854,7 +895,7 @@
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.height -= 5;
+    _section1.style.width -= 5;
 //    _section1.style.marginBottom -= 3;
 //    [_section1 reflow];
 }
@@ -869,7 +910,7 @@
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.height += 5;
+    _section1.style.width += 5;
 //    _section1.style.marginBottom += 3;
 //    [_section1 reflow];
 }
@@ -902,8 +943,7 @@
 - (ALView *) createBlockViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
     ALView * view = [[ALView alloc] init];
-    view.style.marginRight = 5;
-    view.style.marginBottom = 5;
+    view.style.margin = (ALRect) {0, 0, 5, 5};
     if ( height ) {
         view.style.height = height;
     }
@@ -1106,18 +1146,32 @@
     [[self createInlineViewWidth: 200 height:40 alpha:0.7] addTo: inlineArticle];
 }
 
-- (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+- (ALView *) createAbsoluteViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
-    ALView * inlineView = [ALView newInlineView];
-    inlineView.style.margin = (ALRect){0, 5, 5, 0};
+    ALView * view = [ALView newAbsoluteView];
+    view.style.center = (CGPoint) {0, 0};
     if ( height ) {
-        inlineView.style.height = height;
+        view.style.height = height;
     }
     if ( width ) {
-        inlineView.style.width = width;
+        view.style.width = width;
     }
-    inlineView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
-    return inlineView;
+    view.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:alpha];
+    return view;
+}
+
+- (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+{
+    ALView * view = [ALView newInlineView];
+    view.style.margin = (ALRect){0, 5, 5, 0};
+    if ( height ) {
+        view.style.height = height;
+    }
+    if ( width ) {
+        view.style.width = width;
+    }
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return view;
 }
 
 - (void) initBlockAndInlineLayout1
@@ -1233,48 +1287,37 @@
     body.style.marginTop = 20;
     [body addTo: self.view];
     
-    ALView * artivle1 = [[ALView alloc] init];
-    artivle1.style.marginBottom = 20;
-    artivle1.style.marginTop = 20;
-    artivle1.style.contentAlign = ALContentAlignLeft;
-    artivle1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-    [artivle1 addTo: body];
+    ALView * article1 = [[ALView alloc] init];
+    article1.style.margin = (ALRect){20, 0, 20, 0};
+    article1.style.contentAlign = ALContentAlignLeft;
+    article1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article1 addTo: body];
     
-    [[self createInlineBox1:0.1] addTo:artivle1];
-    [[self createInlineBox1:0.2] addTo:artivle1];
-    [[self createInlineBox1:0.3] addTo:artivle1];
-    [[self createInlineBox1:0.4] addTo:artivle1];
-    [[self createInlineBox1:0.5] addTo:artivle1];
-    [[self createInlineBox1:0.6] addTo:artivle1];
+    [[self createInlineBox1:0.1] addTo:article1];
+    [[self createInlineBox1:0.2] addTo:article1];
+    [[self createInlineBox1:0.3] addTo:article1];
+    [[self createInlineBox1:0.4] addTo:article1];
     
-    ALView * artivle2 = [[ALView alloc] init];
-    artivle2.style.marginBottom = 20;
-    artivle2.style.contentAlign = ALContentAlignCenter;
-    artivle2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-    [artivle2 addTo: body];
+    ALView * article2 = [[ALView alloc] init];
+    article2.style.marginBottom = 20;
+    article2.style.contentAlign = ALContentAlignCenter;
+    article2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article2 addTo: body];
     
-    [[self createInlineBox1:0.1] addTo:artivle2];
-    [[self createInlineBox1:0.2] addTo:artivle2];
-    [[self createInlineBox1:0.3] addTo:artivle2];
-    [[self createInlineBox1:0.4] addTo:artivle2];
-    [[self createInlineBox1:0.5] addTo:artivle2];
-    [[self createInlineBox1:0.6] addTo:artivle2];
+    [[self createInlineBox1:0.1] addTo:article2];
+    [[self createInlineBox1:0.2] addTo:article2];
+    [[self createInlineBox1:0.3] addTo:article2];
+    [[self createInlineBox1:0.4] addTo:article2];
     
-    ALView * artivle3 = [[ALView alloc] init];
-    artivle3.style.marginBottom = 20;
-    artivle3.style.contentAlign = ALContentAlignRight;
-    artivle3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
-    [artivle3 addTo: body];
+    ALView * article3 = [[ALView alloc] init];
+    article3.style.contentAlign = ALContentAlignRight;
+    article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [article3 addTo: body];
     
-    [[self createInlineBox1:0.1] addTo:artivle3];
-    [[self createInlineBox1:0.2] addTo:artivle3];
-    [[self createInlineBox1:0.3] addTo:artivle3];
-    [[self createInlineBox1:0.4] addTo:artivle3];
-    [[self createInlineBox1:0.5] addTo:artivle3];
-    [[self createInlineBox1:0.6] addTo:artivle3];
-    [[self createInlineBox1:0.7] addTo:artivle3];
-    [[self createInlineBox1:0.8] addTo:artivle3];
-//    NSLog(@"%@", artivle3.rows);
+    [[self createInlineBox1:0.1] addTo:article3];
+    [[self createInlineBox1:0.2] addTo:article3];
+    [[self createInlineBox1:0.3] addTo:article3];
+    [[self createInlineBox1:0.4] addTo:article3];
 }
 
 - (void) initBlockContentBlockLayout
@@ -1284,15 +1327,13 @@
     [body addTo: self.view];
     
     ALView * artivle1 = [[ALView alloc] init];
-    artivle1.style.marginBottom = 20;
-    artivle1.style.marginTop = 20;
+    artivle1.style.margin = (ALRect) {20, 0, 20, 0};
     artivle1.style.contentAlign = ALContentAlignLeft;
     artivle1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
     [artivle1 addTo: body];
     
     ALView * block1 = [[ALView alloc] init];
-    block1.style.width = 150;
-    block1.style.height = 100;
+    block1.style.size = (CGSize) {150, 100};
     block1.backgroundColor = [UIColor yellowColor];
     [block1 addTo: artivle1];
     
@@ -1303,8 +1344,7 @@
     [artivle2 addTo: body];
     
     ALView * block2 = [[ALView alloc] init];
-    block2.style.width = 150;
-    block2.style.height = 100;
+    block2.style.size = (CGSize) {150, 100};
     block2.backgroundColor = [UIColor blueColor];
     [block2 addTo: artivle2];
     
@@ -1315,8 +1355,7 @@
     [artivle3 addTo: body];
     
     ALView * block3 = [[ALView alloc] init];
-    block3.style.width = 150;
-    block3.style.height = 100;
+    block3.style.size = (CGSize) {150, 100};
     block3.backgroundColor = [UIColor redColor];
     [block3 addTo: artivle3];
 }
@@ -1689,16 +1728,11 @@
 
 - (ALView *) createInlineBox1: (CGFloat) alpha
 {
-    ALView * subInline = [[ALView alloc] init];
-    subInline.style.height = 50;
-    subInline.style.width = 40;
-    subInline.style.marginTop = 10;
-    subInline.style.marginLeft = 10;
-    subInline.style.marginRight = 10;
-    subInline.style.marginBottom = 10;
-    subInline.style.display = ALDisplayInline;
-    subInline.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
-    return subInline;
+    ALView * view = [ALView newInlineView];
+    view.style.size = (CGSize) {40, 50};
+    view.style.margin = (ALRect) {10, 10, 10, 10};
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return view;
 }
 - (ALView *) createInlineBox2: (CGFloat) alpha
 {
