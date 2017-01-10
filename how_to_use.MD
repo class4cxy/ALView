@@ -272,6 +272,7 @@ block4.style.size = (CGSize) {80, 40};
 block4.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
 [block4 addTo: self.view];
 
+// 辅助方法
 - (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
     ALView * inlineView = [ALView newInlineView];
@@ -399,6 +400,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 [[self createInlineBox1:0.3] addTo:article3];
 [[self createInlineBox1:0.4] addTo:article3];
 
+// 辅助方法
 - (ALView *) createInlineBox1: (CGFloat) alpha
 {
     ALView * view = [ALView newInlineView];
@@ -462,6 +464,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
     return view;
 }
 
+// 辅助方法
 - (ALView *) createBlockViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
     ALView * view = [[ALView alloc] init];
@@ -502,4 +505,99 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 
 ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，在之前的demo我们也有演示过关于`width` `height`属性，不过大家千万别以为ALEngine提供的能力就是那么简单而已，下面我会用demo详细讲解到。
 
+#### DEMO - 4 - 1
 
+##### code
+```objective-c
+[[self createTitleViewWith: @"demo-1"] addTo: self.view];
+ALView * inlView1 = [ALView newInlineView];
+inlView1.style.size = (CGSize) {100, 30};
+inlView1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView1 addTo: self.view];
+
+ALView * blkView1 = [ALView new];
+blkView1.style.size = (CGSize) {100, 30};
+blkView1.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+[blkView1 addTo: self.view];
+
+[[self createTitleViewWith: @"demo-2"] addTo: self.view];
+ALView * inlView2 = [ALView newInlineView];
+inlView2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView2 addTo: self.view];
+
+ALView * blkView2 = [ALView new];
+blkView2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+[blkView2 addTo: self.view];
+
+[[self createTitleViewWith: @"demo-3"] addTo: self.view];
+ALView * inlView3 = [ALView newInlineView];
+inlView3.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView3 addTo: self.view];
+
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView3];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView3];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView3];
+
+ALView * blkView3 = [ALView new];
+blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+[blkView3 addTo: self.view];
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView3];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView3];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView3];
+
+[[self createTitleViewWith: @"demo-4"] addTo: self.view];
+ALView * inlView4 = [ALView newInlineView];
+inlView4.style.maxWidth = 100;
+inlView4.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView4 addTo: self.view];
+
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView4];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView4];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView4];
+
+ALView * blkView4 = [ALView new];
+blkView4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+blkView4.style.maxWidth = 100;
+[blkView4 addTo: self.view];
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView4];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView4];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView4];
+
+// 辅助方法
+- (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+{
+    ALView * view = [ALView newInlineView];
+    view.style.margin = (ALRect){0, 5, 5, 0};
+    if ( height ) {
+        view.style.height = height;
+    }
+    if ( width ) {
+        view.style.width = width;
+    }
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return view;
+}
+- (ALView *) createTitleViewWith: (NSString *) tx
+{
+    ALView * wrap = [ALView new];
+    wrap.style.margin = (ALRect) {20, 0, 5, 0};
+    wrap.style.contentAlign = ALContentAlignCenter;
+    ALLabel * title = [ALLabel new];
+    title.text = tx;
+    title.font = [UIFont systemFontOfSize:12];
+    [title addTo: wrap];
+    return wrap;
+}
+```
+
+##### 效果预览
+<img width="320" src="resource/demo-4-1.png"/>
+
+##### DEMO分析
+这里我整合了5个demo，每个demo中都包含一个inline与block类型的view，主要用于展示`width`属性在流体布局的view上的特征：
+* demo-1，这是最普通的用法，分别给block与inline类型的view设置了固定的宽高，实际的排版就会按照设置的值来布局；
+* demo-2，在这个代码中，我同时去掉宽高的设置，可以看出两中类型的view都不见；那是不是默认都为0呢？我们继续看demo-3；
+* demo-3，创建三个子view分别添加进去，可以看出：inline类型的view的宽高完全被子view撑开了，而block类型的view高度也由子view撑开了，但宽度却为父view的宽度；
+* demo-4，代码与demo-3基本保持一致，我给两种类型的view都设置了maxWidth属性；可以看到inline类型的view发生了断行，但block类型的view却无动于衷。
+这里我总结一下：
+1. 
