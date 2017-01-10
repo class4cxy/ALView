@@ -1,17 +1,52 @@
 # 流体布局的使用
 
----
-
 ## 简介：
 
 > iOS原有的排版方式就好比贴纸画一样，这样的方式相对灵活，但往往开发者需要关心每个素材的位置、大小，如果涉及到相对位置排版（比如狮子要在青蛙的右边且距离xx个像素），开发者还需关注哪些素材与哪些素材相关联。  
 
 > 而流体布局就好比积木一样，先有基底才有塔峰；哪些素材排在同一层？哪些素材排在新的一层？这些完全由织梦者去选择不同的素材来决定，你可以选择长一点的木块放到新的一层也可以选择多个短一点的木块凑在同一层；流体布局也一样，从上往下，从左到右的排下来，开发者不需要再关心每一个素材的独立位置，开发者只需定义这个素材的类型（block或者inline），也不需要指定素材与素材直接的相对排版关系。
 
-<div style="text-align: center">
-	<img width="45%" src="resource/tiehua.png" style="margin-right:20px"/>
+<div>
+	<img width="45%" src="resource/tiehua.png"/>
 	<img width="45%" src="resource/jimu.png"/>
 </div>
+
+## 属性大纲
+
+* 排版属性
+  * position
+  * display
+  * contentAlign
+* 样式属性
+  * 尺寸类
+    * size
+    * width
+    * height
+    * maxWidth
+    * maxHeight
+  * 位置类
+    * origin
+    * top
+    * left
+    * right
+    * bottom
+    * center
+    * centerX
+    * centerY
+  * 外边距类
+    * margin
+    * marginTop
+    * marginLeft
+    * marginRight
+    * marginBottom
+  * 内边距类
+    * paddingTop
+    * paddingLeft
+    * paddingRight
+    * paddingBottom
+* 其他属性
+  * isEngOfLine
+  * isFirstOfLine
 
 ## 排版属性
 
@@ -462,5 +497,9 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 这里主要演示的是混合了block与inline类型的子view，以及使用了`absolute`方式布局的子view；从效果可以明显看出contentAlign只对流体(relative)布局的子view有作用。
 
 ## 样式属性
+
+### 尺寸类 - 尺寸类属性主要用于指定view的大小
+
+ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，在之前的demo我们也有演示过关于`width` `height`属性，不过大家千万别以为ALEngine提供的能力就是那么简单而已，下面我会用demo详细讲解到。
 
 
