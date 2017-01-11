@@ -503,7 +503,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 
 ### 尺寸类 - 尺寸类属性主要用于指定view的大小
 
-ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，在之前的demo我们也有演示过关于`width` `height`属性，不过大家千万别以为ALEngine提供的能力就是那么简单而已，下面我会用demo详细讲解到。
+ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，在之前的demo我们也有演示过关于`width` `height`属性，下面我再用一个demo总结一下。
 
 #### DEMO - 4 - 1
 
@@ -545,24 +545,6 @@ blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
 [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView3];
 [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView3];
 
-[[self createTitleViewWith: @"demo-4"] addTo: self.view];
-ALView * inlView4 = [ALView newInlineView];
-inlView4.style.maxWidth = 100;
-inlView4.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
-[inlView4 addTo: self.view];
-
-[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView4];
-[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView4];
-[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView4];
-
-ALView * blkView4 = [ALView new];
-blkView4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
-blkView4.style.maxWidth = 100;
-[blkView4 addTo: self.view];
-[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView4];
-[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView4];
-[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView4];
-
 // 辅助方法
 - (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
@@ -594,10 +576,26 @@ blkView4.style.maxWidth = 100;
 <img width="320" src="resource/demo-4-1.png"/>
 
 ##### DEMO分析
-这里我整合了5个demo，每个demo中都包含一个inline与block类型的view，主要用于展示`width`属性在流体布局的view上的特征：
+这里我整合了3个demo，每个demo中都包含一个inline与block类型的view，主要用于展示`width`属性在流体布局的view上的特征：
 * demo-1，这是最普通的用法，分别给block与inline类型的view设置了固定的宽高，实际的排版就会按照设置的值来布局；
 * demo-2，在这个代码中，我同时去掉宽高的设置，可以看出两中类型的view都不见；那是不是默认都为0呢？我们继续看demo-3；
 * demo-3，创建三个子view分别添加进去，可以看出：inline类型的view的宽高完全被子view撑开了，而block类型的view高度也由子view撑开了，但宽度却为父view的宽度；
-* demo-4，代码与demo-3基本保持一致，我给两种类型的view都设置了maxWidth属性；可以看到inline类型的view发生了断行，但block类型的view却无动于衷。
-这里我总结一下：
-1. 
+
+1. 对于inline类型的view
+  * 如果没有设置height则默认height为0，并且会随着子view的最新高度而更新自身的高度，最大不超过父view的固定高度；
+  * 如果没有设置width则默认width为0，并且会随着子view的最新宽度而更新自身的宽度，最大不超过父view的固定宽度；
+2. 对于block类型的view
+  * 如果没有设置height则默认height为0，并且会随着子view的最新高度而更新自身的高度（同inline）；
+  * 如果没有设置width则默认width为父view的宽度；
+3. 对于absolute排版的view，规则跟inline类型一致。
+
+除了通用的width与height属性，`ALEngine`还提供了`maxWidth` `maxHeight`能力，下面[demo-4-2]会展示这两个属性的用处。
+
+#### DEMO - 4 - 2
+
+##### code
+```objective-c
+
+```
+##### 效果预览
+<img width="320" src="resource/demo-4-2.png"/>

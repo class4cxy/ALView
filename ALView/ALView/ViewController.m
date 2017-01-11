@@ -55,7 +55,7 @@
 //    [self initWithRelativeViewLayout];
 //    [self initWithAbsuluteLayout];
 //    [self initWithBlockLayout];
-    [self initDemoOfSize];
+//    [self initDemoOfSize];
     
 //    [self initDynamicLayout];
     
@@ -75,6 +75,26 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initDemoOfMaxSize
+{
+    [[self createTitleViewWith: @"demo-3"] addTo: self.view];
+    ALView * inlView3 = [ALView newInlineView];
+    inlView3.style.maxWidth = 200;
+    inlView3.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+    [inlView3 addTo: self.view];
+    
+    [[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView3];
+    [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView3];
+    [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView3];
+    
+    ALView * blkView3 = [ALView new];
+    blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+    [blkView3 addTo: self.view];
+    [[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView3];
+    [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView3];
+    [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView3];
 }
 
 - (void) initDemoOfSize
@@ -114,27 +134,6 @@
     [[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView3];
     [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView3];
     [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView3];
-    
-    [[self createTitleViewWith: @"demo-4"] addTo: self.view];
-    ALView * inlView4 = [ALView newInlineView];
-    inlView4.style.maxWidth = 100;
-    inlView4.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
-    [inlView4 addTo: self.view];
-    
-    [[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView4];
-    [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView4];
-    [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView4];
-    
-    ALView * blkView4 = [ALView new];
-    blkView4.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
-    blkView4.style.maxWidth = 100;
-    [blkView4 addTo: self.view];
-    [[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:blkView4];
-    [[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:blkView4];
-    [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:blkView4];
-
-    
-    
 }
 
 - (ALView *) createTitleViewWith: (NSString *) tx
