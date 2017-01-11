@@ -503,7 +503,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 
 ### 尺寸类 - 尺寸类属性主要用于指定view的大小
 
-ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，在之前的demo我们也有演示过关于`width` `height`属性，下面我再用一个demo总结一下。
+ALEngine提供了这些跟尺寸相关的属性：`width` `height` `maxWidth` `maxHeight`，其中`size`是简写；在之前的demo我们也有演示过关于`width` `height`属性，下面我再用一个demo总结一下。
 
 #### DEMO - 4 - 1
 
@@ -599,3 +599,17 @@ blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
 ```
 ##### 效果预览
 <img width="320" src="resource/demo-4-2.png"/>
+##### DEMO分析
+`maxWidth` `maxHeight`的应用场景很丰富，但这里有一点需要注意的：maxWidth对block类型的view不起作用的，因为block类型在没设置width属性的情况下默认为父view的宽度，换句话说也就是ALEngine已经帮你设置了width属性。
+
+### 位置类 - 位置类属性主要用于指定view的相对排版位置
+
+ALEngine提供了这些跟尺寸相关的属性：`top` `left` `right` `bottom`，其中`origin`是简写；还有`centerX` `centerY`，其中`center`是简写。
+
+#### DEMO - 4 - 1
+
+##### code
+```objective-c
+
+```
+##### 效果预览
