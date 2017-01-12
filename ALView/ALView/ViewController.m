@@ -23,6 +23,9 @@
     UIView * _testInlineView;
     
     ALView * _wrap;
+    ALView * _absView1;
+    ALView * _absView2;
+    ALView * _absView3;
 }
 @end
 
@@ -56,7 +59,9 @@
 //    [self initWithAbsuluteLayout];
 //    [self initWithBlockLayout];
 //    [self initDemoOfSize];
-    [self initDemoOfMaxSize];
+//    [self initDemoOfMaxSize];
+//    [self initDemoOfAbsolute];
+    [self initDemoOfDynamicAbsolute];
     
 //    [self initDynamicLayout];
     
@@ -76,6 +81,53 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initDemoOfDynamicAbsolute
+{
+    // 左下角
+    _absView1 = [self createAbsViewWithOrigin: (ALRect) {0, 0, 20, 20}];
+    [_absView1 addTo: self.view];
+    // 右下角
+    _absView2 = [self createAbsViewWithOrigin: (ALRect) {0, 20, 20, 0}];
+    [_absView2 addTo: self.view];
+    // 居中
+    _absView3 = [self createAbsViewWithCenter: (CGPoint) {0, 0}];
+    [_absView3 addTo: self.view];
+    
+    [[self createSizeCtrlView] addTo: self.view];
+}
+
+- (void) initDemoOfAbsolute
+{
+    // 左上角
+    [[self createAbsViewWithOrigin: (ALRect) {20, 0, 0, 20}] addTo: self.view];
+    // 右上角
+    [[self createAbsViewWithOrigin: (ALRect) {20, 20, 0, 0}] addTo: self.view];
+    // 左下角
+    [[self createAbsViewWithOrigin: (ALRect) {0, 0, 20, 20}] addTo: self.view];
+    // 右下角
+    [[self createAbsViewWithOrigin: (ALRect) {0, 20, 20, 0}] addTo: self.view];
+    // 居中
+    [[self createAbsViewWithCenter: (CGPoint) {0, 0}] addTo: self.view];
+}
+
+- (ALView *) createAbsViewWithCenter: (CGPoint) center
+{
+    ALView * view = [ALView newAbsoluteView];
+    view.style.center = center;
+    view.style.size = (CGSize) {50, 50};
+    view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
+    return view;
+}
+
+- (ALView *) createAbsViewWithOrigin: (ALRect) origin
+{
+    ALView * view = [ALView newAbsoluteView];
+    view.style.origin = origin;
+    view.style.size = (CGSize) {50, 50};
+    view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
+    return view;
 }
 
 - (void) initDemoOfMaxSize
@@ -882,13 +934,12 @@
 
 - (ALView *) createSizeCtrlView
 {
-    ALView * panelWrap = [[ALView alloc] init];
-    panelWrap.style.position = ALPositionAbsolute;
+    ALView * panelWrap = [ALView newAbsoluteView];
     panelWrap.style.bottom = 10;
-    panelWrap.style.left = 10;
+    panelWrap.style.centerX = 0;
     
     ALLabel * widthTx = [[ALLabel alloc] init];
-    widthTx.text = @"width: ";
+    widthTx.text = @"size: ";
     widthTx.font = [UIFont systemFontOfSize:12];
     widthTx.style.height = 30;
     [widthTx addTo: panelWrap];
@@ -896,8 +947,7 @@
     ALLabel * subBtn = [[ALLabel alloc] init];
     subBtn.userInteractionEnabled = YES;
     subBtn.text = @"-";
-    subBtn.style.height = 30;
-    subBtn.style.width = 30;
+    subBtn.style.size = (CGSize) {30, 30};
     subBtn.style.marginLeft = 10;
     subBtn.textColor = [UIColor whiteColor];
     subBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
@@ -909,8 +959,7 @@
     ALLabel * addBtn = [[ALLabel alloc] init];
     addBtn.userInteractionEnabled = YES;
     addBtn.text = @"+";
-    addBtn.style.height = 30;
-    addBtn.style.width = 30;
+    addBtn.style.size = (CGSize) {30, 30};
     addBtn.style.marginLeft = 10;
     addBtn.textColor = [UIColor whiteColor];
     addBtn.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
@@ -974,9 +1023,15 @@
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.width -= 5;
+//    _section1.style.width -= 5;
 //    _section1.style.marginBottom -= 3;
 //    [_section1 reflow];
+    _absView1.style.width -= 5;
+    _absView1.style.height -= 5;
+    _absView2.style.width -= 5;
+    _absView2.style.height -= 5;
+    _absView3.style.width -= 5;
+    _absView3.style.height -= 5;
 }
 - (void) addTheSize
 {
@@ -989,9 +1044,16 @@
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
 //    [_section1.belongRow refreshSize];
-    _section1.style.width += 5;
+//    _section1.style.width += 5;
 //    _section1.style.marginBottom += 3;
 //    [_section1 reflow];
+    _absView1.style.width += 5;
+    _absView1.style.height += 5;
+    _absView2.style.width += 5;
+    _absView2.style.height += 5;
+    _absView3.style.width += 5;
+    _absView3.style.height += 5;
+
 }
 
 - (void) hideView
