@@ -102,7 +102,6 @@
     [[self createInlineViewWidth:50 height:30 alpha:0.4] addTo:inlView2];
     [[self createInlineViewWidth:100 height:30 alpha:0.5] addTo:inlView2];
     [[self createInlineViewWidth:30 height:30 alpha:0.6] addTo:inlView2];
-
 }
 
 - (void) initDemoOfSize

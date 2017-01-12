@@ -595,7 +595,42 @@ blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
 
 ##### code
 ```objective-c
+[[self createTitleViewWith: @"demo-1 子view未超200"] addTo: self.view];
+ALView * inlView1 = [ALView newInlineView];
+inlView1.style.maxWidth = 200;
+inlView1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView1 addTo: self.view];
 
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView1];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView1];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView1];
+
+[[self createTitleViewWith: @"demo-2 子view超过200"] addTo: self.view];
+ALView * inlView2 = [ALView newInlineView];
+inlView2.style.maxWidth = 200;
+inlView2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
+[inlView2 addTo: self.view];
+
+[[self createInlineViewWidth:20 height:30 alpha:0.1] addTo:inlView2];
+[[self createInlineViewWidth:40 height:30 alpha:0.2] addTo:inlView2];
+[[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView2];
+[[self createInlineViewWidth:50 height:30 alpha:0.4] addTo:inlView2];
+[[self createInlineViewWidth:100 height:30 alpha:0.5] addTo:inlView2];
+[[self createInlineViewWidth:30 height:30 alpha:0.6] addTo:inlView2];
+// 辅助方法
+- (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+{
+    ALView * view = [ALView newInlineView];
+    view.style.margin = (ALRect){0, 5, 5, 0};
+    if ( height ) {
+        view.style.height = height;
+    }
+    if ( width ) {
+        view.style.width = width;
+    }
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return view;
+}
 ```
 ##### 效果预览
 <img width="320" src="resource/demo-4-2.png"/>
