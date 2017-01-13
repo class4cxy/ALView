@@ -61,7 +61,8 @@
 //    [self initDemoOfSize];
 //    [self initDemoOfMaxSize];
 //    [self initDemoOfAbsolute];
-    [self initDemoOfDynamicAbsolute];
+//    [self initDemoOfDynamicAbsolute];
+    [self initDemoOfPadding];
     
 //    [self initDynamicLayout];
     
@@ -82,6 +83,40 @@
     
     // Do any additional setup after loading the view, typically from a nib.
 }
+
+- (void) initDemoOfPadding
+{
+    [[self createTitleViewWith: @"demo-1 未设置padding"] addTo: self.view];
+    [[self createALLabel:@"jdochen" padding:(ALRect){0,0,0,0}] addTo: self.view];
+    [[self createALLabel:@"jdochennnn" padding:(ALRect){0,0,0,0}] addTo: self.view];
+    [[self createALLabel:@"jdochennnnnn" padding:(ALRect){0,0,0,0}] addTo: self.view];
+    
+    [[self createTitleViewWith: @"demo-2 设置padding=10"] addTo: self.view];
+    [[self createALLabel:@"jdochen" padding:(ALRect){10,10,10,10}] addTo: self.view];
+    [[self createALLabel:@"jdochennnn" padding:(ALRect){10,10,10,10}] addTo: self.view];
+    [[self createALLabel:@"jdochennnnnn" padding:(ALRect){10,10,10,10}] addTo: self.view];
+    
+    [[self createTitleViewWith: @"demo-3 设置不同方向的padding"] addTo: self.view];
+    [[self createALLabel:@"jdochen" padding:(ALRect){10,20,10,0}] addTo: self.view];
+    [[self createALLabel:@"jdochennnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
+    [[self createALLabel:@"jdochennnnnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
+}
+
+- (ALLabel *) createALLabel: (NSString *) text padding: (ALRect) padding
+{
+    ALLabel * view = [[ALLabel alloc] init];
+    view.text = text;
+    view.style.margin = (ALRect) {2, 0, 0, 2};
+    view.style.padding = padding;
+    view.numberOfLines = 0;
+    view.lineBreakMode = NSLineBreakByTruncatingTail;
+    view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    view.font = [UIFont systemFontOfSize:14.0];
+    view.textColor = [UIColor whiteColor];
+    
+    return view;
+}
+
 
 - (void) initDemoOfDynamicAbsolute
 {

@@ -757,24 +757,50 @@ view.style.margin = (ALRect) {10, 10, 10, 10};
 
 ### 内边距类 - 主要用于`ALLabel`设置文字与view之间的间隔
 
-**注：外边距只适用于`relative`方式排版的view。**
+<!-- `ALLabel`是`ALEngine`提供的一种优化之后的UIView，它继承于`UILabel` -->
+上面我们提到margin，主要用于撑开流体布局中的view与view之间的间距，但我们知道`UILabel`中文字与边界的间距是无法通过外边距来调整的，所以`ALEngine`提供内边距的主要是为了控制文字与view之间的空隙。
+
+**注：外边距只适用于`ALLabel`类型的view**
 
 #### 用法
 ##### 标准的用法
 ```objective-c
 // 初始化一个ALView
-ALView * view = [ALView new];
+ALLabel * view = [ALLabel new];
 // 逐个方向设置
-view.style.marginTop = 10;
-view.style.marginLeft = 10;
-view.style.marginBottom = 10;
-view.style.marginRight = 10;
+view.style.paddingTop = 10;
+view.style.paddingLeft = 10;
+view.style.paddingBottom = 10;
+view.style.paddingRight = 10;
 ```
 
 ##### 快捷的用法
 ```objective-c
 // 初始化一个inline方式布局的流体view
-ALView * view = [ALView new];
+ALLabel * view = [ALLabel new];
 // 简写
-view.style.margin = (ALRect) {10, 10, 10, 10};
+view.style.padding = (ALRect) {10, 10, 10, 10};
 ```
+
+#### DEMO - 6 - 1
+
+##### code
+```objective-c
+[[self createTitleViewWith: @"demo-1 未设置padding"] addTo: self.view];
+[[self createALLabel:@"jdochen" padding:(ALRect){0,0,0,0}] addTo: self.view];
+[[self createALLabel:@"jdochennnn" padding:(ALRect){0,0,0,0}] addTo: self.view];
+[[self createALLabel:@"jdochennnnnn" padding:(ALRect){0,0,0,0}] addTo: self.view];
+
+[[self createTitleViewWith: @"demo-2 设置padding=10"] addTo: self.view];
+[[self createALLabel:@"jdochen" padding:(ALRect){10,10,10,10}] addTo: self.view];
+[[self createALLabel:@"jdochennnn" padding:(ALRect){10,10,10,10}] addTo: self.view];
+[[self createALLabel:@"jdochennnnnn" padding:(ALRect){10,10,10,10}] addTo: self.view];
+
+[[self createTitleViewWith: @"demo-3 设置不同方向的padding"] addTo: self.view];
+[[self createALLabel:@"jdochen" padding:(ALRect){10,20,10,0}] addTo: self.view];
+[[self createALLabel:@"jdochennnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
+[[self createALLabel:@"jdochennnnnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
+```
+
+##### 效果预览
+<img width="320" src="resource/demo-6-1.png"/>
