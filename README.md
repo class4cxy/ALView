@@ -800,6 +800,33 @@ view.style.padding = (ALRect) {10, 10, 10, 10};
 [[self createALLabel:@"jdochen" padding:(ALRect){10,20,10,0}] addTo: self.view];
 [[self createALLabel:@"jdochennnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
 [[self createALLabel:@"jdochennnnnn" padding:(ALRect){10,20,10,0}] addTo: self.view];
+
+// 辅助方法
+- (ALLabel *) createALLabel: (NSString *) text padding: (ALRect) padding
+{
+    ALLabel * view = [[ALLabel alloc] init];
+    view.text = text;
+    view.style.margin = (ALRect) {2, 0, 0, 2};
+    view.style.padding = padding;
+    view.numberOfLines = 0;
+    view.lineBreakMode = NSLineBreakByTruncatingTail;
+    view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    view.font = [UIFont systemFontOfSize:14.0];
+    view.textColor = [UIColor whiteColor];
+    return view;
+}
+
+- (ALView *) createTitleViewWith: (NSString *) tx
+{
+    ALView * wrap = [ALView new];
+    wrap.style.margin = (ALRect) {20, 0, 5, 0};
+    wrap.style.contentAlign = ALContentAlignCenter;
+    ALLabel * title = [ALLabel new];
+    title.text = tx;
+    title.font = [UIFont systemFontOfSize:12];
+    [title addTo: wrap];
+    return wrap;
+}
 ```
 
 ##### 效果预览
