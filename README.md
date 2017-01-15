@@ -134,7 +134,7 @@ absView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
 [absView addTo: body];
 ```
 ##### 效果预览
-<kbd><img width="320" src="resource/demo-1-1.png"/></kbd>
+<kbd><img src="resource/demo-1-1.png"/></kbd>
 
 ##### DEMO分析
 大概解释一下代码：
@@ -159,7 +159,7 @@ section2.style.height -= 5;
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-1-2.gif"/>
+<kbd><img src="resource/demo-1-2.gif"/></kbd>
 
 ##### DEMO分析
 可以看到当section2的高度发生改变时，有以下相关联的view发生了重排：
@@ -201,7 +201,7 @@ section3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
 [section3 addTo: body];
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-1-3.png"/>
+<kbd><img src="resource/demo-1-3.png"/></kbd>
 
 ##### DEMO分析
 代码还是很简单：初始化三个使用了relative方式布局的section并添加到了使用absolute方式布局的body中，但这里有两个点是我想单独提出来说的：
@@ -218,7 +218,7 @@ section2.style.height -= 5;
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-1-4.gif"/>
+<kbd><img src="resource/demo-1-4.gif"/></kbd>
 
 
 ### display - 流体布局view的排版类型
@@ -301,7 +301,7 @@ block4.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
 }
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-2-1.png"/>
+<kbd><img src="resource/demo-2-1.png"/></kbd>
 
 ##### DEMO分析
 从上面的demo我们能明显看到block与inline最基本的区别与特征：
@@ -313,7 +313,7 @@ block4.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.5];
 #### DEMO - 2 - 2
 
 ##### 效果预览
-<img width="320" src="resource/demo-2-2.gif"/>
+<kbd><img src="resource/demo-2-2.gif"/></kbd>
 
 ##### DEMO分析
 
@@ -370,7 +370,7 @@ sub3.backgroundColor = [UIColor redColor];
 [sub3 addTo: article3];
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-3-1.png"/>
+<kbd><img src="resource/demo-3-1.png"/></kbd>
 
 ##### DEMO分析
 
@@ -424,7 +424,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 }
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-3-2.png"/>
+<kbd><img src="resource/demo-3-2.png"/></kbd>
 
 ##### DEMO分析
 这个demo也非常简单，主要演示了存在多个inline类型子view的情况下，`ALContentAlignLeft` `ALContentAlignCenter` `ALContentAlignRight`的表现。
@@ -507,7 +507,7 @@ article3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
 }
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-3-3.png"/>
+<kbd><img src="resource/demo-3-3.png"/></kbd>
 
 ##### DEMO分析
 这里主要演示的是混合了block与inline类型的子view，以及使用了`absolute`方式布局的子view；从效果可以明显看出contentAlign只对流体(relative)布局的子view有作用。
@@ -586,7 +586,7 @@ blkView3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-4-1.png"/>
+<kbd><img src="resource/demo-4-1.png"/></kbd>
 
 ##### DEMO分析
 这里我整合了3个demo，每个demo中都包含一个inline与block类型的view，主要用于展示`width`属性在流体布局的view上的特征：
@@ -646,7 +646,7 @@ inlView2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
 }
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-4-2.png"/>
+<kbd><img src="resource/demo-4-2.png"/></kbd>
 ##### DEMO分析
 `maxWidth` `maxHeight`的应用场景很丰富，但这里有两点需要注意的：
 1. `maxWidth` `maxHeight`仅在`width` `height`未指定的情况生效；
@@ -692,7 +692,7 @@ ALEngine提供了这些跟尺寸相关的属性：`top` `left` `right` `bottom`�
 }
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-5-1.png"/>
+<kbd><img src="resource/demo-5-1.png"/></kbd>
 ##### DEMO分析
 demo代码很简单，初始化五个`absolute`方式排版的view，分别相对父view来做左上角、右上角、左下角、右下角、居中排版；虽然简单，但有几个点我还是有必要在这里强调一下：
 1. `top`是上边相对父view上边的距离，`left`是左边相对父view左边的距离；这个与iOS原生的排版一致；
@@ -733,7 +733,7 @@ demo代码很简单，初始化五个`absolute`方式排版的view，分别相�
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-5-2.gif"/>
+<kbd><img src="resource/demo-5-2.gif"/></kbd>
 
 ##### DEMO分析
 代码很简单，初始化三个`absolute`方式排版的view，分别相对父view来是左下角、右下角、居中排版；当我改变这三个view的size时，从效果预览中可以看出它们依旧保持原样的排版位置，而这点是iOS原生排版没有提供的；平时我们遇到一些动态数据回来时总要重新计算了一遍view的origin，而使用`ALEngine`提供的方式则可以省去这部分时间与代码。
@@ -843,7 +843,7 @@ view.style.padding = (ALRect) {10, 10, 10, 10};
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-6-1.png"/>
+<kbd><img src="resource/demo-6-1.png"/></kbd>
 
 ## 其他属性
 
@@ -925,7 +925,7 @@ view.style.padding = (ALRect) {10, 10, 10, 10};
 ```
 
 #### 效果预览
-<img width="320" src="resource/demo-7-1.png"/>
+<kbd><img src="resource/demo-7-1.png"/></kbd>
 
 每一样东西都有它存在的意义，`ALEngine`提供的`isEndOfLine`能力同样是为了弥补在某些场景的不足，下面我举一个demo来很好解释这一不足。
 
@@ -984,7 +984,7 @@ desc.font = [UIFont systemFontOfSize:12];
 ```
 
 ##### 效果预览
-<img width="320" src="resource/demo-7-2.png"/>
+<kbd><img src="resource/demo-7-2.png"/></kbd>
 
 ##### DEMO分析
 这是一个用户料卡的demo，而在这个资料卡中主要要讲的是个人信息的排版，因为用户数据是文本，所以必须用ALLabel承载，但ALLabel默认是`inline`类型的view，那也就意味着它是自动断行的，于是我不得不定义了`row1` `row2` `row3`来承载这些ALLabel以确保它们一定要在新的一行排版；但如果有了`isEndOfLine`这一能力，重结构上就可以减轻层级的嵌套，下面我们看看如何通过`isEndOfLine`来实现以上效果。
