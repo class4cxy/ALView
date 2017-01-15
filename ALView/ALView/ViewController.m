@@ -62,7 +62,9 @@
 //    [self initDemoOfMaxSize];
 //    [self initDemoOfAbsolute];
 //    [self initDemoOfDynamicAbsolute];
-    [self initDemoOfPadding];
+//    [self initDemoOfPadding];
+//    [self initDemoOfBreak];
+    [self initDemoOfBreakHack];
     
 //    [self initDynamicLayout];
     
@@ -82,6 +84,53 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initDemoOfBreakHack
+{
+    [[self createTitleViewWith: @"demo-1 如果没有isEndOfLine"] addTo: self.view];
+    
+    [self initMiniCard];
+    
+//    [[self createTitleViewWith: @"demo-1 使用isEndOfLine"] addTo: self.view];
+}
+
+- (void) initDemoOfBreak
+{
+    [[self createTitleViewWith: @"demo-1 未设置isEndOfLine"] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+    
+    [[self createTitleViewWith: @"demo-1 设置isEndOfLine"] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+    [[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+
+    
+    [[self createTitleViewWith: @"demo-1 未设置isFirstOfLine"] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+    
+    [[self createTitleViewWith: @"demo-1 设置isFirstOfLine"] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+    [[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+}
+
+- (ALView *) createInlineViewIsEndOfLine: (BOOL) isEndOfLine
+{
+    ALView * view = [self createInlineViewWidth:80 height:30 alpha:0.3];
+    view.style.isEndOFLine = isEndOfLine;
+    return  view;
+}
+
+- (ALView *) createInlineViewIsFirstOfLine: (BOOL) isFirstOfLine
+{
+    ALView * view = [self createInlineViewWidth:80 height:30 alpha:0.3];
+    view.style.isFirstOFLine = isFirstOfLine;
+    return  view;
 }
 
 - (void) initDemoOfPadding
@@ -389,30 +438,55 @@
 
 - (void) initMiniCard
 {
-    ALView * body = [[ALView alloc] init];
-    body.style.marginTop = 20;
-    body.style.contentAlign = ALContentAlignCenter;
-    body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
-    [body addTo: self.view];
-    
-    ALView * wrap = [[ALView alloc] initAbsoluteView];
-    wrap.style.center = (CGPoint) {0, 0};
+    ALView * wrap = [ALView newAbsoluteView];
+    wrap.style.centerX = 0;
+    wrap.style.top = 100;
     wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
-    [wrap addTo: body];
+    [wrap addTo: self.view];
     
-    ALView * head = [[ALView alloc] initAbsoluteView];
+    ALView * head = [ALView newAbsoluteView];
     head.style.size = (CGSize) {60, 60};
-//    head.style.center = (CGPoint) {0, -30};
     head.style.centerX = 0;
     head.style.top = -30;
     head.backgroundColor = [UIColor redColor];
     [head addTo: wrap];
     
-    ALView * main = [[ALView alloc] init];
-    main.style.size = (CGSize) {200, 150};
-    main.style.margin = (ALRect) {50, 10, 10, 10};
+    ALView * main = [ALView new];
+    main.style.contentAlign = ALContentAlignCenter;
+    main.style.width = 200;
+    main.style.margin = (ALRect) {40, 10, 10, 10};
     main.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
     [main addTo: wrap];
+    
+    ALLabel * nick = [ALLabel new];
+//    nick.style.isEndOFLine = YES;
+    nick.style.margin = (ALRect) {10, 0, 10, 0};
+    nick.text = @"jdochen";
+    nick.font = [UIFont systemFontOfSize:12];
+    [nick addTo: main];
+    
+    ALLabel * bigv = [ALLabel new];
+    bigv.style.isEndOFLine = YES;
+    bigv.style.hidden = YES;
+//    bigv.style.marginLeft = 5;
+    bigv.style.margin = (ALRect) {10, 0, 10, 5};
+    bigv.text = @"V";
+    bigv.font = [UIFont systemFontOfSize:12];
+    [bigv addTo: main];
+    
+    ALLabel * focus = [ALLabel new];
+    focus.style.isEndOFLine = YES;
+    focus.style.marginBottom = 10;
+    focus.text = @"粉丝数：1000";
+    focus.font = [UIFont systemFontOfSize:12];
+    [focus addTo: main];
+    
+    ALLabel * desc = [ALLabel new];
+    desc.style.isEndOFLine = YES;
+    desc.style.marginBottom = 10;
+    desc.text = @"i'm jdochen";
+    desc.font = [UIFont systemFontOfSize:12];
+    [desc addTo: main];
 }
 
 - (void) initWithMaxWidthLayout

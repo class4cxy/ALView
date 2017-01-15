@@ -11,7 +11,10 @@
 	<img width="45%" src="resource/jimu.png"/>
 </div>
 
-## 属性大纲
+## 大纲
+* `ALEngine`内置view
+  * ALView
+  * ALLabel
 
 * 排版属性
   * position
@@ -47,6 +50,17 @@
 * 其他属性
   * isEngOfLine
   * isFirstOfLine
+  * hidden
+
+## 内置view
+
+### ALView
+
+`ALView`是`ALEngine`提供的最基本的view，它继承于`UIView`，没有任何内置的排版属性（后面会详细讲解到排版属性），完全由开发者去指定。
+
+### ALLabel
+
+`ALLabel`继承于`UILabel`，默认是`inline`类型的的view，具有自动更新自身size的能力。
 
 ## 排版属性
 
@@ -831,3 +845,200 @@ view.style.padding = (ALRect) {10, 10, 10, 10};
 
 ##### 效果预览
 <img width="320" src="resource/demo-6-1.png"/>
+
+## 其他属性
+
+### [BOOL] isEndOfLine
+
+指定了view是所属行的最后一个view，`ALEngine`在遇到isEndOfLine=YES时，下一个view必定以新的一行排版。
+**注：如果不设置isEndOfLine或者isEndOfLine=NO，则默认走自动断行逻辑，该断行时还是会断行**
+**注：isEndOfLine只适用于`inline`类型的view，因为`block`本身就具有这样的特性。**
+
+### [BOOL] isFirstOfLine
+
+指定了view是所属行的第一个view，`ALEngine`在遇到isFirstOfLine=YES时，必定以新的一行排版该view。
+**注：如果不设置isFirstOfLine或者isFirstOfLine=NO，则默认走自动断行逻辑，该断行时还是会断行**
+**注：isFirstOfLine只适用于`inline`类型的view，因为`block`本身就具有这样的特性。**
+
+#### DEMO - 7 - 1
+```objective-c
+[[self createTitleViewWith: @"demo-1 未设置isEndOfLine"] addTo: self.view];
+[[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+[[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+[[self createInlineViewIsEndOfLine: NO] addTo: self.view];
+
+[[self createTitleViewWith: @"demo-1 设置isEndOfLine"] addTo: self.view];
+[[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+[[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+[[self createInlineViewIsEndOfLine: YES] addTo: self.view];
+
+
+[[self createTitleViewWith: @"demo-1 未设置isFirstOfLine"] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: NO] addTo: self.view];
+
+[[self createTitleViewWith: @"demo-1 设置isFirstOfLine"] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+[[self createInlineViewIsFirstOfLine: YES] addTo: self.view];
+
+// 辅助方法
+- (ALView *) createTitleViewWith: (NSString *) tx
+{
+    ALView * wrap = [ALView new];
+    wrap.style.margin = (ALRect) {20, 0, 5, 0};
+    wrap.style.contentAlign = ALContentAlignCenter;
+    ALLabel * title = [ALLabel new];
+    title.text = tx;
+    title.font = [UIFont systemFontOfSize:12];
+    [title addTo: wrap];
+    return wrap;
+}
+
+- (ALView *) createInlineViewIsEndOfLine: (BOOL) isEndOfLine
+{
+    ALView * view = [self createInlineViewWidth:80 height:30 alpha:0.3];
+    view.style.isEndOFLine = isEndOfLine;
+    return  view;
+}
+
+- (ALView *) createInlineViewIsFirstOfLine: (BOOL) isFirstOfLine
+{
+    ALView * view = [self createInlineViewWidth:80 height:30 alpha:0.3];
+    view.style.isFirstOFLine = isFirstOfLine;
+    return  view;
+}
+
+- (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
+{
+    ALView * view = [ALView newInlineView];
+    view.style.margin = (ALRect){0, 5, 5, 0};
+    if ( height ) {
+        view.style.height = height;
+    }
+    if ( width ) {
+        view.style.width = width;
+    }
+    view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];
+    return view;
+}
+```
+
+#### 效果预览
+<img width="320" src="resource/demo-7-1.png"/>
+
+每一样东西都有它存在的意义，`ALEngine`提供的`isEndOfLine`能力同样是为了弥补在某些场景的不足，下面我举一个demo来很好解释这一不足。
+
+#### DEMO - 7 - 2
+
+##### code
+```objective-c
+ALView * wrap = [ALView newAbsoluteView];
+wrap.style.centerX = 0;
+wrap.style.top = 100;
+wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+[wrap addTo: self.view];
+
+ALView * head = [ALView newAbsoluteView];
+head.style.size = (CGSize) {60, 60};
+head.style.centerX = 0;
+head.style.top = -30;
+head.backgroundColor = [UIColor redColor];
+[head addTo: wrap];
+
+ALView * main = [ALView new];
+main.style.width = 200;
+main.style.margin = (ALRect) {40, 10, 10, 10};
+main.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+[main addTo: wrap];
+
+ALView * row1 = [ALView new];
+row1.style.contentAlign = ALContentAlignCenter;
+row1.style.margin = (ALRect) {10, 0, 10, 0};
+[row1 addTo: main];
+
+ALLabel * nick = [ALLabel new];
+nick.text = @"jdochen";
+nick.font = [UIFont systemFontOfSize:12];
+[nick addTo: row1];
+
+ALView * row2 = [ALView new];
+row2.style.contentAlign = ALContentAlignCenter;
+row2.style.marginBottom = 10;
+[row2 addTo: main];
+
+ALLabel * focus = [ALLabel new];
+focus.text = @"粉丝数：1000";
+focus.font = [UIFont systemFontOfSize:12];
+[focus addTo: row2];
+
+ALView * row3 = [ALView new];
+row3.style.marginBottom = 10;
+row3.style.contentAlign = ALContentAlignCenter;
+[row3 addTo: main];
+
+ALLabel * desc = [ALLabel new];
+desc.text = @"i'm jdochen";
+desc.font = [UIFont systemFontOfSize:12];
+[desc addTo: row3];
+```
+
+##### 效果预览
+<img width="320" src="resource/demo-7-2.png"/>
+
+##### DEMO分析
+这是一个用户料卡的demo，而在这个资料卡中主要要讲的是个人信息的排版，因为用户数据是文本，所以必须用ALLabel承载，但ALLabel默认是`inline`类型的view，那也就意味着它是自动断行的，于是我不得不定义了`row1` `row2` `row3`来承载这些ALLabel以确保它们一定要在新的一行排版；但如果有了`isEndOfLine`这一能力，重结构上就可以减轻层级的嵌套，下面我们看看如何通过`isEndOfLine`来实现以上效果。
+
+#### DEMO - 7 - 3
+
+##### code
+```objective-c
+ALView * wrap = [ALView newAbsoluteView];
+wrap.style.centerX = 0;
+wrap.style.top = 100;
+wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+[wrap addTo: self.view];
+
+ALView * head = [ALView newAbsoluteView];
+head.style.size = (CGSize) {60, 60};
+head.style.centerX = 0;
+head.style.top = -30;
+head.backgroundColor = [UIColor redColor];
+[head addTo: wrap];
+
+ALView * main = [ALView new];
+main.style.contentAlign = ALContentAlignCenter;
+main.style.width = 200;
+main.style.margin = (ALRect) {40, 10, 10, 10};
+main.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
+[main addTo: wrap];
+
+ALLabel * nick = [ALLabel new];
+nick.style.isEndOFLine = YES;
+nick.style.margin = (ALRect) {10, 0, 10, 0};
+nick.text = @"jdochen";
+nick.font = [UIFont systemFontOfSize:12];
+[nick addTo: main];
+
+ALLabel * focus = [ALLabel new];
+focus.style.isEndOFLine = YES;
+focus.style.marginBottom = 10;
+focus.text = @"粉丝数：1000";
+focus.font = [UIFont systemFontOfSize:12];
+[focus addTo: main];
+
+ALLabel * desc = [ALLabel new];
+desc.style.isEndOFLine = YES;
+desc.style.marginBottom = 10;
+desc.text = @"i'm jdochen";
+desc.font = [UIFont systemFontOfSize:12];
+[desc addTo: main];
+```
+
+##### DEMO分析
+从代码就看得出，我省去了`row1` `row2` `row3`的承载，减轻了view的层级嵌套，实际最终效果是一样的，我在这就不再展示预览效果了。`isFirstOfLine`的设定跟`isEndOFLine`一致，不过可以弥补一些`isEndOFLine`没法覆盖的场景，比如说：要设置`isEndOFLine=YES`的那个view是动态的（根据业务条件生成或不生成），这时候如果它下一个view是固定输出，那可以抛开业务条件，直接设置下一个view的`isFirstOfLine=YES`也能达到同样的效果。如果还有其他场景的应用那就需要大家一起去挖掘了。
+
+### [BOOL] hidden
+
+`ALEngine`也提供了类似iOS原生的`hidden`属性，你可以通过使用这个`hidden`来实现流体自有的排版规则，例如隐藏一个流体view，会触发相连的view重排。
