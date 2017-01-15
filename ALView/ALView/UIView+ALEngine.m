@@ -182,26 +182,6 @@
     return self;
 }
 
-
-/*
- * 移除该view
- * 1、先执行自身的移除逻辑
- * 2、再调用UIView的removeFromSuperview方法移除
- */
-- (void) remove
-{
-    // TODO
-    [self removeFromSuperview];
-}
-
-/*
- * 在指定view之前插入新的view
- */
-- (void) insertView:(UIView *)view beforeView:(UIView *)siblingView
-{
-    // TODO
-}
-
 /*
  * link view by nextSibling & previousSibling
  */
@@ -354,7 +334,7 @@
                 }
             }
             
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
+            [self layoutWithWidth: width];
             [self.style setWidthWithoutAutoWidth: width];
             
             // 更新自己的行管理器maxWidth值
@@ -387,7 +367,7 @@
                 height = self.frame.size.height;
             }
             
-            self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+            [self layoutWithHeight: height];
             [self.style setHeightWithoutAutoHeight: height];
         }
     }
@@ -449,7 +429,7 @@
             }
         }
         
-        self.frame = CGRectMake(left, top, width, height);
+        [self layoutWithOrigin: CGPointMake(left, top)];
         NSLog(@"reflowOriginWhenAbsolute --- %@", NSStringFromCGRect(self.frame));
     }
 }
@@ -504,8 +484,8 @@
           width <= self.rowManager.maxWidth) ||
          self.style.display == ALDisplayInline ||
          self.style.position == ALPositionAbsolute)
-        ) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, self.frame.size.height);
+    ) {
+        [self layoutWithWidth: width];
         [self.style setWidthWithoutAutoWidth: width];
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
@@ -541,7 +521,7 @@
         //            [((ALScrollView *) self) reflowInnerFrame];
         //        }
         
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.frame.size.width, height);
+        [self layoutWithHeight: height];
         [self.style setHeightWithoutAutoHeight: height];
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
@@ -587,6 +567,50 @@
     }
     
     return maxWidth;
+}
+
+#pragma mark - layout
+
+- (void) layoutWithTop: (CGFloat) top
+{
+    CGRect f = self.frame;
+    f.origin.y = top;
+    self.frame = f;
+}
+
+- (void) layoutWithLeft: (CGFloat) left
+{
+    CGRect f = self.frame;
+    f.origin.x = left;
+    self.frame = f;
+}
+
+- (void) layoutWithOrigin: (CGPoint) origin
+{
+    CGRect f = self.frame;
+    f.origin = origin;
+    self.frame = f;
+}
+
+- (void) layoutWithWidth: (CGFloat) width
+{
+    CGRect f = self.frame;
+    f.size.width = width;
+    self.frame = f;
+}
+
+- (void) layoutWithHeight: (CGFloat) height
+{
+    CGRect f = self.frame;
+    f.size.height = height;
+    self.frame = f;
+}
+
+- (void) layoutWithSize: (CGSize) size
+{
+    CGRect f = self.frame;
+    f.size = size;
+    self.frame = f;
 }
 
 @end

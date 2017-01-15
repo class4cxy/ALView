@@ -85,7 +85,7 @@
                 [self crush2NextRow: belongRow];
             } else {
                 ALRow * startRow = nil;
-                if ( subView == belongRow.firstView && belongRow.previousRow ) {
+                if ( subView == belongRow.viewsArr.firstObject && belongRow.previousRow ) {
                     startRow = belongRow.previousRow;
                 } else {
                     startRow = belongRow;
@@ -173,26 +173,26 @@
 {
     if ( row.nextRow ) {
         // 特殊逻辑：对下一行为空时的处理
-        if ([row.nextRow count] == 0) {
+        if ([row.nextRow.viewsArr count] == 0) {
             [self removeRow: row.nextRow];
             return [self crush2PreviousRow: row];
         }
         
-        UIView * firstView = [row.nextRow firstView];
+        UIView * firstView = [row.nextRow.viewsArr firstObject];
         while ( [row canAddView: firstView] ) {
             // 移除当前行的第一个view，插入到上一行尾部
             [row pushView: [row.nextRow shiftView]];
             
             // 如果当前行已经移除空
-            if ( [row.nextRow count] == 0 ) {
+            if ( [row.nextRow.viewsArr count] == 0 ) {
                 [self removeRow: row.nextRow];
                 if ( row.nextRow && row.nextRow.display == ALDisplayInline ) {
-                    firstView = [row.nextRow firstView];
+                    firstView = [row.nextRow.viewsArr firstObject];
                 } else {
                     break;
                 }
             } else {
-                firstView = [row.nextRow firstView];
+                firstView = [row.nextRow.viewsArr firstObject];
             }
         }
         // 排版当前行
@@ -280,7 +280,7 @@
     
     while (row) {
         if ( row.display == ALDisplayBlock ) {
-            UIView * view = [row firstView];
+            UIView * view = row.viewsArr.firstObject;
             if ( !view.style.hidden ) {
                 // 重排当前block的size，因为父view有可能改变了宽度
                 [view reflowSize];
@@ -321,13 +321,15 @@
     ALRow * row = [self firstRow];
     while (row) {
         // 更新block行
-        if ( row.display == ALDisplayBlock && row.firstView && row.firstView.style.isAutoWidth ) {
-            [row.firstView reflowSize];
-            [row refreshSize];
-            // 递归触发subview重排
-            if ( row.firstView.rowManager ) {
-                [row.firstView.rowManager reflowSubView];
-//                [row.firstView.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+        if ( row.display == ALDisplayBlock ) {
+            UIView * firstView = row.viewsArr.firstObject;
+            if ( firstView && firstView.style.isAutoWidth ) {
+                [firstView reflowSize];
+                [row refreshSize];
+                // 递归触发subview重排
+                if ( firstView.rowManager ) {
+                    [firstView.rowManager reflowSubView];
+                }
             }
         }
         

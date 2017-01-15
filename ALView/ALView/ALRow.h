@@ -52,12 +52,6 @@
 - (void) removeView: (UIView *) view;
 // 在指定view之前插入新的view
 - (void) insertView: (UIView *) view beforeView: (UIView *) beforeView;
-//
-- (UIView *) firstView;
-//
-- (UIView *) lastView;
-//
-- (NSUInteger) count;
 
 // 重排当前行的top/left
 - (void) layout;

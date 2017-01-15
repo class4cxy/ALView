@@ -58,8 +58,6 @@
     }
 }
 
-
-
 /*
  * 移除当前行的最后一个view，并返回该view
  * 会触发当前行重排
@@ -117,24 +115,6 @@
             [self refreshSize];
         }
     }
-}
-
-- (UIView *) firstView
-{
-    if ( [_viewsArr count] > 0 ) {
-        return [_viewsArr objectAtIndex:0];
-    }
-    return nil;
-}
-
-- (UIView *) lastView
-{
-    return _viewsArr.lastObject;
-}
-
-- (NSUInteger) count
-{
-    return [_viewsArr count];
 }
 
 // 过滤hidden类型的view
@@ -210,8 +190,8 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat w = view.style.marginLeft +
-                view.style.marginRight +
-                view.frame.size.width;
+                        view.style.marginRight +
+                        view.frame.size.width;
                 
                 _width += w;
             }
@@ -231,8 +211,8 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat h = view.style.marginTop +
-                view.style.marginBottom +
-                view.frame.size.height;
+                        view.style.marginBottom +
+                        view.frame.size.height;
                 
                 if ( _height < h ) {
                     _height = h;
@@ -277,9 +257,8 @@
         } else {
             left = view.style.marginLeft;
         }
-        
-        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
-        NSLog(@"reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
+        [view layoutWithOrigin:CGPointMake(left, top)];
+        NSLog(@"[ALEnging] reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
     }
 }
 // 触发row内部的view进行layout，仅重排left值
@@ -310,9 +289,8 @@
                     prevView.frame.size.width +
                     prevView.style.marginRight;
         }
-        
-        view.frame = CGRectMake(left, top, view.frame.size.width, view.frame.size.height);
-        NSLog(@"reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
+        [view layoutWithOrigin:CGPointMake(left, top)];
+        NSLog(@"[ALEnging] reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
 
@@ -325,8 +303,8 @@
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
-        view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
-        NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+        [view layoutWithTop: top];
+        NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
 // 重排指定view的top
@@ -337,8 +315,8 @@
         // 存在beforeView才操作
         if ( beforeIndex != NSNotFound ) {
             CGFloat top = [self getCurrTop] + view.style.marginTop;
-            view.frame = CGRectMake(view.frame.origin.x, top, view.frame.size.width, view.frame.size.height);
-            NSLog(@"reflowTop --- %@", NSStringFromCGRect(view.frame));
+            [view layoutWithTop: top];
+            NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
         }
     }
 }
