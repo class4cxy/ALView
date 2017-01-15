@@ -134,7 +134,7 @@ absView.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.7];
 [absView addTo: body];
 ```
 ##### 效果预览
-<img width="320" src="resource/demo-1-1.png"/>
+<div width="320"><kbd><img src="resource/demo-1-1.png"/></kbd></div>
 
 ##### DEMO分析
 大概解释一下代码：
