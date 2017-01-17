@@ -22,6 +22,9 @@
  * 样式属性
  */
 @property (nonatomic, strong) ALStyle * style;
+// 私有x, y属性，外界只读
+@property (nonatomic, assign, readonly) CGFloat ALEX;
+@property (nonatomic, assign, readonly) CGFloat ALEY;
 // 下一个兄弟view
 @property (nonatomic, retain, readonly) ALView * nextSibling;
 // 上一个兄弟view

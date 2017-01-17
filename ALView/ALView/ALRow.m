@@ -156,7 +156,8 @@
         return YES;
     }
     
-    return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
+//    return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
+    return _maxWidth >= _width + view.style.width + view.style.marginLeft + view.style.marginRight;
 }
 
 - (BOOL) need2break
@@ -190,8 +191,9 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat w = view.style.marginLeft +
-                        view.style.marginRight +
-                        view.frame.size.width;
+                            view.style.marginRight +
+                            view.style.width;
+//                        view.frame.size.width;
                 
                 _width += w;
             }
@@ -211,8 +213,9 @@
             UIView * view = [_viewsArr objectAtIndex:i];
             if ( !view.style.hidden ) {
                 CGFloat h = view.style.marginTop +
-                        view.style.marginBottom +
-                        view.frame.size.height;
+                            view.style.marginBottom +
+                            view.style.height;
+//                            view.frame.size.height;
                 
                 if ( _height < h ) {
                     _height = h;
@@ -248,7 +251,8 @@
     if ( !view.style.hidden ) {
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         CGFloat left = 0;
-        CGFloat parentWidth = _parent.frame.size.width;
+//        CGFloat parentWidth = _parent.frame.size.width;
+        CGFloat parentWidth = _parent.style.width;
         
         if ( _contentAlign == ALContentAlignCenter ) {
             left = (parentWidth - _width)/2 + view.style.marginLeft;
@@ -272,7 +276,8 @@
         UIView * view = [views objectAtIndex: i];
         CGFloat left = 0;
         CGFloat top = [self getCurrTop] + view.style.marginTop;
-        CGFloat parentWidth = _parent.frame.size.width;
+//        CGFloat parentWidth = _parent.frame.size.width;
+        CGFloat parentWidth = _parent.style.width;
         
         if ( i == 0 ) {
             if ( _contentAlign == ALContentAlignCenter ) {
@@ -284,9 +289,13 @@
             }
         } else {
             UIView * prevView = [views objectAtIndex: i-1];
+//            left =  view.style.marginLeft +
+//                    prevView.frame.origin.x +
+//                    prevView.frame.size.width +
+//                    prevView.style.marginRight;
             left =  view.style.marginLeft +
-                    prevView.frame.origin.x +
-                    prevView.frame.size.width +
+                    prevView.ALEX +
+                    prevView.style.width +
                     prevView.style.marginRight;
         }
         [view layoutWithOrigin:CGPointMake(left, top)];

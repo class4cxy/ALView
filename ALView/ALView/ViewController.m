@@ -44,7 +44,7 @@
 //    [self initBlockContentInlineLayout];
 //    [self initBlockContentMixLayout];
 //    [self initInlineAutoWidthHeightLayout];
-//    [self initALLabelAutoHeightWidthLayout];
+    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
     // demo

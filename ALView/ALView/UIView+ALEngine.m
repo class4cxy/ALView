@@ -33,6 +33,25 @@
     objc_setAssociatedObject(self, @"style", style, OBJC_ASSOCIATION_RETAIN);
 }
 
+@dynamic ALEX;
+- (CGFloat) ALEX
+{
+    return [objc_getAssociatedObject(self, @"ALEX") floatValue];
+}
+-(void)setALEX:(CGFloat)ALEX
+{
+    objc_setAssociatedObject(self, @"ALEX", [NSNumber numberWithFloat:ALEX], OBJC_ASSOCIATION_RETAIN);
+}
+@dynamic ALEY;
+- (CGFloat) ALEY
+{
+    return [objc_getAssociatedObject(self, @"ALEY") floatValue];
+}
+-(void)setALEY:(CGFloat)ALEY
+{
+    objc_setAssociatedObject(self, @"ALEY", [NSNumber numberWithFloat:ALEY], OBJC_ASSOCIATION_RETAIN);
+}
+
 @dynamic nextSibling;
 - (ALView *) nextSibling
 {
@@ -335,7 +354,7 @@
             }
             
             [self layoutWithWidth: width];
-            [self.style setWidthWithoutAutoWidth: width];
+//            [self.style setWidthWithoutAutoWidth: width];
             
             // 更新自己的行管理器maxWidth值
             if ( self.rowManager ) {
@@ -368,7 +387,7 @@
             }
             
             [self layoutWithHeight: height];
-            [self.style setHeightWithoutAutoHeight: height];
+//            [self.style setHeightWithoutAutoHeight: height];
         }
     }
 }
@@ -486,7 +505,7 @@
          self.style.position == ALPositionAbsolute)
     ) {
         [self layoutWithWidth: width];
-        [self.style setWidthWithoutAutoWidth: width];
+//        [self.style setWidthWithoutAutoWidth: width];
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
             [self.belongRow refreshWidth];
@@ -522,7 +541,7 @@
         //        }
         
         [self layoutWithHeight: height];
-        [self.style setHeightWithoutAutoHeight: height];
+//        [self.style setHeightWithoutAutoHeight: height];
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
             [self.belongRow refreshHeight];
@@ -575,6 +594,7 @@
 {
     CGRect f = self.frame;
     f.origin.y = top;
+    self.ALEY = top;
     self.frame = f;
 }
 
@@ -582,6 +602,7 @@
 {
     CGRect f = self.frame;
     f.origin.x = left;
+    self.ALEY = left;
     self.frame = f;
 }
 
@@ -589,6 +610,8 @@
 {
     CGRect f = self.frame;
     f.origin = origin;
+    self.ALEX = origin.x;
+    self.ALEY = origin.y;
     self.frame = f;
 }
 
@@ -597,6 +620,7 @@
     CGRect f = self.frame;
     f.size.width = width;
     self.frame = f;
+    [self.style setWidthWithoutAutoWidth: width];
 }
 
 - (void) layoutWithHeight: (CGFloat) height
@@ -604,6 +628,7 @@
     CGRect f = self.frame;
     f.size.height = height;
     self.frame = f;
+    [self.style setHeightWithoutAutoHeight: height];
 }
 
 - (void) layoutWithSize: (CGSize) size
@@ -611,6 +636,8 @@
     CGRect f = self.frame;
     f.size = size;
     self.frame = f;
+    [self.style setWidthWithoutAutoWidth: size.width];
+    [self.style setHeightWithoutAutoHeight: size.height];
 }
 
 @end
