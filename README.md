@@ -12,21 +12,21 @@
 
 ## 大纲
 * [`ALEngine`内置view](#内置view)
-  * ALView
-  * ALLabel
+  * [ALView](#alview)
+  * [ALLabel](#allabel)
 
-* 排版属性
-  * position
-  * display
-  * contentAlign
-* 样式属性
-  * 尺寸类
+* [排版属性](#排版属性)
+  * [position](#position---view的布局方式)
+  * [display](#display---流体布局view的排版类型)
+  * [contentAlign](#contentalign---指定流体布局的水平对齐方向)
+* [样式属性](#样式属性)
+  * [尺寸类](#尺寸类---尺寸类属性主要用于指定view的大小)
     * size
     * width
     * height
     * maxWidth
     * maxHeight
-  * 位置类
+  * [位置类](#位置类---位置类属性主要用于指定view的相对排版位置)
     * origin
     * top
     * left
@@ -35,21 +35,21 @@
     * center
     * centerX
     * centerY
-  * 外边距类
+  * [外边距类](#外边距类---主要用于设置view与view之间的间隔)
     * margin
     * marginTop
     * marginLeft
     * marginRight
     * marginBottom
-  * 内边距类
+  * [内边距类](#内边距类---主要用于allabel设置文字与view之间的间隔)
     * paddingTop
     * paddingLeft
     * paddingRight
     * paddingBottom
-* 其他属性
-  * isEngOfLine
-  * isFirstOfLine
-  * hidden
+* [其他属性](#其他属性)
+  * [isEngOfLine](#bool-isendofline)
+  * [isFirstOfLine](#bool-isfirstofline)
+  * [hidden](#bool-hidden)
 
 ## 内置view
 
