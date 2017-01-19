@@ -56,7 +56,7 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize;
+- (ALSizeIsChange) reflowSizeWhenAutoSize;
 /*
  * 如果当前view是auto height，那么根据指定的height排版当前view height
  */

@@ -260,7 +260,6 @@
             // 防止未知错误
             if ( self.superview.rowManager ) {
                 [self.superview.rowManager reflowWhenYChange:self need2reflowSelfTop: (marginType == ALMarginTop)];
-//                [self.superview.rowManager rowReflowHeightWithSubView: self];
             }
         }
     }
@@ -274,12 +273,11 @@
             // 防止未知错误
             if ( self.superview.rowManager ) {
                 [self.superview.rowManager reflowWhenXChange: self need2ReflowSubView: YES];
-//                [self.superview.rowManager rowReflowWidthWithSubView: self reflowInnerView:YES];
             }
         } else {
             if ( self.rowManager ) {
                 [self.rowManager reflowSubView];
-                [self reflowSizeWhenAutoSizeWithSize];
+                [self reflowSizeWhenAutoSize];
             }
             [self reflowOriginWhenAbsolute];
         }
@@ -298,10 +296,8 @@
             // 防止未知错误
             if ( self.superview.rowManager ) {
                 [self.superview.rowManager reflowWhenYChange: self need2reflowSelfTop: NO];
-//                [self.superview.rowManager rowReflowHeightWithSubView: self];
             }
         } else { // absolute
-//            [self reflowHeightWhenAutoHeightWithHeight];
             [self reflowOriginWhenAbsolute];
         }
         
@@ -454,7 +450,7 @@
 /*
  * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
  */
-- (ALSizeIsChange) reflowSizeWhenAutoSizeWithSize
+- (ALSizeIsChange) reflowSizeWhenAutoSize
 {
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
     ALSizeIsChange hasChange;

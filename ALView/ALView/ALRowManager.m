@@ -235,7 +235,7 @@
     ALSizeIsChange hasChange;
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        hasChange = [self.ownerView reflowSizeWhenAutoSizeWithSize];
+        hasChange = [self.ownerView reflowSizeWhenAutoSize];
         
         if ( self.ownerView.style.position == ALPositionRelative ) {
             if ( hasChange.width ) {
