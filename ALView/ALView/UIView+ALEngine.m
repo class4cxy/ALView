@@ -33,23 +33,23 @@
     objc_setAssociatedObject(self, @"style", style, OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic ALEX;
-- (CGFloat) ALEX
+@dynamic aleX;
+- (CGFloat) aleX
 {
-    return [objc_getAssociatedObject(self, @"ALEX") floatValue];
+    return [objc_getAssociatedObject(self, @"aleX") floatValue];
 }
--(void)setALEX:(CGFloat)ALEX
+-(void)setAleX:(CGFloat)aleX
 {
-    objc_setAssociatedObject(self, @"ALEX", [NSNumber numberWithFloat:ALEX], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"aleX", [NSNumber numberWithFloat:aleX], OBJC_ASSOCIATION_RETAIN);
 }
-@dynamic ALEY;
-- (CGFloat) ALEY
+@dynamic aleY;
+- (CGFloat) aleY
 {
-    return [objc_getAssociatedObject(self, @"ALEY") floatValue];
+    return [objc_getAssociatedObject(self, @"aleY") floatValue];
 }
--(void)setALEY:(CGFloat)ALEY
+-(void)setAleY:(CGFloat)aleY
 {
-    objc_setAssociatedObject(self, @"ALEY", [NSNumber numberWithFloat:ALEY], OBJC_ASSOCIATION_RETAIN);
+    objc_setAssociatedObject(self, @"aleY", [NSNumber numberWithFloat:aleY], OBJC_ASSOCIATION_RETAIN);
 }
 
 @dynamic nextSibling;
@@ -172,8 +172,6 @@
     // 避免开发者乱玩
     if ( !self.isALEngine ) {
         self.isALEngine = YES;
-        self.nextSibling = nil;
-        self.previousSibling = nil;
         self.style = [[ALStyle alloc] init];
         self.style.view = self;
         
@@ -594,7 +592,7 @@
 {
     CGRect f = self.frame;
     f.origin.y = top;
-    self.ALEY = top;
+    self.aleY = top;
     self.frame = f;
 }
 
@@ -602,7 +600,7 @@
 {
     CGRect f = self.frame;
     f.origin.x = left;
-    self.ALEY = left;
+    self.aleX = left;
     self.frame = f;
 }
 
@@ -610,8 +608,8 @@
 {
     CGRect f = self.frame;
     f.origin = origin;
-    self.ALEX = origin.x;
-    self.ALEY = origin.y;
+    self.aleX = origin.x;
+    self.aleY = origin.y;
     self.frame = f;
 }
 

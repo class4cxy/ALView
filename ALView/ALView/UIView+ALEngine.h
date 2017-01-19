@@ -22,9 +22,9 @@
  * 样式属性
  */
 @property (nonatomic, strong) ALStyle * style;
-// 私有x, y属性，外界只读
-@property (nonatomic, assign, readonly) CGFloat ALEX;
-@property (nonatomic, assign, readonly) CGFloat ALEY;
+// position=relative时style.top & style.left 是不记录值的，aleX & aleY可以代替frame.origin.x & frame.origin.y弥补这一欠缺
+@property (nonatomic, assign, readonly) CGFloat aleX;
+@property (nonatomic, assign, readonly) CGFloat aleY;
 // 下一个兄弟view
 @property (nonatomic, retain, readonly) ALView * nextSibling;
 // 上一个兄弟view

@@ -294,7 +294,7 @@
 //                    prevView.frame.size.width +
 //                    prevView.style.marginRight;
             left =  view.style.marginLeft +
-                    prevView.ALEX +
+                    prevView.aleX +
                     prevView.style.width +
                     prevView.style.marginRight;
         }
