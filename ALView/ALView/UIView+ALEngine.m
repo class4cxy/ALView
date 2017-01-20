@@ -163,6 +163,7 @@
     return nil;
 }
 
+#pragma mark - translate
 /*
  * 提供给一个普通UIView转为ALView布局
  * 1、初始化size
