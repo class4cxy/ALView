@@ -49,8 +49,8 @@
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
-    [self initWithAbsoluteALLabel];
-//    [self initWithScrollView];
+//    [self initWithAbsoluteALLabel];
+    [self initWithScrollView];
     
     // demo
 //    [self initInlineLayout];
