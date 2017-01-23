@@ -19,18 +19,8 @@
 {
     self = [super init];
     if (self) {
-        _hidden = NO;
-        
-        _isEndOFLine = NO;
         _isAutoHeight = YES;
         _isAutoWidth = YES;
-        
-        _hasSettedTop = NO;
-        _hasSettedLeft = NO;
-        _hasSettedRight = NO;
-        _hasSettedBottom = NO;
-        _hasSettedCenterX = NO;
-        _hasSettedCenterY = NO;
     }
     return self;
 }
@@ -282,6 +272,16 @@
         _view.hidden = hidden;
         [_view reflowWhenHiddenChange];
     }
+}
+
+- (void) updateX: (CGFloat) x
+{
+    _x = x;
+}
+
+- (void) updateY: (CGFloat) y
+{
+    _y = y;
 }
 
 @end

@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ALView.h"
 #import "ALStyle.h"
 #import "ALRow.h"
 #import "ALRowManager.h"
-#import "ALScrollView.h"
+#import "ALView.h"
 #import "ALLabel.h"
+#import "ALScrollView.h"
 
 @interface UIView (ALEngine)
 
@@ -22,20 +22,17 @@
  * 样式属性
  */
 @property (nonatomic, strong) ALStyle * style;
-// position=relative时style.top & style.left 是不记录值的，aleX & aleY可以代替frame.origin.x & frame.origin.y弥补这一欠缺
-@property (nonatomic, assign, readonly) CGFloat aleX;
-@property (nonatomic, assign, readonly) CGFloat aleY;
 // 下一个兄弟view
-@property (nonatomic, retain, readonly) ALView * nextSibling;
+@property (nonatomic, retain, readonly) UIView * nextSibling;
 // 上一个兄弟view
-@property (nonatomic, retain, readonly) ALView * previousSibling;
+@property (nonatomic, retain, readonly) UIView * previousSibling;
 // 行管理器
 @property (nonatomic, retain) ALRowManager * rowManager;
 // 所属的行实例
 @property (nonatomic, retain) ALRow * belongRow;
 
 // 初始化AL实体view【提供给子类初始化用，实例不要调用该方法】
-- (instancetype) initWithALEngine;
+- (instancetype) initALEngine;
 // 开放给实例使用，插入到父view，开始渲染
 - (void) addTo: (UIView *) parent;
 /*

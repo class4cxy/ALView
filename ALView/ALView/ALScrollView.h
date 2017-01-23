@@ -11,6 +11,7 @@
 @interface ALScrollView : UIScrollView
 
 - (instancetype) init;
+- (instancetype) initAbsolute;
 // private method
 - (void) reflowInnerFrame;
 

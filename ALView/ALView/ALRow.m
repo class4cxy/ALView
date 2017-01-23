@@ -156,7 +156,6 @@
         return YES;
     }
     
-//    return _maxWidth >= _width + view.frame.size.width + view.style.marginLeft + view.style.marginRight;
     return _maxWidth >= _width + view.style.width + view.style.marginLeft + view.style.marginRight;
 }
 
@@ -193,7 +192,6 @@
                 CGFloat w = view.style.marginLeft +
                             view.style.marginRight +
                             view.style.width;
-//                        view.frame.size.width;
                 
                 _width += w;
             }
@@ -215,7 +213,6 @@
                 CGFloat h = view.style.marginTop +
                             view.style.marginBottom +
                             view.style.height;
-//                            view.frame.size.height;
                 
                 if ( _height < h ) {
                     _height = h;
@@ -262,6 +259,7 @@
             left = view.style.marginLeft;
         }
         [view layoutWithOrigin:CGPointMake(left, top)];
+//        [ALLayout layoutView: view withOrigin:CGPointMake(left, top)];
         NSLog(@"[ALEnging] reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -289,16 +287,13 @@
             }
         } else {
             UIView * prevView = [views objectAtIndex: i-1];
-//            left =  view.style.marginLeft +
-//                    prevView.frame.origin.x +
-//                    prevView.frame.size.width +
-//                    prevView.style.marginRight;
             left =  view.style.marginLeft +
-                    prevView.aleX +
+                    prevView.style.x +
                     prevView.style.width +
                     prevView.style.marginRight;
         }
         [view layoutWithOrigin:CGPointMake(left, top)];
+//        [ALLayout layoutView: view withOrigin:CGPointMake(left, top)];
         NSLog(@"[ALEnging] reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -313,6 +308,7 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         [view layoutWithTop: top];
+//        [ALLayout layoutView: view withTop: top];
         NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -325,6 +321,7 @@
         if ( beforeIndex != NSNotFound ) {
             CGFloat top = [self getCurrTop] + view.style.marginTop;
             [view layoutWithTop: top];
+//            [ALLayout layoutView: view withTop: top];
             NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
         }
     }

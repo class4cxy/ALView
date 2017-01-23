@@ -44,9 +44,10 @@
 //    [self initBlockContentInlineLayout];
 //    [self initBlockContentMixLayout];
 //    [self initInlineAutoWidthHeightLayout];
-    [self initALLabelAutoHeightWidthLayout];
+//    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
+    [self initWithAbsoluteALLabel];
     // demo
 //    [self initInlineLayout];
 //    [self initBlockLayout];
@@ -84,6 +85,23 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithAbsoluteALLabel
+{
+    _allabel = [[ALLabel alloc] initWithAbsolute];
+    _allabel.textAlignment = NSTextAlignmentCenter;
+    _allabel.text = @"jdochen";
+    _allabel.style.padding = (ALRect){10, 10, 10, 10};
+    _allabel.style.center = (CGPoint) {0, 0};
+    _allabel.numberOfLines = 0;
+    _allabel.lineBreakMode = NSLineBreakByTruncatingTail;
+    _allabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    _allabel.font = [UIFont systemFontOfSize:12.0];
+    _allabel.textColor = [UIColor redColor];
+    
+    [_allabel addTo: self.view];
+    [[self createSizeCtrlView] addTo: self.view];
 }
 
 - (void) initDemoOfBreakHack
@@ -1124,6 +1142,8 @@
 
 - (void) subTheSize
 {
+    _allabel.style.width -= 5;
+    _allabel.style.height -= 5;
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
@@ -1135,15 +1155,17 @@
 //    _section1.style.width -= 5;
 //    _section1.style.marginBottom -= 3;
 //    [_section1 reflow];
-    _absView1.style.width -= 5;
-    _absView1.style.height -= 5;
-    _absView2.style.width -= 5;
-    _absView2.style.height -= 5;
-    _absView3.style.width -= 5;
-    _absView3.style.height -= 5;
+//    _absView1.style.width -= 5;
+//    _absView1.style.height -= 5;
+//    _absView2.style.width -= 5;
+//    _absView2.style.height -= 5;
+//    _absView3.style.width -= 5;
+//    _absView3.style.height -= 5;
 }
 - (void) addTheSize
 {
+    _allabel.style.width += 5;
+    _allabel.style.height += 5;
 //    _testInlineView.style.width += 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
@@ -1156,12 +1178,12 @@
 //    _section1.style.width += 5;
 //    _section1.style.marginBottom += 3;
 //    [_section1 reflow];
-    _absView1.style.width += 5;
-    _absView1.style.height += 5;
-    _absView2.style.width += 5;
-    _absView2.style.height += 5;
-    _absView3.style.width += 5;
-    _absView3.style.height += 5;
+//    _absView1.style.width += 5;
+//    _absView1.style.height += 5;
+//    _absView2.style.width += 5;
+//    _absView2.style.height += 5;
+//    _absView3.style.width += 5;
+//    _absView3.style.height += 5;
 
 }
 
@@ -1695,7 +1717,7 @@
     headerLabel2.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
     [headerLabel2 addTo:header];
     
-    ALScrollView * scbox1 = [[ALScrollView alloc] init];
+    ALScrollView * scbox1 = [ALScrollView new];
     scbox1.style.marginTop = 10;
     scbox1.style.height = 200;
     scbox1.backgroundColor = [UIColor blueColor];

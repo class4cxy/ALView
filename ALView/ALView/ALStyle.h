@@ -151,6 +151,9 @@ typedef struct ALRect ALRect;
 @property (nonatomic, assign) CGFloat bottom;
 @property (nonatomic, assign) CGFloat left;
 @property (nonatomic, assign) CGFloat right;
+// 对外只读，用于记录view的真实位置信息
+@property (nonatomic, assign, readonly) CGFloat x;
+@property (nonatomic, assign, readonly) CGFloat y;
 
 /*
  * 0表示居中，允许负值
@@ -201,8 +204,14 @@ typedef struct ALRect ALRect;
 // 记录是否设置过right值
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
-// 私有方法，用于更新width/height值，但不改变isAutoWidth/isAutoHeight
+/*
+ * 私有方法
+ */
+// 用于更新width/height值，但不改变isAutoWidth/isAutoHeight
 - (void) setHeightWithoutAutoHeight:(CGFloat)height;
 - (void) setWidthWithoutAutoWidth:(CGFloat)width;
 
+// 提供给ALEngine更新x,y值用的
+- (void) updateX: (CGFloat) x;
+- (void) updateY: (CGFloat) y;
 @end

@@ -13,7 +13,7 @@
 
 - (instancetype) init
 {
-    if ( self = [super initWithALEngine] ) {
+    if ( self = [super initALEngine] ) {
         self.style.display = ALDisplayInline;
     }
     return self;
@@ -21,7 +21,7 @@
 
 - (instancetype) initWithAbsolute
 {
-    if ( self = [super initWithALEngine] ) {
+    if ( self = [super initALEngine] ) {
         self.style.display = ALDisplayInline;
         self.style.position = ALPositionAbsolute;
     }
@@ -84,13 +84,8 @@
             fontSize.width = self.style.width;
             fontSize.height = self.style.height;
         }
+//        [ALLayout layoutView: self withSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
         [self layoutWithSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
-        // padding是会导致内增高的
-//        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom);
-        
-        // 更新内部值
-//        [self.style setWidthWithoutAutoWidth: fontSize.width];
-//        [self.style setHeightWithoutAutoHeight: fontSize.height];
         // 更新行信息
         if ( self.belongRow ) {
             [self.belongRow refreshSize];

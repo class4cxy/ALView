@@ -33,41 +33,22 @@
     objc_setAssociatedObject(self, @"style", style, OBJC_ASSOCIATION_RETAIN);
 }
 
-@dynamic aleX;
-- (CGFloat) aleX
-{
-    return [objc_getAssociatedObject(self, @"aleX") floatValue];
-}
--(void)setAleX:(CGFloat)aleX
-{
-    objc_setAssociatedObject(self, @"aleX", [NSNumber numberWithFloat:aleX], OBJC_ASSOCIATION_RETAIN);
-}
-@dynamic aleY;
-- (CGFloat) aleY
-{
-    return [objc_getAssociatedObject(self, @"aleY") floatValue];
-}
--(void)setAleY:(CGFloat)aleY
-{
-    objc_setAssociatedObject(self, @"aleY", [NSNumber numberWithFloat:aleY], OBJC_ASSOCIATION_RETAIN);
-}
-
 @dynamic nextSibling;
-- (ALView *) nextSibling
+- (UIView *) nextSibling
 {
     return objc_getAssociatedObject(self, @"nextSibling");
 }
-- (void) setNextSibling:(ALView *)nextSibling
+- (void) setNextSibling:(UIView *)nextSibling
 {
     objc_setAssociatedObject(self, @"nextSibling", nextSibling, OBJC_ASSOCIATION_RETAIN);
 }
 
 @dynamic previousSibling;
-- (ALView *) previousSibling
+- (UIView *) previousSibling
 {
     return objc_getAssociatedObject(self, @"previousSibling");
 }
-- (void) setPreviousSibling:(ALView *)previousSibling
+- (void) setPreviousSibling:(UIView *)previousSibling
 {
     objc_setAssociatedObject(self, @"previousSibling", previousSibling, OBJC_ASSOCIATION_RETAIN);
 }
@@ -94,7 +75,7 @@
 
 #pragma mark - init
 // 继承类需重载该方法，用于初始化对应的配置文件
-- (instancetype) initWithALEngine
+- (instancetype) initALEngine
 {
     if ( self = [self initWithFrame:CGRectZero] ) {
         
@@ -209,8 +190,8 @@
     UIView * lastSubView = [self getPreviousSiblingALEngineView];
     
     if ( lastSubView != nil ) {
-        self.previousSibling = (ALView*)lastSubView;
-        lastSubView.nextSibling = (ALView*)self;
+        self.previousSibling = lastSubView;
+        lastSubView.nextSibling = self;
     }
 }
 
@@ -326,6 +307,7 @@
 
 /*
  * 重排当前view的width
+ * 重算当前view的width值，
  */
 - (void) reflowWidth
 {
@@ -349,6 +331,7 @@
             }
             
             [self layoutWithWidth: width];
+//            [ALLayout layoutView: self withWidth: width];
 //            [self.style setWidthWithoutAutoWidth: width];
             
             // 更新自己的行管理器maxWidth值
@@ -382,6 +365,7 @@
             }
             
             [self layoutWithHeight: height];
+//            [ALLayout layoutView: self withHeight: height];
 //            [self.style setHeightWithoutAutoHeight: height];
         }
     }
@@ -444,6 +428,7 @@
         }
         
         [self layoutWithOrigin: CGPointMake(left, top)];
+//        [ALLayout layoutView: self withOrigin:CGPointMake(left, top)];
         NSLog(@"reflowOriginWhenAbsolute --- %@", NSStringFromCGRect(self.frame));
     }
 }
@@ -463,13 +448,13 @@
         // 如果是ownerView是relative类型，需额外做以下逻辑：
         // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
         // 2、更新ownerView所属行的size
-        if ( hasChange.height || hasChange.width ) {
-            
-            // 当父view是ALScrollView，需更新scrollView的contentSize
-            if ( [self isKindOfClass: [ALScrollView class]] ) {
-                [((ALScrollView *) self) reflowInnerFrame];
-            }
-        }
+//        if ( hasChange.height || hasChange.width ) {
+//            
+//            // 当父view是ALScrollView，需更新scrollView的contentSize
+//            if ( [self isKindOfClass: [ALScrollView class]] ) {
+//                [((ALScrollView *) self) reflowInnerFrame];
+//            }
+//        }
     }
     return hasChange;
 }
@@ -500,6 +485,7 @@
          self.style.position == ALPositionAbsolute)
     ) {
         [self layoutWithWidth: width];
+//        [ALLayout layoutView: self withWidth: width];
 //        [self.style setWidthWithoutAutoWidth: width];
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
@@ -517,31 +503,28 @@
 - (BOOL) reflowHeightWhenAutoHeight
 {
     BOOL hasChange = NO;
-    // 取最新的高度
-    CGFloat height = -1;
-    if ( self.rowManager ) {
-        height = [self.rowManager getOnwerViewInnerHeight];
-    } else if ( [self isKindOfClass:[ALLabel class]] ) {
-        height = self.style.height;
-    }
-    if (
-        height > -1 &&
-        self.isALEngine &&
-        self.style.isAutoHeight &&
-        height != self.style.height
-    ) {
+    
+    if ( self.isALEngine ) {
         // 当父view是ALScrollView，需更新scrollView的contentSize
-        //        if ( [self isKindOfClass: [ALScrollView class]] ) {
-        //            [((ALScrollView *) self) reflowInnerFrame];
-        //        }
-        
-        [self layoutWithHeight: height];
-//        [self.style setHeightWithoutAutoHeight: height];
-        // 更新行信息
-        if ( self.style.position == ALPositionRelative ) {
-            [self.belongRow refreshHeight];
+        if ( [self isKindOfClass: [ALScrollView class]] ) {
+            [((ALScrollView *) self) reflowInnerFrame];
         }
-        hasChange = YES;
+        if ( self.style.isAutoHeight ) {
+            CGFloat height = self.frame.size.height;
+            if ( self.rowManager ) {
+                height = [self.rowManager getOnwerViewInnerHeight];
+            } else if ( [self isKindOfClass:[ALLabel class]] ) {
+                height = self.style.height;
+            }
+            if ( height != self.style.height ) {
+                [self layoutWithHeight: height];
+//                [ALLayout layoutView: self withHeight: height];
+                if ( self.style.position == ALPositionRelative ) {
+                    [self.belongRow refreshHeight];
+                }
+                hasChange = YES;
+            }
+        }
     }
     
     return hasChange;
@@ -589,7 +572,7 @@
 {
     CGRect f = self.frame;
     f.origin.y = top;
-    self.aleY = top;
+    [self.style updateY: top];
     self.frame = f;
 }
 
@@ -597,7 +580,7 @@
 {
     CGRect f = self.frame;
     f.origin.x = left;
-    self.aleX = left;
+    [self.style updateX: left];
     self.frame = f;
 }
 
@@ -605,8 +588,8 @@
 {
     CGRect f = self.frame;
     f.origin = origin;
-    self.aleX = origin.x;
-    self.aleY = origin.y;
+    [self.style updateX: origin.x];
+    [self.style updateY: origin.y];
     self.frame = f;
 }
 

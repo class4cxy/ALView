@@ -13,7 +13,7 @@
 
 - (instancetype)init
 {
-    if ( self = [super initWithALEngine] ) {
+    if ( self = [super initALEngine] ) {
         self.style.position= ALPositionRelative;
         self.style.display  = ALDisplayBlock;
     }
@@ -22,7 +22,7 @@
 
 - (instancetype) initInlineView
 {
-    if ( self = [super initWithALEngine] ) {
+    if ( self = [super initALEngine] ) {
         self.style.display  = ALDisplayInline;
     }
     return self;
@@ -30,7 +30,7 @@
 
 - (instancetype) initAbsoluteView
 {
-    if ( self = [super initWithALEngine] ) {
+    if ( self = [super initALEngine] ) {
         self.style.position  = ALPositionAbsolute;
     }
     return self;
