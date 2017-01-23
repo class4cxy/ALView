@@ -1142,8 +1142,8 @@
 
 - (void) subTheSize
 {
-    _allabel.style.width -= 5;
-    _allabel.style.height -= 5;
+//    _allabel.style.width -= 5;
+//    _allabel.style.height -= 5;
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
@@ -1164,8 +1164,8 @@
 }
 - (void) addTheSize
 {
-    _allabel.style.width += 5;
-    _allabel.style.height += 5;
+//    _allabel.style.width += 5;
+//    _allabel.style.height += 5;
 //    _testInlineView.style.width += 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);
