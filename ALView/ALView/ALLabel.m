@@ -86,6 +86,9 @@
         }
 //        [ALLayout layoutView: self withSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
         [self layoutWithSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
+        
+        [self.style setWidthWithoutAutoWidth: fontSize.width];
+        [self.style setHeightWithoutAutoHeight: fontSize.height];
         // 更新行信息
         if ( self.belongRow ) {
             [self.belongRow refreshSize];

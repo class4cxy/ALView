@@ -614,8 +614,6 @@
     CGRect f = self.frame;
     f.size = size;
     self.frame = f;
-    [self.style setWidthWithoutAutoWidth: size.width];
-    [self.style setHeightWithoutAutoHeight: size.height];
 }
 
 @end
