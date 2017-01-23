@@ -62,8 +62,6 @@
 
 - (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
 
-
-
 /*
  * 单向刷新逻辑
  */
@@ -82,15 +80,5 @@
 - (void) reflowWhenMarginYChange: (ALMarginType) marginType;
 // 当hidden改变时，触发相关重排
 - (void) reflowWhenHiddenChange;
-
-/*
- * 更新排版
- */
-- (void) layoutWithTop: (CGFloat) top;
-- (void) layoutWithLeft: (CGFloat) left;
-- (void) layoutWithOrigin: (CGPoint) origin;
-- (void) layoutWithWidth: (CGFloat) width;
-- (void) layoutWithHeight: (CGFloat) height;
-- (void) layoutWithSize: (CGSize) size;
 
 @end

@@ -330,9 +330,7 @@
                 }
             }
             
-            [self layoutWithWidth: width];
-//            [ALLayout layoutView: self withWidth: width];
-//            [self.style setWidthWithoutAutoWidth: width];
+            [self.style layoutWithWidth: width];
             
             // 更新自己的行管理器maxWidth值
             if ( self.rowManager ) {
@@ -364,9 +362,7 @@
                 height = self.frame.size.height;
             }
             
-            [self layoutWithHeight: height];
-//            [ALLayout layoutView: self withHeight: height];
-//            [self.style setHeightWithoutAutoHeight: height];
+            [self.style layoutWithHeight: height];
         }
     }
 }
@@ -427,8 +423,7 @@
             }
         }
         
-        [self layoutWithOrigin: CGPointMake(left, top)];
-//        [ALLayout layoutView: self withOrigin:CGPointMake(left, top)];
+        [self.style layoutWithOrigin: CGPointMake(left, top)];
         NSLog(@"reflowOriginWhenAbsolute --- %@", NSStringFromCGRect(self.frame));
     }
 }
@@ -441,20 +436,8 @@
     // 是否有更新了宽度，如果没有更新宽度，其实不必要重排内部子view的origin
     ALSizeIsChange hasChange;
     if ( self.isALEngine ) {
-        
         hasChange.width = [self reflowWidthWhenAutoWidth];
         hasChange.height = [self reflowHeightWhenAutoHeight];
-        
-        // 如果是ownerView是relative类型，需额外做以下逻辑：
-        // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
-        // 2、更新ownerView所属行的size
-//        if ( hasChange.height || hasChange.width ) {
-//            
-//            // 当父view是ALScrollView，需更新scrollView的contentSize
-//            if ( [self isKindOfClass: [ALScrollView class]] ) {
-//                [((ALScrollView *) self) reflowInnerFrame];
-//            }
-//        }
     }
     return hasChange;
 }
@@ -484,9 +467,8 @@
          self.style.display == ALDisplayInline ||
          self.style.position == ALPositionAbsolute)
     ) {
-        [self layoutWithWidth: width];
-//        [ALLayout layoutView: self withWidth: width];
-//        [self.style setWidthWithoutAutoWidth: width];
+        [self.style layoutWithWidth: width];
+        
         // 更新行信息
         if ( self.style.position == ALPositionRelative ) {
             [self.belongRow refreshWidth];
@@ -505,7 +487,9 @@
     BOOL hasChange = NO;
     
     if ( self.isALEngine ) {
-        // 当父view是ALScrollView，需更新scrollView的contentSize
+        // 如果是ownerView是relative类型，需额外做以下逻辑：
+        // 1、如果ownerView是ALScrollView类，需重排该view内部（reflowInnerFrame）
+        // 2、更新ownerView所属行的size
         if ( [self isKindOfClass: [ALScrollView class]] ) {
             [((ALScrollView *) self) reflowInnerFrame];
         }
@@ -517,8 +501,8 @@
                 height = self.style.height;
             }
             if ( height != self.style.height ) {
-                [self layoutWithHeight: height];
-//                [ALLayout layoutView: self withHeight: height];
+                [self.style layoutWithHeight: height];
+                
                 if ( self.style.position == ALPositionRelative ) {
                     [self.belongRow refreshHeight];
                 }
@@ -564,56 +548,6 @@
     }
     
     return maxWidth;
-}
-
-#pragma mark - layout
-
-- (void) layoutWithTop: (CGFloat) top
-{
-    CGRect f = self.frame;
-    f.origin.y = top;
-    [self.style updateY: top];
-    self.frame = f;
-}
-
-- (void) layoutWithLeft: (CGFloat) left
-{
-    CGRect f = self.frame;
-    f.origin.x = left;
-    [self.style updateX: left];
-    self.frame = f;
-}
-
-- (void) layoutWithOrigin: (CGPoint) origin
-{
-    CGRect f = self.frame;
-    f.origin = origin;
-    [self.style updateX: origin.x];
-    [self.style updateY: origin.y];
-    self.frame = f;
-}
-
-- (void) layoutWithWidth: (CGFloat) width
-{
-    CGRect f = self.frame;
-    f.size.width = width;
-    self.frame = f;
-    [self.style setWidthWithoutAutoWidth: width];
-}
-
-- (void) layoutWithHeight: (CGFloat) height
-{
-    CGRect f = self.frame;
-    f.size.height = height;
-    self.frame = f;
-    [self.style setHeightWithoutAutoHeight: height];
-}
-
-- (void) layoutWithSize: (CGSize) size
-{
-    CGRect f = self.frame;
-    f.size = size;
-    self.frame = f;
 }
 
 @end

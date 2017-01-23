@@ -258,8 +258,7 @@
         } else {
             left = view.style.marginLeft;
         }
-        [view layoutWithOrigin:CGPointMake(left, top)];
-//        [ALLayout layoutView: view withOrigin:CGPointMake(left, top)];
+        [view.style layoutWithOrigin: CGPointMake(left, top)];
         NSLog(@"[ALEnging] reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -292,8 +291,7 @@
                     prevView.style.width +
                     prevView.style.marginRight;
         }
-        [view layoutWithOrigin:CGPointMake(left, top)];
-//        [ALLayout layoutView: view withOrigin:CGPointMake(left, top)];
+        [view.style layoutWithOrigin: CGPointMake(left, top)];
         NSLog(@"[ALEnging] reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -307,8 +305,7 @@
     for ( ; i < len; i++ ) {
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
-        [view layoutWithTop: top];
-//        [ALLayout layoutView: view withTop: top];
+        [view.style layoutWithTop: top];
         NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
@@ -320,8 +317,7 @@
         // 存在beforeView才操作
         if ( beforeIndex != NSNotFound ) {
             CGFloat top = [self getCurrTop] + view.style.marginTop;
-            [view layoutWithTop: top];
-//            [ALLayout layoutView: view withTop: top];
+            [view.style layoutWithTop: top];
             NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
         }
     }

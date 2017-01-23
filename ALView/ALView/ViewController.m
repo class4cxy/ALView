@@ -26,6 +26,8 @@
     ALView * _absView1;
     ALView * _absView2;
     ALView * _absView3;
+    
+    ALScrollView * _scrollView;
 }
 @end
 
@@ -48,7 +50,8 @@
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
 //    [self initWithAbsoluteALLabel];
-//    [self initWithScrollView];
+    [self initWithScrollView];
+
     // demo
 //    [self initInlineLayout];
 //    [self initBlockLayout];
@@ -86,6 +89,47 @@
 //    [self initMiniCard];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void) initWithScrollView
+{
+    _scrollView = [[ALScrollView alloc] initAbsolute];
+    _scrollView.style.size = (CGSize) {300, 300};
+    _scrollView.style.center = (CGPoint) {0, 0};
+    _scrollView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
+    [_scrollView addTo: self.view];
+    
+    ALView * section1 = [ALView new];
+    section1.style.height = 100;
+    section1.style.marginBottom = 5;
+    section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.5];
+    [section1 addTo: _scrollView];
+    
+    ALView * section2 = [ALView new];
+    section2.style.height = 100;
+    section2.style.marginBottom = 5;
+    section2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+    [section2 addTo: _scrollView];
+    
+    ALView * section3 = [ALView new];
+    section3.style.height = 100;
+    section3.style.marginBottom = 5;
+    section3.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.5];
+    [section3 addTo: _scrollView];
+    
+    ALView * section4 = [ALView new];
+    section4.style.height = 100;
+    section4.style.marginBottom = 5;
+    section4.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
+    [section4 addTo: _scrollView];
+    
+    ALView * abs1 = [ALView newAbsoluteView];
+    abs1.style.size = (CGSize) {30, 30};
+    abs1.style.origin = (ALRect) {0, 0, 10, 10};
+    abs1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
+    [abs1 addTo: _scrollView];
+    
+    [[self createSizeCtrlView] addTo: self.view];
 }
 
 - (void) initWithAbsoluteALLabel
@@ -1143,8 +1187,8 @@
 
 - (void) subTheSize
 {
-//    _allabel.style.width -= 5;
-//    _allabel.style.height -= 5;
+    _allabel.style.width -= 5;
+    _allabel.style.height -= 5;
 //    _testInlineView.style.width -= 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width - 5, _testInlineView.frame.size.height);
@@ -1165,8 +1209,8 @@
 }
 - (void) addTheSize
 {
-//    _allabel.style.width += 5;
-//    _allabel.style.height += 5;
+    _allabel.style.width += 5;
+    _allabel.style.height += 5;
 //    _testInlineView.style.width += 5;
 //    [_testInlineView reflow];
 //    _testInlineView.frame = CGRectMake(0, 0, _testInlineView.frame.size.width + 5, _testInlineView.frame.size.height);

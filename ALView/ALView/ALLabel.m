@@ -8,6 +8,7 @@
 
 #import "ALLabel.h"
 #import "UIView+ALEngine.h"
+//#import "ALLayout.h"
 
 @implementation ALLabel
 
@@ -41,8 +42,10 @@
 {
     [super setText: text];
     [self reflowWithInnerText: self.superview];
-    [self reflowWhenHeightChange];
-    [self reflowWhenWidthChange];
+//    [self reflowWhenHeightChange];
+//    [self reflowWhenWidthChange];
+    [self.style reflowWhenHeightChange];
+    [self.style reflowWhenWidthChange];
 }
 
 - (void) reflowWithInnerText:(UIView *) parent
@@ -84,11 +87,8 @@
             fontSize.width = self.style.width;
             fontSize.height = self.style.height;
         }
-//        [ALLayout layoutView: self withSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
-        [self layoutWithSize: CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
+        [self.style layoutWithSize:CGSizeMake(fontSize.width + self.style.paddingLeft + self.style.paddingRight, fontSize.height + self.style.paddingTop + self.style.paddingBottom)];
         
-        [self.style setWidthWithoutAutoWidth: fontSize.width];
-        [self.style setHeightWithoutAutoHeight: fontSize.height];
         // 更新行信息
         if ( self.belongRow ) {
             [self.belongRow refreshSize];

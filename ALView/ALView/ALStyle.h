@@ -119,7 +119,7 @@ typedef struct ALRect ALRect;
 /*
  * 增加对所属view的引用，用于驱动view reflow
  */
-@property (nonatomic, strong) UIView * view;
+@property (nonatomic, weak) UIView * view;
 
 /*
  * 样式属性
@@ -205,13 +205,20 @@ typedef struct ALRect ALRect;
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
 /*
- * 私有方法
+ * 排版能力
  */
-// 用于更新width/height值，但不改变isAutoWidth/isAutoHeight
-- (void) setHeightWithoutAutoHeight:(CGFloat)height;
-- (void) setWidthWithoutAutoWidth:(CGFloat)width;
+- (void) layoutWithTop: (CGFloat) top;
+- (void) layoutWithLeft: (CGFloat) left;
+- (void) layoutWithOrigin: (CGPoint) origin;
+- (void) layoutWithWidth: (CGFloat) width;
+- (void) layoutWithHeight: (CGFloat) height;
+- (void) layoutWithSize: (CGSize) size;
 
-// 提供给ALEngine更新x,y值用的
-- (void) updateX: (CGFloat) x;
-- (void) updateY: (CGFloat) y;
+/*
+ * 重排逻辑
+ */
+- (void) reflowWhenHiddenChange;
+- (void) reflowWhenWidthChange;
+- (void) reflowWhenHeightChange;
+- (void) reflowWhenMarginChange: (ALMarginType) marginType;
 @end
