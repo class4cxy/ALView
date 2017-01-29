@@ -145,9 +145,9 @@
     if (
         self.display == ALDisplayBlock ||
         view.style.display == ALDisplayBlock ||
-        (view.previousSibling && view.previousSibling.style.isEndOFLine) ||
+        (view.node.previousSibling && view.node.previousSibling.style.isEndOFLine) ||
         view.style.isFirstOFLine
-        ) {
+    ) {
         return NO;
     }
     // 1、如果当前行已经没有子view，那直接返回YES

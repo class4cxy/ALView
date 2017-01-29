@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ALNode.h"
 #import "ALStyle.h"
 #import "ALRow.h"
 #import "ALRowManager.h"
@@ -18,14 +19,10 @@
 
 @property (nonatomic, assign, readonly) BOOL isALEngine; // 是否为ALEngine布局的view
 
-/*
- * 样式属性
- */
+/* 样式属性 */
+@property (nonatomic, strong) ALNode * node;
+/* 样式属性 */
 @property (nonatomic, strong) ALStyle * style;
-// 下一个兄弟view
-@property (nonatomic, retain, readonly) UIView * nextSibling;
-// 上一个兄弟view
-@property (nonatomic, retain, readonly) UIView * previousSibling;
 // 行管理器
 @property (nonatomic, retain) ALRowManager * rowManager;
 // 所属的行实例
@@ -42,43 +39,5 @@
 - (instancetype) translate2ALView;
 - (instancetype) translate2InlineALView;
 - (instancetype) translate2AbsoluteALView;
-
-#pragma mark - 私有方法，仅提供子类调用，实例不能使用
-// 提供给子类重排自身的size
-- (void) reflowSize;
-// 提供给子类重新排版absolute方式布局的view
-- (void) reflowOriginWhenAbsolute;
-
-- (void) reflowSubviewWhichISAbsolute;
-/*
- * 如果当前view是auto size，那么根据指定的size排版当前view尺寸
- */
-- (ALSizeIsChange) reflowSizeWhenAutoSize;
-/*
- * 如果当前view是auto height，那么根据指定的height排版当前view height
- */
-- (BOOL) reflowHeightWhenAutoHeight;
-- (BOOL) reflowWidthWhenAutoWidth;
-
-- (CGFloat) getRowMaxWidthOf: (UIView *) ownerView;
-
-/*
- * 单向刷新逻辑
- */
-// 重排height
-- (void) reflowHeight;
-// 重排width
-- (void) reflowWidth;
-
-// 当height改变时，触发相关重排
-- (void) reflowWhenHeightChange;
-// 当width改变时，触发相关重排
-- (void) reflowWhenWidthChange;
-// 当marginLeft或marginRight改变时，触发相关重排
-- (void) reflowWhenMarginXChange: (ALMarginType) marginType;
-// 当marginTop或marginBottom改变时，触发相关重排
-- (void) reflowWhenMarginYChange: (ALMarginType) marginType;
-// 当hidden改变时，触发相关重排
-- (void) reflowWhenHiddenChange;
 
 @end

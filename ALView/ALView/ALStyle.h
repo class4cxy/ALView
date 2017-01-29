@@ -204,9 +204,12 @@ typedef struct ALRect ALRect;
 // 记录是否设置过right值
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
+- (instancetype) initWithView: (UIView *) view;
 /*
  * 排版能力
  */
+- (void) layoutOriginWhenAbsolute;
+- (void) layoutSize;
 - (void) layoutWithTop: (CGFloat) top;
 - (void) layoutWithLeft: (CGFloat) left;
 - (void) layoutWithOrigin: (CGPoint) origin;
@@ -215,10 +218,21 @@ typedef struct ALRect ALRect;
 - (void) layoutWithSize: (CGSize) size;
 
 /*
- * 重排逻辑
+ * 触发相关重排逻辑，针对特定属性发生改变时
  */
 - (void) reflowWhenHiddenChange;
 - (void) reflowWhenWidthChange;
 - (void) reflowWhenHeightChange;
 - (void) reflowWhenMarginChange: (ALMarginType) marginType;
+
+/*
+ * 重排size逻辑，针对autoHeight=YES or autoWidth=YES时的重排
+ */
+- (ALSizeIsChange) reflowSizeWhenAuto;
+- (BOOL) reflowWidthWhenAuto;
+- (BOOL) reflowHeightWhenAuto;
+
+// 当size发生变化时，重排子view中使用absolute排版的
+- (void) reflowSubviewOriginWhichISAbsolute;
+- (CGFloat) getBelongRowMaxWidth;
 @end

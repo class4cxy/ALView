@@ -41,7 +41,7 @@
 //    [self initLayoutWithAbsolute];
 //    [self initLayoutWithAbsolutePriority];
 //    [self initLayoutWithScrollView];
-//    [self initMixScrollLayout];
+    [self initMixScrollLayout];
 //    [self initBlockContentBlockLayout];
 //    [self initBlockContentInlineLayout];
 //    [self initBlockContentMixLayout];
@@ -50,7 +50,7 @@
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
 //    [self initWithAbsoluteALLabel];
-    [self initWithScrollView];
+//    [self initWithScrollView];
 
     // demo
 //    [self initInlineLayout];
@@ -901,13 +901,13 @@
     wrap.backgroundColor = [UIColor yellowColor];
     [wrap addTo: body];
     
-    _allabel = [self createALLabel: @"jdochen" numberOfLine:0];
+    _allabel = [self createALLabel: @"jdochen isdhsakj" numberOfLine:0];
     [_allabel addTo: wrap];
     [[self createALLabel: @"jdochen123" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen24321732" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen3343217328718732187" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen432143217328718732187" numberOfLine:0] addTo: wrap];
-    
+//
     [[self createHiddenCtrlView] addTo:body];
 }
 
@@ -1234,11 +1234,11 @@
 
 - (void) hideView
 {
-    _block.style.hidden = YES;
+//    _block.style.hidden = YES;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
-//    _allabel.text = @"jdochennnnnn";
+    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
 //    _nicklabel.text = @"jdochen";
 //    _timelabel.text = @"";
@@ -1248,9 +1248,9 @@
 {
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
-//    _allabel.text = @"jdochen";
+    _allabel.text = @"jdochen";
 //    [_allabel reflow];
-    _block.style.hidden = NO;
+//    _block.style.hidden = NO;
 //    [_block reflow];
 //    _nicklabel.text = @"jdochenchen";
 //    _timelabel.text = @"10:00";

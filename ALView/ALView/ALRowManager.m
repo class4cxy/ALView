@@ -21,6 +21,7 @@
     if (self) {
         self.ownerView = view;
         _rowsArr = [[NSMutableArray alloc] init];
+        [self calcMaxWidth];
     }
     return self;
 }
@@ -235,7 +236,7 @@
     ALSizeIsChange hasChange;
     if ( self.ownerView.isALEngine ) {
         // 更新ownerView的size
-        hasChange = [self.ownerView reflowSizeWhenAutoSize];
+        hasChange = [self.ownerView.style reflowSizeWhenAuto];
         
         if ( self.ownerView.style.position == ALPositionRelative ) {
             if ( hasChange.width ) {
@@ -251,7 +252,7 @@
         // ownerView是absolute方式布局，而且isAutoHeight=YES，那也需要更新ownerView的origin
         } else {
             if ( hasChange.height || hasChange.width ) {
-                [self.ownerView reflowOriginWhenAbsolute];
+                [self.ownerView.style layoutOriginWhenAbsolute];
             }
         }
         
@@ -262,7 +263,7 @@
         
         // 重排子view中使用absolute排版的
         if ( hasChange.height || hasChange.width ) {
-            [self.ownerView reflowSubviewWhichISAbsolute];
+            [self.ownerView.style reflowSubviewOriginWhichISAbsolute];
         }
     }
     return hasChange;
@@ -283,7 +284,8 @@
             UIView * view = row.viewsArr.firstObject;
             if ( !view.style.hidden ) {
                 // 重排当前block的size，因为父view有可能改变了宽度
-                [view reflowSize];
+//                [view reflowSize];
+                [view.style layoutSize];
                 [row refreshSize];
                 // 重排行
                 [row layout];
@@ -324,7 +326,8 @@
         if ( row.display == ALDisplayBlock ) {
             UIView * firstView = row.viewsArr.firstObject;
             if ( firstView && firstView.style.isAutoWidth ) {
-                [firstView reflowSize];
+//                [firstView reflowSize];
+                [firstView.style layoutSize];
                 [row refreshSize];
                 // 递归触发subview重排
                 if ( firstView.rowManager ) {
@@ -350,17 +353,17 @@
 {
     if ( self.ownerView.isALEngine ) {
         // 重排ownerView的高度
-        BOOL hasChange = [self.ownerView reflowHeightWhenAutoHeight];
+        BOOL hasChange = [self.ownerView.style reflowHeightWhenAuto];
         // 递归兄弟view以及superView
         if ( hasChange ) {
             // 如果是absolute类型，需要重排origin
             if ( self.ownerView.style.position == ALPositionAbsolute ) {
-                [self.ownerView reflowOriginWhenAbsolute];
+                [self.ownerView.style layoutOriginWhenAbsolute];
             // 如果是relative类型，需要递归触发重排高度
             } else {
                 [self recurReflowNextSiblingTopAndParentHeight: self.ownerView];
             }
-            [self.ownerView reflowSubviewWhichISAbsolute];
+            [self.ownerView.style reflowSubviewOriginWhichISAbsolute];
         }
     }
 }
@@ -550,14 +553,13 @@
     _maxWidth = maxWidth;
 }
 
-/*
- * 检查是否需要重排[指定view]的内部子view
- * 1 isAutoWidth=YES
- * 2 display == ALDisplayInline 或 position == ALPositionAbsolute
- */
-//- (BOOL) checkNeed2ReflowInnerView: (UIView *) view
-//{
-//    return view.rowManager && view.style.isAutoWidth && (view.style.display == ALDisplayInline || view.style.position == ALPositionAbsolute);
-//}
+- (void) calcMaxWidth
+{
+    if ( _ownerView.isALEngine ) {
+        self.maxWidth = [_ownerView.style getBelongRowMaxWidth];
+    } else {
+        self.maxWidth = _ownerView.frame.size.width;
+    }
+}
 
 @end
