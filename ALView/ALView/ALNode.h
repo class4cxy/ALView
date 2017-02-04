@@ -16,7 +16,9 @@
  */
 @property(nonatomic, weak) UIView * view;
 // 父view
-@property (nonatomic, weak) UIView * parent;
+@property (nonatomic, weak) id parent;
+// 父view
+@property (nonatomic, strong) NSArray * subviews;
 // 下一个兄弟view
 @property (nonatomic, weak) UIView * nextSibling;
 // 上一个兄弟view
@@ -27,5 +29,6 @@
  */
 - (instancetype) initWithView: (UIView *) view;
 - (void) linkSiblingView;
+- (void) add2ParentView: (id) parent;
 
 @end
