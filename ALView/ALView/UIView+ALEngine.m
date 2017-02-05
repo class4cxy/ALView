@@ -84,7 +84,8 @@
 - (void) addTo: (UIView *) parent
 {
     // 将view add到树中
-    [parent addSubview: self];
+//    [parent addSubview: self];
+    [self.node add2Parent: parent];
     // 如果当前view并不是ALEngine，那默认把它转成
     [self translate2ALView];
     // 生成兄弟view关系

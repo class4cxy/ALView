@@ -26,7 +26,6 @@
 		6B1D25841DBFB23A00FC4081 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25821DBFB23A00FC4081 /* ALView.m */; };
 		6B1D25851DBFB23A00FC4081 /* ALView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B1D25821DBFB23A00FC4081 /* ALView.m */; };
 		6B294FEC1E3DDB3400DC3688 /* ALNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B294FEB1E3DDB3400DC3688 /* ALNode.m */; };
-		6B294FEF1E46209100DC3688 /* ALVirtualView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B294FEE1E46209100DC3688 /* ALVirtualView.m */; };
 		6B700E691DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
 		6B700E6A1DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
 		6B700E6B1DEC35E6002B49AD /* ALRow.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E681DEC35E6002B49AD /* ALRow.m */; };
@@ -82,8 +81,6 @@
 		6B1D25821DBFB23A00FC4081 /* ALView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALView.m; sourceTree = "<group>"; };
 		6B294FEA1E3DDB0600DC3688 /* ALNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALNode.h; sourceTree = "<group>"; };
 		6B294FEB1E3DDB3400DC3688 /* ALNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALNode.m; path = ../ALNode.m; sourceTree = "<group>"; };
-		6B294FED1E46203500DC3688 /* ALVirtualView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALVirtualView.h; sourceTree = "<group>"; };
-		6B294FEE1E46209100DC3688 /* ALVirtualView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALVirtualView.m; sourceTree = "<group>"; };
 		6B700E671DEC34B6002B49AD /* ALRow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALRow.h; sourceTree = "<group>"; };
 		6B700E681DEC35E6002B49AD /* ALRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALRow.m; sourceTree = "<group>"; };
 		6B700E6C1DF298A7002B49AD /* ALRowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALRowManager.h; sourceTree = "<group>"; };
@@ -140,8 +137,6 @@
 		6B1D24F41DB307A200FC4081 /* ALView */ = {
 			isa = PBXGroup;
 			children = (
-				6B294FED1E46203500DC3688 /* ALVirtualView.h */,
-				6B294FEE1E46209100DC3688 /* ALVirtualView.m */,
 				6B294FEA1E3DDB0600DC3688 /* ALNode.h */,
 				6B294FEB1E3DDB3400DC3688 /* ALNode.m */,
 				6B700E671DEC34B6002B49AD /* ALRow.h */,
@@ -342,7 +337,6 @@
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B099BE91DD007300031F8EA /* ALLabel.m in Sources */,
-				6B294FEF1E46209100DC3688 /* ALVirtualView.m in Sources */,
 				6BC8B12A1DF7BEF3006F3832 /* ALStyle.m in Sources */,
 				6B700E691DEC35E6002B49AD /* ALRow.m in Sources */,
 			);
