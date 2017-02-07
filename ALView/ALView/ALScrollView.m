@@ -48,7 +48,7 @@
                 subView.style.position== ALPositionAbsolute &&
                 subView.style.hasSettedRight
             ) {
-                [subView reflowOriginWhenAbsolute];
+                [subView.style layoutOriginWhenAbsolute];
             }
         }
     }
@@ -64,7 +64,7 @@
                 subView.style.position== ALPositionAbsolute &&
                 subView.style.hasSettedBottom
             ) {
-                [subView reflowOriginWhenAbsolute];
+                [subView.style layoutOriginWhenAbsolute];
             }
         }
     }

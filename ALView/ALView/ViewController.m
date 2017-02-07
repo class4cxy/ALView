@@ -9,7 +9,133 @@
 #import "ViewController.h"
 #import "UIView+ALEngine.h"
 
-@interface ViewController () <UIScrollViewDelegate>
+@interface GroupMemberModel : NSObject
+/**街道*/
+@property (nonatomic, strong) NSString *label;
+/**省*/
+@property (nonatomic, strong) NSString *nick;
+@end
+
+@implementation GroupMemberModel
+
+@end
+
+@interface ALEnginViewCell : UITableViewCell
+{
+    ALLabel * _label;
+    ALLabel * _nick;
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+- (void) setModel: (GroupMemberModel *) model;
+@end
+
+@implementation ALEnginViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
+    {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self initUI];
+    }
+    return self;
+}
+
+- (void) initUI
+{
+    // 头像
+    ALView * avatar = [ALView newInlineView];
+    avatar.style.size = (CGSize) {40, 40};
+    avatar.style.margin = (ALRect) {5, 8, 0, 8};
+    avatar.layer.cornerRadius = 20;
+    avatar.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.7];
+    [avatar addTo: self];
+    // 标签
+    _label = [ALLabel new];
+    _label.style.padding = (ALRect) {1, 8, 1, 8};
+    _label.style.margin = (ALRect) {17, 8, 0, 0};
+    _label.layer.cornerRadius = 5;
+    _label.clipsToBounds = YES;
+    _label.font = [UIFont systemFontOfSize:12];
+    _label.textColor = [UIColor whiteColor];
+    _label.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
+    [_label addTo: self];
+    // 昵称
+    _nick = [ALLabel new];
+    _nick.style.marginTop = 17;
+    _nick.font = [UIFont systemFontOfSize:14];
+    [_nick addTo: self];
+}
+- (void) setModel: (GroupMemberModel *) model
+{
+    [_label setText: model.label];
+    [_nick setText: model.nick];
+}
+
+@end
+@interface UIViewCell : UITableViewCell
+{
+    UILabel * _label;
+    UILabel * _nick;
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
+- (void) setModel: (GroupMemberModel *) model;
+@end
+
+@implementation UIViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
+    {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self initUI];
+    }
+    return self;
+}
+
+- (void) initUI
+{
+    // 头像
+    UIView * avatar = [[UIView alloc] initWithFrame: CGRectMake(8, 5, 40, 40)];
+    avatar.layer.cornerRadius = 20;
+    avatar.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.7];
+    [self addSubview: avatar];
+    
+    // 标签
+    _label = [[UILabel alloc] initWithFrame: CGRectMake(CGRectGetMaxX(avatar.frame) + 8, 17, 0, 0)];
+    _label.layer.cornerRadius = 5;
+    _label.textAlignment = NSTextAlignmentCenter;
+    _label.clipsToBounds = YES;
+    _label.font = [UIFont systemFontOfSize:12];
+    _label.textColor = [UIColor whiteColor];
+    _label.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
+    [self addSubview: _label];
+    // 昵称
+    _nick = [UILabel new];
+    _nick.font = [UIFont systemFontOfSize:14];
+    [self addSubview: _nick];
+}
+- (void) setModel: (GroupMemberModel *) model
+{
+    [_label setText: model.label];
+    [_label sizeToFit];
+    CGRect ff = _label.frame;
+    ff.size = (CGSize) {ff.size.width + 16, ff.size.height + 2};
+    _label.frame = ff;
+    
+    [_nick setText: model.nick];
+    [_nick sizeToFit];
+    CGRect f = _nick.frame;
+    f.origin = (CGPoint) {CGRectGetMaxX(_label.frame)+8, 17};
+    _nick.frame = f;
+}
+
+@end
+
+@interface ViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 {
     ALView * _section1;
     ALView * _body;
@@ -28,6 +154,9 @@
     ALView * _absView3;
     
     ALScrollView * _scrollView;
+    
+    UITableView * _tableView;
+    NSMutableArray * _tableDataSource;
 }
 @end
 
@@ -50,8 +179,8 @@
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
 //    [self initWithAbsoluteALLabel];
-    [self initWithScrollView];
-    
+//    [self initWithScrollView];
+
     // demo
 //    [self initInlineLayout];
 //    [self initBlockLayout];
@@ -87,8 +216,115 @@
 //    [self initWithDynamicHiddenLayout];
 //    [self initWithMaxWidthLayout];
 //    [self initMiniCard];
+//    [self checkChain];
+    //性能测试
+    [self initPerformanceTest];
     
     // Do any additional setup after loading the view, typically from a nib.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    NSArray * labels = [NSArray arrayWithObjects:@"名字越长越傻", @"富甲一方", @"东方", @"二三三三三三", @"风华绝代", @"超凡脱俗", @"一件倾心", nil];
+    NSArray * nicks = [NSArray arrayWithObjects:@"jdochen", @"simplehuang", @"maxsezhang", @"cirolong", @"justinytang", @"nicema", @"peterlmeng", @"xiangruli", nil];
+    int i = 0;
+    _tableDataSource = [NSMutableArray new];
+    
+    for (; i < 100; i++) {
+        GroupMemberModel * model = [GroupMemberModel new];
+        model.label = [labels objectAtIndex: (i%7)];
+        model.nick = [nicks objectAtIndex: (i%8)];
+        [_tableDataSource addObject:model];
+    }
+    [_tableView reloadData];
+}
+
+- (void) initPerformanceTest
+{
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    _tableView.opaque = NO;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    _tableView.showsVerticalScrollIndicator = NO;
+    [_tableView setBackgroundColor:[UIColor clearColor]];
+    [self.view addSubview: _tableView];
+    
+    
+}
+
+#pragma mark  Delegate And DataSource
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _tableDataSource.count;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ALEnginViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ALEngine"];
+    if (cell == nil)
+    {
+        cell = [[ALEnginViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALEngine"];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+    
+    [cell setModel:[_tableDataSource objectAtIndex:indexPath.row]];
+    return cell;
+}
+
+
+- (void) checkChain
+{
+    ALView * section1 = [ALView new];
+    ALView * article1 = [ALView new];
+    article1.style.size = (CGSize) {100, 20};
+    article1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.3];
+    [article1 addTo: section1];
+    ALView * article2 = [ALView new];
+    article2.style.size = (CGSize) {100, 30};
+    article2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.3];
+    [article2 addTo: section1];
+    
+    [section1 addTo: self.view];
+    
+    ALView * section2 = [ALView new];
+    section2.style.size = (CGSize) {200, 30};
+    section2.backgroundColor = [UIColor colorWithRed:0 green:1 blue:1 alpha:0.2];
+    [section2 addTo: self.view];
+    
+    NSLog(@"section1.nextSibling===%@", section1.node.nextSibling);
+    NSLog(@"section1.previousSibling===%@", section1.node.previousSibling);
+    NSLog(@"section1.parent===%@", section1.node.parent);
+    
+    NSLog(@"section2.nextSibling===%@", section2.node.nextSibling);
+    NSLog(@"section2.previousSibling===%@", section2.node.previousSibling);
+    NSLog(@"section2.parent===%@", section2.node.parent);
+    
+    
+    NSLog(@"article1.nextSibling===%@", article1.node.nextSibling);
+    NSLog(@"article1.previousSibling===%@", article1.node.previousSibling);
+    NSLog(@"article1.parent===%@", article1.node.parent);
+    
+    NSLog(@"article2.nextSibling===%@", article2.node.nextSibling);
+    NSLog(@"article2.previousSibling===%@", article2.node.previousSibling);
+    NSLog(@"article2.parent===%@", article2.node.parent);
 }
 
 - (void) initWithScrollView
@@ -901,13 +1137,13 @@
     wrap.backgroundColor = [UIColor yellowColor];
     [wrap addTo: body];
     
-    _allabel = [self createALLabel: @"jdochen" numberOfLine:0];
+    _allabel = [self createALLabel: @"jdochen isdhsakj" numberOfLine:0];
     [_allabel addTo: wrap];
     [[self createALLabel: @"jdochen123" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen24321732" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen3343217328718732187" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen432143217328718732187" numberOfLine:0] addTo: wrap];
-    
+//
     [[self createHiddenCtrlView] addTo:body];
 }
 
@@ -1187,7 +1423,6 @@
 
 - (void) subTheSize
 {
-//    _scrollView.style.height -= 5;
     _allabel.style.width -= 5;
     _allabel.style.height -= 5;
 //    _testInlineView.style.width -= 5;
@@ -1210,7 +1445,6 @@
 }
 - (void) addTheSize
 {
-//    _scrollView.style.height += 5;
     _allabel.style.width += 5;
     _allabel.style.height += 5;
 //    _testInlineView.style.width += 5;
@@ -1236,11 +1470,11 @@
 
 - (void) hideView
 {
-    _block.style.hidden = YES;
+//    _block.style.hidden = YES;
 //    [_block reflow];
 //    _section1.style.hidden = YES;
 //    [_section1 reflow];
-//    _allabel.text = @"jdochennnnnn";
+    _allabel.text = @"jdochennnnnn";
 //    [_allabel reflow];
 //    _nicklabel.text = @"jdochen";
 //    _timelabel.text = @"";
@@ -1250,9 +1484,9 @@
 {
 //    _section1.style.hidden = NO;
 //    [_section1 reflow];
-//    _allabel.text = @"jdochen";
+    _allabel.text = @"jdochen";
 //    [_allabel reflow];
-    _block.style.hidden = NO;
+//    _block.style.hidden = NO;
 //    [_block reflow];
 //    _nicklabel.text = @"jdochenchen";
 //    _timelabel.text = @"10:00";

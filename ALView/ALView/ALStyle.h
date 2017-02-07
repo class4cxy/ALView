@@ -119,7 +119,7 @@ typedef struct ALRect ALRect;
 /*
  * 增加对所属view的引用，用于驱动view reflow
  */
-@property (nonatomic, strong) UIView * view;
+@property (nonatomic, weak) UIView * view;
 
 /*
  * 样式属性
@@ -204,14 +204,35 @@ typedef struct ALRect ALRect;
 // 记录是否设置过right值
 @property (nonatomic, assign, readonly) BOOL hasSettedRight;
 
+- (instancetype) initWithView: (UIView *) view;
 /*
- * 私有方法
+ * 排版能力
  */
-// 用于更新width/height值，但不改变isAutoWidth/isAutoHeight
-- (void) setHeightWithoutAutoHeight:(CGFloat)height;
-- (void) setWidthWithoutAutoWidth:(CGFloat)width;
+- (void) layoutOriginWhenAbsolute;
+- (void) layoutSize;
+- (void) layoutWithTop: (CGFloat) top;
+- (void) layoutWithLeft: (CGFloat) left;
+- (void) layoutWithOrigin: (CGPoint) origin;
+- (void) layoutWithWidth: (CGFloat) width;
+- (void) layoutWithHeight: (CGFloat) height;
+- (void) layoutWithSize: (CGSize) size;
 
-// 提供给ALEngine更新x,y值用的
-- (void) updateX: (CGFloat) x;
-- (void) updateY: (CGFloat) y;
+/*
+ * 触发相关重排逻辑，针对特定属性发生改变时
+ */
+- (void) reflowWhenHiddenChange;
+- (void) reflowWhenWidthChange;
+- (void) reflowWhenHeightChange;
+- (void) reflowWhenMarginChange: (ALMarginType) marginType;
+
+/*
+ * 重排size逻辑，针对autoHeight=YES or autoWidth=YES时的重排
+ */
+- (ALSizeIsChange) reflowSizeWhenAuto;
+- (BOOL) reflowWidthWhenAuto;
+- (BOOL) reflowHeightWhenAuto;
+
+// 当size发生变化时，重排子view中使用absolute排版的
+- (void) reflowSubviewOriginWhichISAbsolute;
+- (CGFloat) getBelongRowMaxWidth;
 @end

@@ -12,10 +12,9 @@
 
 - (instancetype) init;
 - (instancetype) initWithAbsolute;
-// ALLabel私有的重排自身内部高度
-- (void) reflowWithInnerText:(UIView *) parent;
-
 // 类方法，简便调用
 + (instancetype) newWithAbsolute;
 
+// 排版size
+- (void) layoutSize;
 @end

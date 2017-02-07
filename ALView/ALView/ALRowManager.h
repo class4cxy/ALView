@@ -12,7 +12,7 @@
 }
 
 // 行管理器所属的view，换个说法：每个view都有一个ALRowManager用于管理该view的所有subView（absolute类型除外）
-@property (nonatomic, strong) UIView * ownerView;
+@property (nonatomic, weak) UIView * ownerView;
 // 行管理的最大宽度，给到行布局时候用
 @property (nonatomic, assign) CGFloat maxWidth;
 // 当前行的最大高度，用于过滤没必要的重排
@@ -33,4 +33,6 @@
 - (CGFloat) getOnwerViewInnerWidth;
 // 获取当前onwerView的高度
 - (CGFloat) getOnwerViewInnerHeight;
+// 计算所属行最大宽度
+- (void) calcMaxWidth;
 @end
