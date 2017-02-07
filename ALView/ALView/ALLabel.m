@@ -41,7 +41,7 @@
 - (void)setText:(NSString *)text
 {
     [super setText: text];
-    if ( self.superview ) {
+    if ( self.node.parent ) {
         [self layoutSize];
     }
 }

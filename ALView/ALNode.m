@@ -25,6 +25,14 @@
 
 #pragma mark - 节点操作逻辑
 
+- (UIView *) parent
+{
+    if ( _parent ) {
+        return _parent;
+    }
+    return _view.superview;
+}
+
 - (void) add2Parent: (UIView *) parent
 {
     if ( parent ) {

@@ -54,8 +54,9 @@
         }
         
         // 递归重排父view的height
-        if ( subView.superview && subView.superview.rowManager ) {
-            [subView.superview.rowManager reflowOwnerViewHeight];
+//        [[subView.node getParentRowManager] reflowOwnerViewHeight];
+        if ( subView.node.parent && subView.node.parent.rowManager ) {
+            [subView.node.parent.rowManager reflowOwnerViewHeight];
         }
     }
 }
@@ -98,9 +99,9 @@
         // 递归重排父view的size
         // 注：因为重排宽度有可能导致断行，会改变父view的高度
         // 注：如果是block类型的view，而且父view是autowidth，那也需要触发父view reflow
-        if ( subView.superview && subView.superview.rowManager ) {
-            if ( subView.superview.style.isAutoWidth || subView.superview.style.isAutoHeight ) {
-                [subView.superview.rowManager reflowOwnerViewSizeWithReflowInner: NO];
+        if ( subView.node.parent && subView.node.parent.rowManager ) {
+            if ( subView.node.parent.style.isAutoWidth || subView.node.parent.style.isAutoHeight ) {
+                [subView.node.parent.rowManager reflowOwnerViewSizeWithReflowInner: NO];
             }
         }
         
@@ -242,7 +243,7 @@
             if ( hasChange.width ) {
                 // 存在所属行，重排所属行
                 if ( self.ownerView.belongRow ) {
-                    [self.ownerView.superview.rowManager reflowWhenXChange: self.ownerView need2ReflowSubView: NO];
+                    [self.ownerView.node.parent.rowManager reflowWhenXChange: self.ownerView need2ReflowSubView: NO];
                 }
             }
             // 更新top值即可
@@ -354,7 +355,7 @@
     if ( self.ownerView.isALEngine ) {
         // 重排ownerView的高度
         BOOL hasChange = [self.ownerView.style reflowHeightWhenAuto];
-        // 递归兄弟view以及superView
+        // 递归兄弟view以及parent
         if ( hasChange ) {
             // 如果是absolute类型，需要重排origin
             if ( self.ownerView.style.position == ALPositionAbsolute ) {
@@ -380,8 +381,8 @@
         [belongRow.nextRow reflowTop];
         belongRow = belongRow.nextRow;
     }
-    if ( view.superview ) {
-        [view.superview.rowManager reflowOwnerViewHeight];
+    if ( view.node.parent ) {
+        [view.node.parent.rowManager reflowOwnerViewHeight];
     }
 }
 

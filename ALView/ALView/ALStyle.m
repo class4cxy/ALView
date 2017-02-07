@@ -253,9 +253,9 @@
         if ( _position == ALPositionRelative ) {
             // 如果是block，且自动宽度布局，那默认宽度是父view的宽度
             if ( _display == ALDisplayBlock && _isAutoWidth ) {
-                CGFloat parentWidth = _view.superview.frame.size.width;
-                if ( _view.superview.isALEngine ) {
-                    parentWidth = _view.superview.style.width;
+                CGFloat parentWidth = _view.node.parent.frame.size.width;
+                if ( _view.node.parent.isALEngine ) {
+                    parentWidth = _view.node.parent.style.width;
                 }
                 width = parentWidth - _marginLeft - _marginRight;
             }
@@ -283,7 +283,7 @@
 - (void) layoutOriginWhenAbsolute
 {
     if ( [self isValidALView] ) {
-        UIView * parent = _view.superview;
+        UIView * parent = _view.node.parent;
         
         CGFloat top = _top;
         CGFloat left = _left;
@@ -418,13 +418,13 @@
 //                [_view reflowSize];
             }
             // 防止未知错误
-            if ( _view.superview.rowManager ) {
-                [_view.superview.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
+            if ( _view.node.parent.rowManager ) {
+                [_view.node.parent.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
                 // 如果isAutoWidth=YES或者contentAlign != ALContentAlignLeft，需重排内部子view
                 if ( (_isAutoWidth || _contentAlign != ALContentAlignLeft) && _hidden == NO ) {
-                    [_view.superview.rowManager reflowWhenXChange: _view need2ReflowSubView: YES];
+                    [_view.node.parent.rowManager reflowWhenXChange: _view need2ReflowSubView: YES];
                 } else {
-                    [_view.superview.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
+                    [_view.node.parent.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
                 }
             }
         }
@@ -436,26 +436,26 @@
     if ( [self isValidALView] ) {
         if ( _position == ALPositionRelative ) {
             // 防止未知错误
-            if ( _view.superview.rowManager ) {
+            if ( _view.node.parent.rowManager ) {
                 switch (marginType) {
                     case ALMarginTop:
                     {
-                        [_view.superview.rowManager reflowWhenYChange: _view need2reflowSelfTop: YES];
+                        [_view.node.parent.rowManager reflowWhenYChange: _view need2reflowSelfTop: YES];
                     }
                         break;
                     case ALMarginBottom:
                     {
-                        [_view.superview.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
+                        [_view.node.parent.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
                     }
                         break;
                     case ALMarginLeft:
                     {
-                        [_view.superview.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
+                        [_view.node.parent.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
                     }
                         break;
                     case ALMarginRight:
                     {
-                        [_view.superview.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
+                        [_view.node.parent.rowManager reflowWhenXChange: _view need2ReflowSubView: NO];
                     }
                         break;
                     default:
@@ -471,8 +471,8 @@
     if ( [self isValidALView] ) {
         if ( _position == ALPositionRelative ) {
             // 防止未知错误
-            if ( _view.superview.rowManager ) {
-                [_view.superview.rowManager reflowWhenXChange: _view need2ReflowSubView: YES];
+            if ( _view.node.parent.rowManager ) {
+                [_view.node.parent.rowManager reflowWhenXChange: _view need2ReflowSubView: YES];
             }
         } else {
             if ( _view.rowManager ) {
@@ -495,8 +495,8 @@
         // 重排row
         if ( _position == ALPositionRelative ) { // relative
             // 防止未知错误
-            if ( _view.superview.rowManager ) {
-                [_view.superview.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
+            if ( _view.node.parent.rowManager ) {
+                [_view.node.parent.rowManager reflowWhenYChange: _view need2reflowSelfTop: NO];
             }
         } else { // absolute
             [self layoutOriginWhenAbsolute];
@@ -615,11 +615,11 @@
     if ( _view.isALEngine && _isAutoWidth ) {
         if ( _view.belongRow ) {
             maxWidth = _view.belongRow.maxWidth;
-        } else if ( _view.superview ) {
-            if ( _view.superview.isALEngine ) {
-                return [_view.superview.style getBelongRowMaxWidth];
+        } else if ( _view.node.parent ) {
+            if ( _view.node.parent.isALEngine ) {
+                return [_view.node.parent.style getBelongRowMaxWidth];
             } else {
-                maxWidth = _view.superview.frame.size.width;
+                maxWidth = _view.node.parent.frame.size.width;
             }
         } else {
             // 否则直接返回屏幕宽度
