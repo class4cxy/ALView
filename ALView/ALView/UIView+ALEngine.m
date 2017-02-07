@@ -122,8 +122,8 @@
     // 避免开发者乱玩
     if ( !self.isALEngine ) {
         self.isALEngine = YES;
-        self.style = [[ALStyle alloc] init];
-        self.style.view = self;
+        self.style = [[ALStyle alloc] initWithView: self];
+        self.node = [[ALNode alloc] initWithView: self];
         
         CGSize size = self.frame.size;
         

@@ -22,18 +22,23 @@
 
 - (void) initUI
 {
+    ALView * wrap = [ALView new];
+    wrap.style.size = (CGSize) {[[UIScreen mainScreen] bounds].size.width, 95};
+    [wrap addTo: self];
     // 头像
     _avatar = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)] translate2AbsoluteALView];
     _avatar.style.centerY = 0;
     _avatar.style.left = 10;
-    [_avatar addTo: self];
+    _avatar.layer.cornerRadius = 25;
+    _avatar.clipsToBounds = YES;
+    [_avatar addTo: wrap];
     
     // 信息模块
     ALView * infoWrap = [ALView newAbsoluteView];
     infoWrap.style.centerY = 0;
     infoWrap.style.left = 70;
     infoWrap.style.width = CGRectGetWidth(self.frame) - 70 - 70;
-    [infoWrap addTo: self];
+    [infoWrap addTo: wrap];
     
     // 昵称
     _nick = [ALLabel new];
@@ -60,7 +65,9 @@
     _cover =  [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 60, 85)] translate2AbsoluteALView];
     _cover.style.centerY = 0;
     _cover.style.right = 10;
-    [_cover addTo: self];
+    _cover.layer.cornerRadius = 5;
+    _cover.clipsToBounds = YES;
+    [_cover addTo: wrap];
 }
 
 - (void) setModel: (TableViewCellModel *) model
