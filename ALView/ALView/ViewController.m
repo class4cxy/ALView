@@ -8,134 +8,9 @@
 
 #import "ViewController.h"
 #import "UIView+ALEngine.h"
+#import "PrefTestTableView.h"
 
-@interface GroupMemberModel : NSObject
-/**街道*/
-@property (nonatomic, strong) NSString *label;
-/**省*/
-@property (nonatomic, strong) NSString *nick;
-@end
-
-@implementation GroupMemberModel
-
-@end
-
-@interface ALEnginViewCell : UITableViewCell
-{
-    ALLabel * _label;
-    ALLabel * _nick;
-}
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
-- (void) setModel: (GroupMemberModel *) model;
-@end
-
-@implementation ALEnginViewCell
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
-    {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        [self initUI];
-    }
-    return self;
-}
-
-- (void) initUI
-{
-    // 头像
-    ALView * avatar = [ALView newInlineView];
-    avatar.style.size = (CGSize) {40, 40};
-    avatar.style.margin = (ALRect) {5, 8, 0, 8};
-    avatar.layer.cornerRadius = 20;
-    avatar.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.7];
-    [avatar addTo: self];
-    // 标签
-    _label = [ALLabel new];
-    _label.style.padding = (ALRect) {1, 8, 1, 8};
-    _label.style.margin = (ALRect) {17, 8, 0, 0};
-    _label.layer.cornerRadius = 5;
-    _label.clipsToBounds = YES;
-    _label.font = [UIFont systemFontOfSize:12];
-    _label.textColor = [UIColor whiteColor];
-    _label.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
-    [_label addTo: self];
-    // 昵称
-    _nick = [ALLabel new];
-    _nick.style.marginTop = 17;
-    _nick.font = [UIFont systemFontOfSize:14];
-    [_nick addTo: self];
-}
-- (void) setModel: (GroupMemberModel *) model
-{
-    [_label setText: model.label];
-    [_nick setText: model.nick];
-}
-
-@end
-@interface UIViewCell : UITableViewCell
-{
-    UILabel * _label;
-    UILabel * _nick;
-}
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
-- (void) setModel: (GroupMemberModel *) model;
-@end
-
-@implementation UIViewCell
-
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
-    {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        [self initUI];
-    }
-    return self;
-}
-
-- (void) initUI
-{
-    // 头像
-    UIView * avatar = [[UIView alloc] initWithFrame: CGRectMake(8, 5, 40, 40)];
-    avatar.layer.cornerRadius = 20;
-    avatar.backgroundColor = [UIColor colorWithRed:1 green:1 blue:0 alpha:0.7];
-    [self addSubview: avatar];
-    
-    // 标签
-    _label = [[UILabel alloc] initWithFrame: CGRectMake(CGRectGetMaxX(avatar.frame) + 8, 17, 0, 0)];
-    _label.layer.cornerRadius = 5;
-    _label.textAlignment = NSTextAlignmentCenter;
-    _label.clipsToBounds = YES;
-    _label.font = [UIFont systemFontOfSize:12];
-    _label.textColor = [UIColor whiteColor];
-    _label.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:1];
-    [self addSubview: _label];
-    // 昵称
-    _nick = [UILabel new];
-    _nick.font = [UIFont systemFontOfSize:14];
-    [self addSubview: _nick];
-}
-- (void) setModel: (GroupMemberModel *) model
-{
-    [_label setText: model.label];
-    [_label sizeToFit];
-    CGRect ff = _label.frame;
-    ff.size = (CGSize) {ff.size.width + 16, ff.size.height + 2};
-    _label.frame = ff;
-    
-    [_nick setText: model.nick];
-    [_nick sizeToFit];
-    CGRect f = _nick.frame;
-    f.origin = (CGPoint) {CGRectGetMaxX(_label.frame)+8, 17};
-    _nick.frame = f;
-}
-
-@end
-
-@interface ViewController () <UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ViewController () <UIScrollViewDelegate>
 {
     ALView * _section1;
     ALView * _body;
@@ -154,9 +29,6 @@
     ALView * _absView3;
     
     ALScrollView * _scrollView;
-    
-    UITableView * _tableView;
-    NSMutableArray * _tableDataSource;
 }
 @end
 
@@ -218,7 +90,7 @@
 //    [self initMiniCard];
 //    [self checkChain];
     //性能测试
-    [self initPerformanceTest];
+//    [self initPerformanceTest];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -227,66 +99,13 @@
 {
     [super viewDidAppear:animated];
     
-    NSArray * labels = [NSArray arrayWithObjects:@"名字越长越傻", @"富甲一方", @"东方", @"二三三三三三", @"风华绝代", @"超凡脱俗", @"一件倾心", nil];
-    NSArray * nicks = [NSArray arrayWithObjects:@"jdochen", @"simplehuang", @"maxsezhang", @"cirolong", @"justinytang", @"nicema", @"peterlmeng", @"xiangruli", nil];
-    int i = 0;
-    _tableDataSource = [NSMutableArray new];
-    
-    for (; i < 100; i++) {
-        GroupMemberModel * model = [GroupMemberModel new];
-        model.label = [labels objectAtIndex: (i%7)];
-        model.nick = [nicks objectAtIndex: (i%8)];
-        [_tableDataSource addObject:model];
-    }
-    [_tableView reloadData];
+    [self initPerfTestView];
 }
 
-- (void) initPerformanceTest
+- (void) initPerfTestView
 {
-    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.opaque = NO;
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    _tableView.showsVerticalScrollIndicator = NO;
-    [_tableView setBackgroundColor:[UIColor clearColor]];
-    [self.view addSubview: _tableView];
-    
-    
-}
-
-#pragma mark  Delegate And DataSource
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _tableDataSource.count;
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ALEnginViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ALEngine"];
-    if (cell == nil)
-    {
-        cell = [[ALEnginViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALEngine"];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    
-    [cell setModel:[_tableDataSource objectAtIndex:indexPath.row]];
-    return cell;
+    PrefTestTableView * perfView = [[PrefTestTableView alloc] initWithFrame: self.view.frame];
+    [self.view addSubview: perfView];
 }
 
 

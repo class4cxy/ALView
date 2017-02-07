@@ -32,6 +32,26 @@
 		6B700E6F1DF298FB002B49AD /* ALRowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E6D1DF298FB002B49AD /* ALRowManager.m */; };
 		6B700E701DF298FB002B49AD /* ALRowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B700E6D1DF298FB002B49AD /* ALRowManager.m */; };
 		6BB7F9631E49BF40005917E5 /* ALNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB7F9621E49BF40005917E5 /* ALNode.m */; };
+		6BB7F9691E49C542005917E5 /* PrefTestTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB7F9681E49C542005917E5 /* PrefTestTableView.m */; };
+		6BB7F96C1E49CA2E005917E5 /* ALEngineViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB7F96B1E49CA2E005917E5 /* ALEngineViewCell.m */; };
+		6BB7F96F1E49CB1A005917E5 /* TableViewCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB7F96E1E49CB1A005917E5 /* TableViewCellModel.m */; };
+		6BB7F9721E49CC5B005917E5 /* UIViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BB7F9711E49CC5B005917E5 /* UIViewCell.m */; };
+		6BB7F9841E49F850005917E5 /* 1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9741E49F850005917E5 /* 1.jpeg */; };
+		6BB7F9851E49F850005917E5 /* 2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9751E49F850005917E5 /* 2.jpeg */; };
+		6BB7F9861E49F850005917E5 /* 3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9761E49F850005917E5 /* 3.jpeg */; };
+		6BB7F9871E49F850005917E5 /* 4.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9771E49F850005917E5 /* 4.jpeg */; };
+		6BB7F9881E49F850005917E5 /* 5.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9781E49F850005917E5 /* 5.jpeg */; };
+		6BB7F9891E49F850005917E5 /* 6.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9791E49F850005917E5 /* 6.jpeg */; };
+		6BB7F98A1E49F850005917E5 /* 7.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97A1E49F850005917E5 /* 7.jpeg */; };
+		6BB7F98B1E49F850005917E5 /* 8.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97B1E49F850005917E5 /* 8.jpeg */; };
+		6BB7F98C1E49F850005917E5 /* cirolong.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97C1E49F850005917E5 /* cirolong.png */; };
+		6BB7F98D1E49F850005917E5 /* jdochen.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97D1E49F850005917E5 /* jdochen.png */; };
+		6BB7F98E1E49F850005917E5 /* justinytang.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97E1E49F850005917E5 /* justinytang.png */; };
+		6BB7F98F1E49F850005917E5 /* maxsezhang.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F97F1E49F850005917E5 /* maxsezhang.png */; };
+		6BB7F9901E49F850005917E5 /* nicema.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9801E49F850005917E5 /* nicema.png */; };
+		6BB7F9911E49F850005917E5 /* peterlmeng.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9811E49F850005917E5 /* peterlmeng.png */; };
+		6BB7F9921E49F850005917E5 /* simplehuang.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9821E49F850005917E5 /* simplehuang.png */; };
+		6BB7F9931E49F850005917E5 /* xiangruli.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BB7F9831E49F850005917E5 /* xiangruli.png */; };
 		6BC8B12A1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
 		6BC8B12B1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
 		6BC8B12C1DF7BEF3006F3832 /* ALStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BC8B1291DF7BEF3006F3832 /* ALStyle.m */; };
@@ -85,6 +105,30 @@
 		6B700E6C1DF298A7002B49AD /* ALRowManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALRowManager.h; sourceTree = "<group>"; };
 		6B700E6D1DF298FB002B49AD /* ALRowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALRowManager.m; sourceTree = "<group>"; };
 		6BB7F9621E49BF40005917E5 /* ALNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALNode.m; sourceTree = "<group>"; };
+		6BB7F9671E49C4C4005917E5 /* PrefTestTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefTestTableView.h; sourceTree = "<group>"; };
+		6BB7F9681E49C542005917E5 /* PrefTestTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrefTestTableView.m; sourceTree = "<group>"; };
+		6BB7F96A1E49C9E9005917E5 /* ALEngineViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALEngineViewCell.h; sourceTree = "<group>"; };
+		6BB7F96B1E49CA2E005917E5 /* ALEngineViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALEngineViewCell.m; sourceTree = "<group>"; };
+		6BB7F96D1E49CB09005917E5 /* TableViewCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewCellModel.h; sourceTree = "<group>"; };
+		6BB7F96E1E49CB1A005917E5 /* TableViewCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewCellModel.m; sourceTree = "<group>"; };
+		6BB7F9701E49CBF3005917E5 /* UIViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIViewCell.h; sourceTree = "<group>"; };
+		6BB7F9711E49CC5B005917E5 /* UIViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIViewCell.m; sourceTree = "<group>"; };
+		6BB7F9741E49F850005917E5 /* 1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpeg; sourceTree = "<group>"; };
+		6BB7F9751E49F850005917E5 /* 2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpeg; sourceTree = "<group>"; };
+		6BB7F9761E49F850005917E5 /* 3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpeg; sourceTree = "<group>"; };
+		6BB7F9771E49F850005917E5 /* 4.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpeg; sourceTree = "<group>"; };
+		6BB7F9781E49F850005917E5 /* 5.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpeg; sourceTree = "<group>"; };
+		6BB7F9791E49F850005917E5 /* 6.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6.jpeg; sourceTree = "<group>"; };
+		6BB7F97A1E49F850005917E5 /* 7.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7.jpeg; sourceTree = "<group>"; };
+		6BB7F97B1E49F850005917E5 /* 8.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 8.jpeg; sourceTree = "<group>"; };
+		6BB7F97C1E49F850005917E5 /* cirolong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cirolong.png; sourceTree = "<group>"; };
+		6BB7F97D1E49F850005917E5 /* jdochen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jdochen.png; sourceTree = "<group>"; };
+		6BB7F97E1E49F850005917E5 /* justinytang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = justinytang.png; sourceTree = "<group>"; };
+		6BB7F97F1E49F850005917E5 /* maxsezhang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maxsezhang.png; sourceTree = "<group>"; };
+		6BB7F9801E49F850005917E5 /* nicema.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nicema.png; sourceTree = "<group>"; };
+		6BB7F9811E49F850005917E5 /* peterlmeng.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = peterlmeng.png; sourceTree = "<group>"; };
+		6BB7F9821E49F850005917E5 /* simplehuang.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = simplehuang.png; sourceTree = "<group>"; };
+		6BB7F9831E49F850005917E5 /* xiangruli.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xiangruli.png; sourceTree = "<group>"; };
 		6BC8B1281DF7BEB6006F3832 /* ALStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALStyle.h; sourceTree = "<group>"; };
 		6BC8B1291DF7BEF3006F3832 /* ALStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALStyle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +165,7 @@
 				6B1D250E1DB307A300FC4081 /* ALViewTests */,
 				6B1D25191DB307A300FC4081 /* ALViewUITests */,
 				6B1D24F31DB307A200FC4081 /* Products */,
+				6BB7F9641E49C241005917E5 /* PrefTests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +235,45 @@
 				6B1D251C1DB307A300FC4081 /* Info.plist */,
 			);
 			path = ALViewUITests;
+			sourceTree = "<group>";
+		};
+		6BB7F9641E49C241005917E5 /* PrefTests */ = {
+			isa = PBXGroup;
+			children = (
+				6BB7F9731E49F7A8005917E5 /* resource */,
+				6BB7F9671E49C4C4005917E5 /* PrefTestTableView.h */,
+				6BB7F9681E49C542005917E5 /* PrefTestTableView.m */,
+				6BB7F9701E49CBF3005917E5 /* UIViewCell.h */,
+				6BB7F9711E49CC5B005917E5 /* UIViewCell.m */,
+				6BB7F96D1E49CB09005917E5 /* TableViewCellModel.h */,
+				6BB7F96E1E49CB1A005917E5 /* TableViewCellModel.m */,
+				6BB7F96A1E49C9E9005917E5 /* ALEngineViewCell.h */,
+				6BB7F96B1E49CA2E005917E5 /* ALEngineViewCell.m */,
+			);
+			path = PrefTests;
+			sourceTree = "<group>";
+		};
+		6BB7F9731E49F7A8005917E5 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				6BB7F9741E49F850005917E5 /* 1.jpeg */,
+				6BB7F9751E49F850005917E5 /* 2.jpeg */,
+				6BB7F9761E49F850005917E5 /* 3.jpeg */,
+				6BB7F9771E49F850005917E5 /* 4.jpeg */,
+				6BB7F9781E49F850005917E5 /* 5.jpeg */,
+				6BB7F9791E49F850005917E5 /* 6.jpeg */,
+				6BB7F97A1E49F850005917E5 /* 7.jpeg */,
+				6BB7F97B1E49F850005917E5 /* 8.jpeg */,
+				6BB7F97C1E49F850005917E5 /* cirolong.png */,
+				6BB7F97D1E49F850005917E5 /* jdochen.png */,
+				6BB7F97E1E49F850005917E5 /* justinytang.png */,
+				6BB7F97F1E49F850005917E5 /* maxsezhang.png */,
+				6BB7F9801E49F850005917E5 /* nicema.png */,
+				6BB7F9811E49F850005917E5 /* peterlmeng.png */,
+				6BB7F9821E49F850005917E5 /* simplehuang.png */,
+				6BB7F9831E49F850005917E5 /* xiangruli.png */,
+			);
+			path = resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,9 +385,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BB7F9851E49F850005917E5 /* 2.jpeg in Resources */,
 				6B1D25051DB307A200FC4081 /* LaunchScreen.storyboard in Resources */,
 				6B1D25021DB307A200FC4081 /* Assets.xcassets in Resources */,
+				6BB7F98F1E49F850005917E5 /* maxsezhang.png in Resources */,
+				6BB7F9861E49F850005917E5 /* 3.jpeg in Resources */,
+				6BB7F98C1E49F850005917E5 /* cirolong.png in Resources */,
+				6BB7F98B1E49F850005917E5 /* 8.jpeg in Resources */,
+				6BB7F9871E49F850005917E5 /* 4.jpeg in Resources */,
+				6BB7F98A1E49F850005917E5 /* 7.jpeg in Resources */,
+				6BB7F9931E49F850005917E5 /* xiangruli.png in Resources */,
+				6BB7F9911E49F850005917E5 /* peterlmeng.png in Resources */,
+				6BB7F98E1E49F850005917E5 /* justinytang.png in Resources */,
+				6BB7F9901E49F850005917E5 /* nicema.png in Resources */,
 				6B1D25001DB307A200FC4081 /* Main.storyboard in Resources */,
+				6BB7F9891E49F850005917E5 /* 6.jpeg in Resources */,
+				6BB7F9841E49F850005917E5 /* 1.jpeg in Resources */,
+				6BB7F9921E49F850005917E5 /* simplehuang.png in Resources */,
+				6BB7F98D1E49F850005917E5 /* jdochen.png in Resources */,
+				6BB7F9881E49F850005917E5 /* 5.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,7 +436,11 @@
 				6B1D24F71DB307A200FC4081 /* main.m in Sources */,
 				6B1D25831DBFB23A00FC4081 /* ALView.m in Sources */,
 				6B099BE91DD007300031F8EA /* ALLabel.m in Sources */,
+				6BB7F96C1E49CA2E005917E5 /* ALEngineViewCell.m in Sources */,
+				6BB7F9691E49C542005917E5 /* PrefTestTableView.m in Sources */,
+				6BB7F9721E49CC5B005917E5 /* UIViewCell.m in Sources */,
 				6BC8B12A1DF7BEF3006F3832 /* ALStyle.m in Sources */,
+				6BB7F96F1E49CB1A005917E5 /* TableViewCellModel.m in Sources */,
 				6BB7F9631E49BF40005917E5 /* ALNode.m in Sources */,
 				6B700E691DEC35E6002B49AD /* ALRow.m in Sources */,
 			);
