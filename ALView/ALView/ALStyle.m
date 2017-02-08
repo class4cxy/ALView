@@ -36,8 +36,10 @@
 
         _width = width;
         
-        [self layoutWithWidth: width];
-        [self reflowWhenWidthChange];
+        if ( [self hasParent] ) {
+            [self layoutWithWidth: width];
+            [self reflowWhenWidthChange];
+        }
     }
 }
 
@@ -50,8 +52,10 @@
 
         _height = height;
         
-        [self layoutWithHeight: height];
-        [self reflowWhenHeightChange];
+        if ( [self hasParent] ) {
+            [self layoutWithHeight: height];
+            [self reflowWhenHeightChange];
+        }
     }
 }
 
@@ -349,6 +353,7 @@
         f.origin.y = top;
         _view.frame = f;
         _y = top;
+        NSLog(@"[ALEnging] layoutWithTop");
     }
 }
 
@@ -359,6 +364,7 @@
         f.origin.x = left;
         _view.frame = f;
         _x = left;
+        NSLog(@"[ALEnging] layoutWithLeft");
     }
 }
 
@@ -370,6 +376,7 @@
         _view.frame = f;
         _x = origin.x;
         _y = origin.y;
+        NSLog(@"[ALEnging] layoutWithOrigin");
     }
 }
 
@@ -383,6 +390,7 @@
         if ( _isAutoWidth ) {
             _width = width;
         }
+        NSLog(@"[ALEnging] layoutWithWidth");
     }
 }
 
@@ -396,6 +404,7 @@
         if ( _isAutoHeight ) {
             _height = height;
         }
+        NSLog(@"[ALEnging] layoutWithHeight");
     }
 }
 
@@ -603,6 +612,11 @@
 - (BOOL) isValidALView
 {
     return _view && _view.isALEngine;
+}
+
+- (BOOL) hasParent
+{
+    return _view && _view.node.parent;
 }
 
 /*

@@ -26,57 +26,57 @@
     wrap.style.size = (CGSize) {[[UIScreen mainScreen] bounds].size.width, 95};
     [wrap addTo: self];
     // 头像
-    _avatar = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)] translate2AbsoluteALView];
-    _avatar.style.centerY = 0;
-    _avatar.style.left = 10;
-    _avatar.layer.cornerRadius = 25;
-    _avatar.clipsToBounds = YES;
-    [_avatar addTo: wrap];
-    
-    // 信息模块
-    ALView * infoWrap = [ALView newAbsoluteView];
-    infoWrap.style.centerY = 0;
-    infoWrap.style.left = 70;
-    infoWrap.style.width = CGRectGetWidth(self.frame) - 70 - 70;
-    [infoWrap addTo: wrap];
-    
-    // 昵称
-    _nick = [ALLabel new];
-    _nick.style.isEndOFLine = YES;
-    _nick.font = [UIFont systemFontOfSize:16];
-    _nick.numberOfLines = 0;
-    [_nick addTo: infoWrap];
-    // 视频数量
-    _count = [ALLabel new];
-    _count.style.margin = (ALRect) {5, 0, 5, 0};
-    _count.style.isEndOFLine = YES;
-    _count.font = [UIFont systemFontOfSize:12];
-    _count.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-    _count.numberOfLines = 0;
-    [_count addTo: infoWrap];
-    // 拍摄时间
-    _time = [ALLabel new];
-    _time.font = [UIFont systemFontOfSize:12];
-    _time.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-    _time.numberOfLines = 0;
-    [_time addTo: infoWrap];
-    
-    // 封面
-    _cover =  [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 60, 85)] translate2AbsoluteALView];
-    _cover.style.centerY = 0;
-    _cover.style.right = 10;
-    _cover.layer.cornerRadius = 5;
-    _cover.clipsToBounds = YES;
-    [_cover addTo: wrap];
+//    _avatar = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 50, 50)] translate2AbsoluteALView];
+//    _avatar.style.centerY = 0;
+//    _avatar.style.left = 10;
+//    _avatar.layer.cornerRadius = 25;
+//    _avatar.clipsToBounds = YES;
+//    [_avatar addTo: wrap];
+//    
+//    // 信息模块
+//    ALView * infoWrap = [ALView newAbsoluteView];
+//    infoWrap.style.centerY = 0;
+//    infoWrap.style.left = 70;
+//    infoWrap.style.width = CGRectGetWidth(self.frame) - 70 - 70;
+//    [infoWrap addTo: wrap];
+//    
+//    // 昵称
+//    _nick = [ALLabel new];
+//    _nick.style.isEndOFLine = YES;
+//    _nick.font = [UIFont systemFontOfSize:16];
+//    _nick.numberOfLines = 0;
+//    [_nick addTo: infoWrap];
+//    // 视频数量
+//    _count = [ALLabel new];
+//    _count.style.margin = (ALRect) {5, 0, 5, 0};
+//    _count.style.isEndOFLine = YES;
+//    _count.font = [UIFont systemFontOfSize:12];
+//    _count.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+//    _count.numberOfLines = 0;
+//    [_count addTo: infoWrap];
+//    // 拍摄时间
+//    _time = [ALLabel new];
+//    _time.font = [UIFont systemFontOfSize:12];
+//    _time.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+//    _time.numberOfLines = 0;
+//    [_time addTo: infoWrap];
+//    
+//    // 封面
+//    _cover =  [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 60, 85)] translate2AbsoluteALView];
+//    _cover.style.centerY = 0;
+//    _cover.style.right = 10;
+//    _cover.layer.cornerRadius = 5;
+//    _cover.clipsToBounds = YES;
+//    [_cover addTo: wrap];
 }
 
 - (void) setModel: (TableViewCellModel *) model
 {
-    _avatar.image = [UIImage imageNamed: model.avatarUrl];
-    _nick.text = model.nick;
-    _count.text = model.count;
-    _time.text = model.time;
-    _cover.image = [UIImage imageNamed: model.coverUrl];
+//    _avatar.image = [UIImage imageNamed: model.avatarUrl];
+//    _nick.text = model.nick;
+//    _count.text = model.count;
+//    _time.text = model.time;
+//    _cover.image = [UIImage imageNamed: model.coverUrl];
 }
 
 @end

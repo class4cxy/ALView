@@ -259,7 +259,6 @@
             left = view.style.marginLeft;
         }
         [view.style layoutWithOrigin: CGPointMake(left, top)];
-        NSLog(@"[ALEnging] reflowWhenBlock --- %@", NSStringFromCGRect(view.frame));
     }
 }
 // 触发row内部的view进行layout，仅重排left值
@@ -292,7 +291,6 @@
                     prevView.style.marginRight;
         }
         [view.style layoutWithOrigin: CGPointMake(left, top)];
-        NSLog(@"[ALEnging] reflowWhenInline --- %@", NSStringFromCGRect(view.frame));
     }
 }
 
@@ -306,7 +304,6 @@
         UIView * view = [_viewsArr objectAtIndex: i];
         CGFloat top = [self getCurrTop] + view.style.marginTop;
         [view.style layoutWithTop: top];
-        NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
     }
 }
 // 重排指定view的top
@@ -318,7 +315,6 @@
         if ( beforeIndex != NSNotFound ) {
             CGFloat top = [self getCurrTop] + view.style.marginTop;
             [view.style layoutWithTop: top];
-            NSLog(@"[ALEnging] reflowTop --- %@", NSStringFromCGRect(view.frame));
         }
     }
 }

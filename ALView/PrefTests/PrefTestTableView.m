@@ -46,7 +46,7 @@
     int i = 0;
     _tableDataSource = [NSMutableArray new];
     
-    for (; i < 100; i++) {
+    for (; i < 1; i++) {
         TableViewCellModel * model = [TableViewCellModel new];
         model.avatarUrl = [NSString stringWithFormat:@"%@.png", [nicks objectAtIndex: (i%8)]];
         model.nick = [nicks objectAtIndex: (i%8)];

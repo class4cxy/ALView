@@ -13,7 +13,7 @@
 {
     UILabel * _nick;
     UILabel * _count;
-    UILabel * time;
+    UILabel * _time;
     UIImageView * _avatar;
     UIImageView * _cover;
 }
