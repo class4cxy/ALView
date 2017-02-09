@@ -50,7 +50,7 @@
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
-//    [self initWithAbsoluteALLabel];
+    [self initWithAbsoluteALLabel];
 //    [self initWithScrollView];
 
     // demo
@@ -89,8 +89,6 @@
 //    [self initWithMaxWidthLayout];
 //    [self initMiniCard];
 //    [self checkChain];
-    //性能测试
-//    [self initPerformanceTest];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -99,7 +97,7 @@
 {
     [super viewDidAppear:animated];
     
-    [self initPerfTestView];
+//    [self initPerfTestView];
 }
 
 - (void) initPerfTestView
