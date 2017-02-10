@@ -50,7 +50,7 @@
 //    [self initALLabelAutoHeightWidthLayout];
 //    [self initBlockAndInlineLayout1];
 //    [self initBlockAndInlineLayout2];
-    [self initWithAbsoluteALLabel];
+//    [self initWithAbsoluteALLabel];
 //    [self initWithScrollView];
 
     // demo
@@ -97,7 +97,7 @@
 {
     [super viewDidAppear:animated];
     
-//    [self initPerfTestView];
+    [self initPerfTestView];
 }
 
 - (void) initPerfTestView

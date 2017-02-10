@@ -52,7 +52,9 @@
     BOOL isHeightChange = newSize.height != self.style.height;
     BOOL isWidthChange = newSize.width != self.style.width;
     
-    [self.style layoutWithSize: newSize];
+    if ( !CGSizeEqualToSize(newSize, self.style.size) ) {
+        [self.style layoutWithSize: newSize];
+    }
     // 触发响应的重排
     if ( isHeightChange ) {
         [self.style reflowWhenHeightChange];
@@ -113,7 +115,6 @@
 {
     // 增加padding计算逻辑
     UIEdgeInsets inset = UIEdgeInsetsMake(self.style.paddingTop, self.style.paddingLeft, self.style.paddingBottom, self.style.paddingRight);
-    
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, inset)];
 }
 

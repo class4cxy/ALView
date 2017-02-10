@@ -122,7 +122,9 @@
     _hasSettedTop = YES;
     _top = top;
     
-    [self layoutOriginWhenAbsolute];
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (void)setLeft: (CGFloat) left
@@ -130,23 +132,29 @@
     _hasSettedLeft = YES;
     _left = left;
     
-    [self layoutOriginWhenAbsolute];
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (void)setRight: (CGFloat) right
 {
     _hasSettedRight = YES;
     _right = right;
-
-    [self layoutOriginWhenAbsolute];
+    
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (void)setBottom: (CGFloat) bottom
 {
     _hasSettedBottom = YES;
     _bottom = bottom;
-
-    [self layoutOriginWhenAbsolute];
+    
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (CGPoint)center
@@ -166,7 +174,9 @@
     _hasSettedCenterX = YES;
     _centerX = centerX;
     
-    [self layoutOriginWhenAbsolute];
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (void)setCenterY: (CGFloat) centerY
@@ -174,7 +184,9 @@
     _hasSettedCenterY = YES;
     _centerY = centerY;
 
-    [self layoutOriginWhenAbsolute];
+    if ( [self hasParent] ) {
+        [self layoutOriginWhenAbsolute];
+    }
 }
 
 - (void) setMarginTop:(CGFloat)marginTop
@@ -341,42 +353,41 @@
     if ( [_view isKindOfClass:[ALLabel class]] ) {
         [((ALLabel*)_view) layoutSize];
     } else {
-        [self layoutWithWidth: [self reCountWidth]];
-        [self layoutWithHeight: [self reCountHeight]];
+        [self layoutWithSize: (CGSize) {[self reCountWidth], [self reCountHeight]}];
     }
 }
 
 - (void) layoutWithTop: (CGFloat) top
 {
-    if ( [self isValidALView] ) {
+    if ( [self isValidALView] && top != _y ) {
         CGRect f = _view.frame;
         f.origin.y = top;
         _view.frame = f;
         _y = top;
-        NSLog(@"[ALEnging] layoutWithTop");
+//        NSLog(@"[ALEnging] %@ layoutWithTop -> %f", NSStringFromClass([_view class]), top);
     }
 }
 
 - (void) layoutWithLeft: (CGFloat) left
 {
-    if ( [self isValidALView] ) {
+    if ( [self isValidALView] && left != _x ) {
         CGRect f = _view.frame;
         f.origin.x = left;
         _view.frame = f;
         _x = left;
-        NSLog(@"[ALEnging] layoutWithLeft");
+//        NSLog(@"[ALEnging] %@ layoutWithLeft -> %f", NSStringFromClass([_view class]), left);
     }
 }
 
 - (void) layoutWithOrigin: (CGPoint) origin
 {
-    if ( [self isValidALView] ) {
+    if ( [self isValidALView] && !CGPointEqualToPoint(origin, CGPointMake(_x, _y)) ) {
         CGRect f = _view.frame;
         f.origin = origin;
         _view.frame = f;
         _x = origin.x;
         _y = origin.y;
-        NSLog(@"[ALEnging] layoutWithOrigin");
+//        NSLog(@"[ALEnging] %@ layoutWithOrigin -> %@", NSStringFromClass([_view class]), NSStringFromCGPoint(origin));
     }
 }
 
@@ -390,7 +401,7 @@
         if ( _isAutoWidth ) {
             _width = width;
         }
-        NSLog(@"[ALEnging] layoutWithWidth");
+//        NSLog(@"[ALEnging] %@ layoutWithWidth -> %f", NSStringFromClass([_view class]), width);
     }
 }
 
@@ -404,14 +415,26 @@
         if ( _isAutoHeight ) {
             _height = height;
         }
-        NSLog(@"[ALEnging] layoutWithHeight");
+//        NSLog(@"[ALEnging] %@ layoutWithHeight -> %f", NSStringFromClass([_view class]), height);
     }
 }
 
 - (void) layoutWithSize: (CGSize) size
 {
-    [self layoutWithWidth: size.width];
-    [self layoutWithHeight: size.height];
+    if ( [self isValidALView] ) {
+        CGRect f = _view.frame;
+        f.size = size;
+        _view.frame = f;
+        // 如果autoWidth=YES
+        if ( _isAutoWidth ) {
+            _width = size.width;
+        }
+        // 如果autoHeight=YES
+        if ( _isAutoHeight ) {
+            _height = size.height;
+        }
+//        NSLog(@"[ALEnging] %@ layoutWithSize -> %@", NSStringFromClass([_view class]), NSStringFromCGSize(size));
+    }
 }
 
 #pragma mark - reflow(属性改变需触发相关重排)

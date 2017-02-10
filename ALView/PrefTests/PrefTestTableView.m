@@ -15,6 +15,7 @@
 {
     UITableView * _tableView;
     NSMutableArray * _tableDataSource;
+    NSInteger _currentIndex;
 }
 
 @end
@@ -46,16 +47,27 @@
     int i = 0;
     _tableDataSource = [NSMutableArray new];
     
-    for (; i < 1; i++) {
+    for (; i < 100; i++) {
         TableViewCellModel * model = [TableViewCellModel new];
         model.avatarUrl = [NSString stringWithFormat:@"%@.png", [nicks objectAtIndex: (i%8)]];
-        model.nick = [nicks objectAtIndex: (i%8)];
+        model.nick = [NSString stringWithFormat:@"%@ - %d", [nicks objectAtIndex: (i%8)], (i+1)];
         model.count = [NSString stringWithFormat:@"%@个小视频", [counts objectAtIndex: (i%8)]];
         model.time = [times objectAtIndex: (i%10)];
         model.coverUrl = [coverUrls objectAtIndex: (i%8)];
         [_tableDataSource addObject:model];
     }
     [_tableView reloadData];
+    _currentIndex = 9;
+//    [self performSelector:@selector(autoRunTabelView) withObject:nil afterDelay:10.0];
+}
+
+- (void) autoRunTabelView
+{
+    if ( (_currentIndex += 10) >= 100 ) {
+        return;
+    }
+    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_currentIndex inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    [self performSelector:@selector(autoRunTabelView) withObject:nil afterDelay:5.0];
 }
 
 #pragma mark  Delegate And DataSource
