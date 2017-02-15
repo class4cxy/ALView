@@ -8,6 +8,9 @@
 
 #import "ALEngineViewCell.h"
 
+#define CELL_HEIGHT 95
+#define CELL_WIDTH [[UIScreen mainScreen] bounds].size.width
+
 @implementation ALEngineViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -42,7 +45,7 @@
     _nick = [ALLabel new];
     _nick.style.isEndOFLine = YES;
     _nick.font = [UIFont systemFontOfSize:16];
-    _nick.numberOfLines = 0;
+    _nick.numberOfLines = 1;
     [_nick addTo: infoWrap];
     // 视频数量
     _count = [ALLabel new];
@@ -50,13 +53,13 @@
     _count.style.isEndOFLine = YES;
     _count.font = [UIFont systemFontOfSize:12];
     _count.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-    _count.numberOfLines = 0;
+    _count.numberOfLines = 1;
     [_count addTo: infoWrap];
     // 拍摄时间
     _time = [ALLabel new];
     _time.font = [UIFont systemFontOfSize:12];
     _time.textColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
-    _time.numberOfLines = 0;
+    _time.numberOfLines = 1;
     [_time addTo: infoWrap];
 
     // 封面

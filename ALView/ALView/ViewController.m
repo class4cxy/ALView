@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "UIView+ALEngine.h"
 #import "PrefTestTableView.h"
+#import "PerfTestNeatByTableView.h"
 
 @interface ViewController () <UIScrollViewDelegate>
 {
@@ -97,12 +98,19 @@
 {
     [super viewDidAppear:animated];
     
-    [self initPerfTestView];
+//    [self initPerfTestView];
+    [self initNearByPerfTestView];
 }
 
 - (void) initPerfTestView
 {
     PrefTestTableView * perfView = [[PrefTestTableView alloc] initWithFrame: self.view.frame];
+    [self.view addSubview: perfView];
+}
+
+- (void) initNearByPerfTestView
+{
+    PerfTestNeatByTableView * perfView = [[PerfTestNeatByTableView alloc] initWithFrame: self.view.frame];
     [self.view addSubview: perfView];
 }
 
