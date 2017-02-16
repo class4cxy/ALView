@@ -12,8 +12,8 @@
 
 @interface NearByALEngineCell : UITableViewCell
 {
+    UIImageView * _avatar;
     ALLabel * _nick;
-    ALLabel * _distance;
     UIImageView * _descIcon;
     ALLabel * _desc;
     ALView * _ageView;
@@ -21,8 +21,10 @@
     UIImageView * _sex;
     ALLabel * _professionTag;
     ALLabel * _charmLevelTag;
+    UIImageView * _vipTag;
+    ALView * _distWrap;
     ALLabel * _commonLabel;
-    UIImageView * _avatar;
+    ALLabel * _distance;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;

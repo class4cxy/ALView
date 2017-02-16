@@ -7,16 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIView+ALEngine.h"
 #import "UserInfoModel.h"
 
 @interface NearByUIViewCell : UITableViewCell
 {
-    ALLabel * _nick;
-    ALLabel * _count;
-    ALLabel * _time;
     UIImageView * _avatar;
-    UIImageView * _cover;
+    UILabel * _nick;
+    UIImageView * _descIcon;
+    UILabel * _desc;
+    UIView * _ageView;
+    UILabel * _age;
+    UIImageView * _sex;
+    UILabel * _professionTag;
+    UILabel * _charmLevelTag;
+    UIImageView * _vipTag;
+    UILabel * _commonLabel;
+    UILabel * _distance;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;

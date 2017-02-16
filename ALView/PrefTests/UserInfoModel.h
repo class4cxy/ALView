@@ -17,6 +17,7 @@
 @property(nonatomic, assign) NSInteger age;
 @property (nonatomic, copy) NSString* charmLevelTag;
 @property (nonatomic, copy) NSString* professionTag;
+@property (nonatomic, assign) BOOL isVip;
 @property (nonatomic, copy) NSString* interest;
 @property (nonatomic, copy) NSString* richStateText;
 @property (nonatomic, copy) NSString* commonLabel;
