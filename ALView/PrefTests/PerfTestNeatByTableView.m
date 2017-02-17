@@ -65,7 +65,7 @@
     }
     [_tableView reloadData];
     _currentIndex = 9;
-    [self performSelector:@selector(autoRunTabelView) withObject:nil afterDelay:10.0];
+//    [self performSelector:@selector(autoRunTabelView) withObject:nil afterDelay:10.0];
 }
 - (void) autoRunTabelView
 {
@@ -99,10 +99,10 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NearByUIViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ALEngine"];
+    NearByALEngineCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ALEngine"];
     if (cell == nil)
     {
-        cell = [[NearByUIViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALEngine"];
+        cell = [[NearByALEngineCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALEngine"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
