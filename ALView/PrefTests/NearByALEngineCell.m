@@ -29,11 +29,11 @@
     self.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, CELL_HEIGHT);
     
     // 头像
-    _avatar = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 70, 70)] translate2AbsoluteALView];
+    _avatar = [[[UIImageView alloc] initWithFrame:CGRectMake(10, (CELL_HEIGHT-70)/2, 70, 70)] translate2AbsoluteALView];
     _avatar.style.centerY = 0;
     _avatar.style.left = 10;
-    _avatar.layer.cornerRadius = 35;
-    _avatar.clipsToBounds = YES;
+//    _avatar.layer.cornerRadius = 35;
+//    _avatar.clipsToBounds = YES;
     [_avatar addTo: self];
     
     // 昵称
@@ -51,8 +51,8 @@
     _ageView.style.marginRight = 2;
     _ageView.style.height = 14;
     _ageView.backgroundColor = [UIColor colorWithRed:252/255.0 green:181/255.0 blue:200/255.0 alpha:1];
-    _ageView.layer.cornerRadius = 3;
-    _ageView.clipsToBounds = YES;
+//    _ageView.layer.cornerRadius = 3;
+//    _ageView.clipsToBounds = YES;
     [_ageView addTo: tagWrap];
     // 性别
     _sex = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 8, 10)] translate2InlineALView];
@@ -70,8 +70,8 @@
     _professionTag.style.height = 14;
     _professionTag.style.padding = (ALRect) {0, 6, 0, 6};
     _professionTag.backgroundColor = [UIColor colorWithRed:134/255.0 green:212/255.0 blue:241/255.0 alpha:1];
-    _professionTag.layer.cornerRadius = 3;
-    _professionTag.clipsToBounds = YES;
+//    _professionTag.layer.cornerRadius = 3;
+//    _professionTag.clipsToBounds = YES;
     _professionTag.font = [UIFont systemFontOfSize:10];
     _professionTag.textColor = [UIColor whiteColor];
     [_professionTag addTo: tagWrap];
@@ -81,16 +81,16 @@
     _charmLevelTag.style.marginRight = 2;
     _charmLevelTag.style.padding = (ALRect) {0, 6, 0, 6};
     _charmLevelTag.backgroundColor = [UIColor colorWithRed:253/255.0 green:202/255.0 blue:99/255.0 alpha:1];
-    _charmLevelTag.layer.cornerRadius = 3;
-    _charmLevelTag.clipsToBounds = YES;
+//    _charmLevelTag.layer.cornerRadius = 3;
+//    _charmLevelTag.clipsToBounds = YES;
     _charmLevelTag.font = [UIFont systemFontOfSize:10];
     _charmLevelTag.textColor = [UIColor whiteColor];
     [_charmLevelTag addTo: tagWrap];
     // 会员标签
     _vipTag = [[[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 28, 14)] translate2InlineALView];
     _vipTag.image = [UIImage imageNamed:@"lbs_nearbyfriend_vip_icon.png"];
-    _vipTag.layer.cornerRadius = 3;
-    _vipTag.clipsToBounds = YES;
+//    _vipTag.layer.cornerRadius = 3;
+//    _vipTag.clipsToBounds = YES;
     [_vipTag addTo: tagWrap];
     
     ALView * descWrap = [ALView new];

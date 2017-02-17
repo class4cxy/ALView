@@ -962,12 +962,12 @@
     wrap.backgroundColor = [UIColor yellowColor];
     [wrap addTo: body];
     
-    _allabel = [self createALLabel: @"jdochen isdhsakj" numberOfLine:0];
+    _allabel = [self createALLabel: @"jdochen isdhsakji rew rewrewui rew rewrewiurew rewrewuifdsi jdochen isdhsakji rew rewrewui rew rewrewiurew rewrewuifdsi" numberOfLine:1];
     [_allabel addTo: wrap];
     [[self createALLabel: @"jdochen123" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen24321732" numberOfLine:0] addTo: wrap];
     [[self createALLabel: @"jdochen3343217328718732187" numberOfLine:0] addTo: wrap];
-    [[self createALLabel: @"jdochen432143217328718732187" numberOfLine:0] addTo: wrap];
+    [[self createALLabel: @"jdochen43214321732871873218" numberOfLine:0] addTo: wrap];
 //
     [[self createHiddenCtrlView] addTo:body];
 }

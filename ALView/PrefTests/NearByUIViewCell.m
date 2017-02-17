@@ -27,8 +27,8 @@
 {
     // 头像
     _avatar = [[UIImageView alloc] initWithFrame: CGRectMake(10, (CELL_HEIGHT-70)/2, 70, 70)];
-    _avatar.layer.cornerRadius = 35;
-    _avatar.clipsToBounds = YES;
+//    _avatar.layer.cornerRadius = 35;
+//    _avatar.clipsToBounds = YES;
     [self addSubview:_avatar];
     
     CGFloat avatarRight = CGRectGetMaxX(_avatar.frame)+10;
@@ -42,8 +42,8 @@
     // 年龄性别标签
     _ageView = [[UIView alloc] initWithFrame:CGRectMake(avatarRight, 0, 0, 14)];
     _ageView.backgroundColor = [UIColor colorWithRed:252/255.0 green:181/255.0 blue:200/255.0 alpha:1];
-    _ageView.layer.cornerRadius = 3;
-    _ageView.clipsToBounds = YES;
+//    _ageView.layer.cornerRadius = 3;
+//    _ageView.clipsToBounds = YES;
     [self addSubview:_ageView];
     // 性别
     _sex = [[UIImageView alloc] initWithFrame: CGRectMake(6, 2, 8, 10)];
@@ -57,8 +57,8 @@
     _professionTag = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 14)];
     _professionTag.textAlignment = NSTextAlignmentCenter;
     _professionTag.backgroundColor = [UIColor colorWithRed:134/255.0 green:212/255.0 blue:241/255.0 alpha:1];
-    _professionTag.layer.cornerRadius = 3;
-    _professionTag.clipsToBounds = YES;
+//    _professionTag.layer.cornerRadius = 3;
+//    _professionTag.clipsToBounds = YES;
     _professionTag.font = [UIFont systemFontOfSize:10];
     _professionTag.textColor = [UIColor whiteColor];
     [self addSubview:_professionTag];
@@ -66,16 +66,16 @@
     _charmLevelTag = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 14)];
     _charmLevelTag.textAlignment = NSTextAlignmentCenter;
     _charmLevelTag.backgroundColor = [UIColor colorWithRed:253/255.0 green:202/255.0 blue:99/255.0 alpha:1];
-    _charmLevelTag.layer.cornerRadius = 3;
-    _charmLevelTag.clipsToBounds = YES;
+//    _charmLevelTag.layer.cornerRadius = 3;
+//    _charmLevelTag.clipsToBounds = YES;
     _charmLevelTag.font = [UIFont systemFontOfSize:10];
     _charmLevelTag.textColor = [UIColor whiteColor];
     [self addSubview:_charmLevelTag];
     // 会员标签
     _vipTag = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 28, 14)];
     _vipTag.image = [UIImage imageNamed:@"lbs_nearbyfriend_vip_icon.png"];
-    _vipTag.layer.cornerRadius = 3;
-    _vipTag.clipsToBounds = YES;
+//    _vipTag.layer.cornerRadius = 3;
+//    _vipTag.clipsToBounds = YES;
     [self addSubview:_vipTag];
     
     // 喜爱icon
