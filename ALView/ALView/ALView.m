@@ -11,16 +11,7 @@
 
 @implementation ALView
 
-- (instancetype)init
-{
-    if ( self = [super initALEngine] ) {
-        self.style.position= ALPositionRelative;
-        self.style.display  = ALDisplayBlock;
-    }
-    return self;
-}
-
-- (instancetype) initInlineView
+- (instancetype) initInline
 {
     if ( self = [super initALEngine] ) {
         self.style.display  = ALDisplayInline;
@@ -28,7 +19,7 @@
     return self;
 }
 
-- (instancetype) initAbsoluteView
+- (instancetype) initAbsolute
 {
     if ( self = [super initALEngine] ) {
         self.style.position  = ALPositionAbsolute;
@@ -36,14 +27,19 @@
     return self;
 }
 
-+ (instancetype) newInlineView
++ (instancetype) newBlock
 {
-    return [[self alloc] initInlineView];
+    return [[self alloc] init];
 }
 
-+ (instancetype) newAbsoluteView
++ (instancetype) newInline
 {
-    return [[self alloc] initAbsoluteView];
+    return [[self alloc] initInline];
+}
+
++ (instancetype) newAbsolute
+{
+    return [[self alloc] initAbsolute];
 }
 
 @end

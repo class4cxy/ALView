@@ -56,7 +56,7 @@
 
     // demo
 //    [self initInlineLayout];
-//    [self initBlockLayout];
+    [self initBlockLayout];
 //    [self initInlineLayout];
 //    [self initMarginLayout];
 //    [self initPaddingLayout];
@@ -184,7 +184,7 @@
     section4.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
     [section4 addTo: _scrollView];
     
-    ALView * abs1 = [ALView newAbsoluteView];
+    ALView * abs1 = [ALView newAbsolute];
     abs1.style.size = (CGSize) {30, 30};
     abs1.style.origin = (ALRect) {0, 0, 10, 10};
     abs1.backgroundColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.8];
@@ -195,7 +195,7 @@
 
 - (void) initWithAbsoluteALLabel
 {
-    _allabel = [[ALLabel alloc] initWithAbsolute];
+    _allabel = [[ALLabel alloc] initAbsolute];
     _allabel.textAlignment = NSTextAlignmentCenter;
     _allabel.text = @"jdochen";
     _allabel.style.padding = (ALRect){10, 10, 10, 10};
@@ -322,7 +322,7 @@
 
 - (ALView *) createAbsViewWithCenter: (CGPoint) center
 {
-    ALView * view = [ALView newAbsoluteView];
+    ALView * view = [ALView newAbsolute];
     view.style.center = center;
     view.style.size = (CGSize) {50, 50};
     view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
@@ -331,7 +331,7 @@
 
 - (ALView *) createAbsViewWithOrigin: (ALRect) origin
 {
-    ALView * view = [ALView newAbsoluteView];
+    ALView * view = [ALView newAbsolute];
     view.style.origin = origin;
     view.style.size = (CGSize) {50, 50};
     view.backgroundColor = [UIColor colorWithRed:1 green:0 blue:1 alpha:0.5];
@@ -341,7 +341,7 @@
 - (void) initDemoOfMaxSize
 {
     [[self createTitleViewWith: @"demo-1 子view未超200"] addTo: self.view];
-    ALView * inlView1 = [ALView newInlineView];
+    ALView * inlView1 = [ALView newInline];
     inlView1.style.maxWidth = 200;
     inlView1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [inlView1 addTo: self.view];
@@ -351,7 +351,7 @@
     [[self createInlineViewWidth:60 height:30 alpha:0.3] addTo:inlView1];
     
     [[self createTitleViewWith: @"demo-2 子view超过200"] addTo: self.view];
-    ALView * inlView2 = [ALView newInlineView];
+    ALView * inlView2 = [ALView newInline];
     inlView2.style.maxWidth = 200;
     inlView2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [inlView2 addTo: self.view];
@@ -367,7 +367,7 @@
 - (void) initDemoOfSize
 {
     [[self createTitleViewWith: @"demo-1"] addTo: self.view];
-    ALView * inlView1 = [ALView newInlineView];
+    ALView * inlView1 = [ALView newInline];
     inlView1.style.size = (CGSize) {100, 30};
     inlView1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [inlView1 addTo: self.view];
@@ -378,7 +378,7 @@
     [blkView1 addTo: self.view];
     
     [[self createTitleViewWith: @"demo-2"] addTo: self.view];
-    ALView * inlView2 = [ALView newInlineView];
+    ALView * inlView2 = [ALView newInline];
     inlView2.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [inlView2 addTo: self.view];
     
@@ -387,7 +387,7 @@
     [blkView2 addTo: self.view];
     
     [[self createTitleViewWith: @"demo-3"] addTo: self.view];
-    ALView * inlView3 = [ALView newInlineView];
+    ALView * inlView3 = [ALView newInline];
     inlView3.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [inlView3 addTo: self.view];
     
@@ -461,7 +461,7 @@
     block2.style.marginBottom = 10;
     [block2 addTo: self.view];
     
-    _section1 = [ALView newInlineView];
+    _section1 = [ALView newInline];
     _section1.style.size = (CGSize) {20, 50};
     _section1.style.margin = (ALRect) {0, 5, 5, 0};
     _section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
@@ -489,7 +489,7 @@
 - (void) initWithAbsuluteLayout
 {
     // 定义一个absolute方式布局的body
-    ALView * body = [ALView newAbsoluteView];
+    ALView * body = [ALView newAbsolute];
     // 设置body相对父view垂直水平居中
     body.style.center = (CGPoint) {0, 0};
     body.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
@@ -549,7 +549,7 @@
     [section3 addTo: body];
     
     // 定义一个absolute方式布局的absView，并将其添加到body中
-    ALView * absView = [ALView newAbsoluteView];
+    ALView * absView = [ALView newAbsolute];
     // 设置view的大小
     absView.style.size = (CGSize) {80, 80};
     // 设置view相对父view垂直水平居中
@@ -562,13 +562,13 @@
 
 - (void) initMiniCard
 {
-    ALView * wrap = [ALView newAbsoluteView];
+    ALView * wrap = [ALView newAbsolute];
     wrap.style.centerX = 0;
     wrap.style.top = 100;
     wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
     [wrap addTo: self.view];
     
-    ALView * head = [ALView newAbsoluteView];
+    ALView * head = [ALView newAbsolute];
     head.style.size = (CGSize) {60, 60};
     head.style.centerX = 0;
     head.style.top = -30;
@@ -629,7 +629,7 @@
 //    tx.numberOfLines = 1;
 //    [tx addTo: body];
     
-    _section1 = [[ALView alloc] initInlineView];
+    _section1 = [[ALView alloc] initInline];
     _section1.style.maxWidth = 200;
     _section1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
     [_section1 addTo: body];
@@ -649,7 +649,7 @@
     body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
     [body addTo: self.view];
     
-    ALView * section = [[ALView alloc] initInlineView];
+    ALView * section = [[ALView alloc] initInline];
     section.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1];
     [section addTo: body];
     
@@ -664,7 +664,7 @@
     [[self createInlineViewWidth:90 height:30 alpha:0.4] addTo: section];
     [[self createInlineViewWidth:120 height:30 alpha:0.5] addTo: section];
     
-    _section1 = [[ALView alloc] initInlineView];
+    _section1 = [[ALView alloc] initInline];
     _section1.style.size = (CGSize) {300, 30};
     _section1.style.margin = (ALRect) {0, 5, 5, 0};
     _section1.style.hidden = YES;
@@ -691,11 +691,11 @@
     body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
     [body addTo: self.view];
     
-    _wrap = [[ALView alloc] initAbsoluteView];
+    _wrap = [[ALView alloc] initAbsolute];
     _wrap.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [_wrap addTo: body];
     
-    _section1 = [[ALView alloc] initInlineView];
+    _section1 = [[ALView alloc] initInline];
     _section1.style.size = (CGSize) {50, 50};
     _section1.style.margin = (ALRect) {10, 10, 10, 10};
     _section1.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
@@ -706,7 +706,7 @@
     
     [[self createSizeCtrlView] addTo: body];
     
-    ALLabel * reflow = [[ALLabel alloc] initWithAbsolute];
+    ALLabel * reflow = [[ALLabel alloc] initAbsolute];
     reflow.style.origin = (ALRect) {0, 10, 10, 0};
     reflow.style.padding = (ALRect) {10, 10, 10, 10};
     reflow.userInteractionEnabled = YES;
@@ -734,13 +734,13 @@
     wrap.style.padding = (ALRect) {10, 10, 10, 10};
     [wrap addTo: body];
     
-    ALView * sub1 = [[ALView alloc] initInlineView];
+    ALView * sub1 = [[ALView alloc] initInline];
     sub1.style.padding = (ALRect) {10, 10, 10, 10};
     sub1.style.size = (CGSize) {30, 40};
     sub1.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [sub1 addTo:wrap];
     
-    ALView * sub2 = [[ALView alloc] initInlineView];
+    ALView * sub2 = [[ALView alloc] initInline];
     sub2.style.padding = (ALRect) {10, 10, 10, 10};
     sub2.style.size = (CGSize) {30, 40};
     sub2.style.marginLeft = 5;
@@ -835,18 +835,18 @@
     wrap.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
     [wrap addTo: self.view];
     
-    _testInlineView = [[ALView alloc] initInlineView];
+    _testInlineView = [[ALView alloc] initInline];
     _testInlineView.style.size = (CGSize){80, 40};
     _testInlineView.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.4];
     [_testInlineView addTo: wrap];
     
-    ALView * blueView = [[ALView alloc] initInlineView];
+    ALView * blueView = [[ALView alloc] initInline];
     blueView.style.size = (CGSize){90, 40};
     blueView.style.marginLeft = 5;
     blueView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.4];
     [blueView addTo: wrap];
     
-    ALView * greenView = [[ALView alloc] initInlineView];
+    ALView * greenView = [[ALView alloc] initInline];
     greenView.style.size = (CGSize){120, 40};
     greenView.style.marginLeft = 5;
     greenView.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
@@ -862,14 +862,14 @@
     body.style.height = [[UIScreen mainScreen] bounds].size.height - 20;
     [body addTo: self.view];
     
-    ALView * wrap = [[ALView alloc] initAbsoluteView];
+    ALView * wrap = [[ALView alloc] initAbsolute];
     
-    ALView * avatar = [[ALView alloc] initInlineView];
+    ALView * avatar = [[ALView alloc] initInline];
     avatar.style.size = (CGSize) {35, 35};
     avatar.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:0.2];
     [avatar addTo: wrap];
     
-    ALView * infoWrap = [[ALView alloc] initInlineView];
+    ALView * infoWrap = [[ALView alloc] initInline];
     infoWrap.style.margin = (ALRect) {0, 50, 0, 10};
     infoWrap.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.2];
     [infoWrap addTo:wrap];
@@ -893,7 +893,7 @@
     _timelabel.font = [UIFont systemFontOfSize:12];
     [_timelabel addTo: infoWrap];
     
-    ALLabel * focus = [[ALLabel alloc] initWithAbsolute];
+    ALLabel * focus = [[ALLabel alloc] initAbsolute];
     focus.text = @"关注";
     focus.font = [UIFont systemFontOfSize:13];
     focus.backgroundColor = [UIColor colorWithRed:0 green:0 blue:1 alpha:0.2];
@@ -1167,7 +1167,7 @@
 
 - (ALView *) createSizeCtrlView
 {
-    ALView * panelWrap = [ALView newAbsoluteView];
+    ALView * panelWrap = [ALView newAbsolute];
     panelWrap.style.bottom = 10;
     panelWrap.style.centerX = 0;
     
@@ -1526,7 +1526,7 @@
 
 - (ALView *) createAbsoluteViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
-    ALView * view = [ALView newAbsoluteView];
+    ALView * view = [ALView newAbsolute];
     view.style.center = (CGPoint) {0, 0};
     if ( height ) {
         view.style.height = height;
@@ -1540,7 +1540,7 @@
 
 - (ALView *) createInlineViewWidth: (CGFloat) width height: (CGFloat) height alpha: (CGFloat) alpha
 {
-    ALView * view = [ALView newInlineView];
+    ALView * view = [ALView newInline];
     view.style.margin = (ALRect){0, 5, 5, 0};
     if ( height ) {
         view.style.height = height;
@@ -2106,7 +2106,7 @@
 
 - (ALView *) createInlineBox1: (CGFloat) alpha
 {
-    ALView * view = [ALView newInlineView];
+    ALView * view = [ALView newInline];
     view.style.size = (CGSize) {40, 50};
     view.style.margin = (ALRect) {10, 10, 10, 10};
     view.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:alpha];

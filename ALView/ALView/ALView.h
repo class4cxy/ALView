@@ -10,14 +10,14 @@
 
 @interface ALView : UIView
 
-- (instancetype) init;
-- (instancetype) initInlineView;
-- (instancetype) initAbsoluteView;
+- (instancetype) initInline;
+- (instancetype) initAbsolute;
 
 /*
  * 类方法
  */
-+ (instancetype) newInlineView;
-+ (instancetype) newAbsoluteView;
++ (instancetype) newBlock;
++ (instancetype) newInline;
++ (instancetype) newAbsolute;
 
 @end

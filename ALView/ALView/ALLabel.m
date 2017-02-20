@@ -20,7 +20,7 @@
     return self;
 }
 
-- (instancetype) initWithAbsolute
+- (instancetype) initAbsolute
 {
     if ( self = [super initALEngine] ) {
         self.style.display = ALDisplayInline;
@@ -29,9 +29,9 @@
     return self;
 }
 
-+ (instancetype) newWithAbsolute
++ (instancetype) newAbsolute
 {
-    return [[self alloc] initAbsoluteView];
+    return [[self alloc] initAbsolute];
 }
 
 #pragma mark - 重载父类方法

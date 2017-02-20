@@ -47,7 +47,7 @@
     tagWrap.style.margin = (ALRect) {3, 0, 3, 90};
     [tagWrap addTo: self];
     // 年龄性别标签
-    _ageView = [ALView newInlineView];
+    _ageView = [ALView newInline];
     _ageView.style.marginRight = 2;
     _ageView.style.height = 14;
     _ageView.backgroundColor = [UIColor colorWithRed:252/255.0 green:181/255.0 blue:200/255.0 alpha:1];
@@ -109,7 +109,7 @@
     [_desc addTo: descWrap];
     
     // 距离模块
-    _distWrap = [ALView newAbsoluteView];
+    _distWrap = [ALView newAbsolute];
     _distWrap.style.contentAlign = ALContentAlignRight;
     _distWrap.style.origin = (ALRect) {17, 10, 0, 0};
     [_distWrap addTo: self];

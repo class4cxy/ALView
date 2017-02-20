@@ -11,9 +11,9 @@
 @interface ALLabel : UILabel
 
 - (instancetype) init;
-- (instancetype) initWithAbsolute;
+- (instancetype) initAbsolute;
 // 类方法，简便调用
-+ (instancetype) newWithAbsolute;
++ (instancetype) newAbsolute;
 
 // 排版size
 - (void) layoutSize;

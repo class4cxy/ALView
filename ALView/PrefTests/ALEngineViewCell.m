@@ -35,7 +35,7 @@
     [_avatar addTo: self];
 
     // 信息模块
-    ALView * infoWrap = [ALView newAbsoluteView];
+    ALView * infoWrap = [ALView newAbsolute];
     infoWrap.style.centerY = 0;
     infoWrap.style.left = 70;
     infoWrap.style.width = CGRectGetWidth(self.frame) - 70 - 70;
